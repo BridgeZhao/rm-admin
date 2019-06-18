@@ -27,9 +27,9 @@ build:
 deploy_test:
   stage: deploy
   script:
+    - export DOCKER_HOST=tcp://172.16.2.182:2375/
     - docker image rm "172.16.2.182:5000/frontend-admin-retail:latest" || true
     - docker pull "172.16.2.182:5000/frontend-admin-retail:latest"
-    - export DOCKER_HOST=tcp://172.16.2.182:2375/
     - docker stop frontend-admin-retail || true
     - docker run --rm --detach --name frontend-admin-retail -p 8080:80 "172.16.2.182:5000/frontend-admin-retail:latest"
   only:
