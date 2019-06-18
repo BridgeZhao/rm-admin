@@ -16,7 +16,7 @@ services:
 build:
   stage: build
   cache:
-    path:
+    paths:
       - node_modules/
   script:
     - docker run --rm 
