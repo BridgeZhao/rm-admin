@@ -97,7 +97,7 @@ export default {
     },
     changeLang() {
       this.$store.dispatch('app/toggleLang')
-      this.lang=this.$i18n.locale = this.lang
+      this.$i18n.locale = this.lang
     },
     async logout() {
       await this.$store.dispatch('user/logout')

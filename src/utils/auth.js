@@ -55,7 +55,6 @@ export function checkPermission() {
           if (roles[n].name === routes[i].children[f].name && roles[n].parentId !== 0) {
             routes[i].children[f].meta.title = roles[n].title
             route_obj.children.push(routes[i].children[f])
-            break
           }
         }
       }

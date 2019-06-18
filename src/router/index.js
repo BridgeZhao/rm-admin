@@ -164,24 +164,29 @@ export const constantRoutes = [
 				name: 'dashboard-tvShow',
 				component: () => import('@/views/dashboard/tvShow'),
 				meta: {title: '智能客流演示4K屏'}
-			},
-			// 优惠券管理 chy
-			{
-				path: '/coupons',
-				name: 'coupons',
-				component: Layout,
-				meta: {
-					title: '优惠券管理',
-					icon: 'form'
-				},
-				children: [{
-					path: 'config',
-					name: 'coupons-config',
-					component: () => import('@/views/coupons/config'),
-					meta: {title: '优惠券管理'}
-				}]
 			}
 		]
+	},
+	// 优惠券管理 chy
+	{
+		path: '/coupons',
+		name: 'coupons',
+		component: Layout,
+		meta: {
+			title: '优惠券管理',
+			icon: 'form'
+		},
+		children: [{
+			path: 'config',
+			name: 'coupons-config',
+			component: () => import('@/views/coupons/config'),
+			meta: {title: '优惠券管理'}
+		},{
+			path: 'config',
+			name: 'coupons-logs',
+			component: () => import('@/views/coupons/config'),
+			meta: {title: '发放记录'}
+		}]
 	}
 ]
 
