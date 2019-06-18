@@ -169,23 +169,19 @@ export const constantRoutes = [
 	},
 	// 优惠券管理 chy
 	{
-		path: '/coupons',
+		path: '/',
+		redirect: '/coupons',
 		name: 'coupons',
 		component: Layout,
 		meta: {
-			title: '优惠券管理',
+			title: '优惠券',
 			icon: 'form'
 		},
 		children: [{
-			path: 'config',
-			name: 'coupons-config',
+			path: '/coupons',
+			name: 'coupons',
 			component: () => import('@/views/coupons/config'),
 			meta: {title: '优惠券管理'}
-		},{
-			path: 'config',
-			name: 'coupons-logs',
-			component: () => import('@/views/coupons/config'),
-			meta: {title: '发放记录'}
 		}]
 	}
 ]

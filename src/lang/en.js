@@ -31,8 +31,6 @@ module.exports = {
 		'dashboard-inStoreFlow':'InStoreFlow',
 		'dashboard-tvShow':'tvShow',
 		'coupons':'Coupons',
-		'coupons-logs':'Logs',
-		'coupons-config':'Config',
     logout: 'Log Out',
     adi: 'Adidas',
     nb: 'New Banlance',
