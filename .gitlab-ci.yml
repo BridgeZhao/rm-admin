@@ -15,6 +15,9 @@ services:
 
 build:
   stage: build
+  cache:
+    path:
+      - node_modules/
   script:
     - docker run --rm 
       -v "$PWD":/opt/frontend-admin-retail
@@ -28,9 +31,9 @@ deploy_test:
   stage: deploy
   script:
     - export DOCKER_HOST=tcp://172.16.2.182:2375/
+    - docker stop frontend-admin-retail || true
     - docker image rm "172.16.2.182:5000/frontend-admin-retail:latest" || true
     - docker pull "172.16.2.182:5000/frontend-admin-retail:latest"
-    - docker stop frontend-admin-retail || true
     - docker run --rm --detach --name frontend-admin-retail -p 8080:80 "172.16.2.182:5000/frontend-admin-retail:latest"
   only:
     - master
