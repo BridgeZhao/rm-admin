@@ -1,0 +1,57 @@
+.report-margin{
+    margin-top: 20px;
+}
+.report-line{
+    width: 100%;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -ms-flex-align: center;
+    align-items: center;
+    border-radius: 4px;
+    border: 1px solid rgba(113,220,255,.3);
+    position: relative;
+    background: #082849;
+}
+.report-title{
+    font-size: .8rem;
+    color: #71dcff;
+    line-height: 1.3rem;
+    font-weight: 700;
+    margin-top: 1.05rem;
+}
+.report-num{
+    font-size: 2rem;
+    line-height: 2.4rem;
+}
+.report-small{
+    font-size: .6rem;
+    color: #56b327;
+    line-height: 1rem;
+    font-weight: 700;
+    margin-top: .5rem;
+}
+.report-gang{
+    width: 100%;
+    height: 40px;
+    border-bottom: 1px solid rgba(113,220,255,.3);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    padding:0px 5px;
+    justify-content: space-between;
+}
+.report-tip{
+    position: absolute;
+    right: 3%;
+    top: 8%;
+}
+.el-tooltip__popper.is-dark{
+    background: #1a2e49;
+    border: 1px solid rgba(113,220,255,.3);
+    color: #71dcff;
+}
+.el-tooltip__popper{
+    padding: 5px;
+}

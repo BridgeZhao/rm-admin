@@ -1,0 +1,270 @@
+<template>
+    <div class="app-container" style="background:none">
+        <div class="top">
+            <div style="width:120px;">
+                <label-view labelFather="周时段客流统计"></label-view>
+            </div>
+           <div style="width:50%;margin-left:10px;">
+                <el-radio-group v-model="radio" size="mini">
+                    <el-radio-button label="图形报表" class="radioBtn"></el-radio-button>
+                    <el-radio-button label="数据报表" class="radioBtn"></el-radio-button>
+                </el-radio-group>
+           </div>
+        </div>
+        <div class="middle" v-show="radio == '图形报表'">
+            <div class="queryConditions report-margin">
+                <el-form :inline="true" :model="formInline" class="demo-form-inline" size="mini">
+                    <el-form-item label="时间">
+                        <el-date-picker
+                            type="week"
+                            style="width: 200px"
+                            :clearable="false"
+                            value-format="yyyy-MM-dd"
+                            v-model="formInline.dateTimeDay"
+                            :picker-options="{
+                                disabledDate(time) {
+                                            return time.getTime() > Date.now() - 8.64e7;
+                                        },
+                                    firstDayOfWeek: 7
+                            }"
+                            format="yyyy 第 WW 周"
+                            placeholder="选择周">
+                            </el-date-picker>
+                        </el-form-item>
+                <!-- <el-form-item label="时间">
+                    <el-time-select
+                    placeholder="起始时间"
+                    v-model="formInline.startTime"
+                    :picker-options="{
+                    start: '01:00',
+                    step: '01:00',
+                    end: '23:59'
+                    }">
+                </el-time-select>
+                -
+                <el-time-select
+                    placeholder="结束时间"
+                    v-model="formInline.endTime"
+                    :picker-options="{
+                    start: '01:00',
+                    step: '01:00',
+                    end: '23:59',
+                    minTime: formInline.startTime
+                    }">
+                </el-time-select>
+                </el-form-item> -->
+                <el-form-item>
+                    <el-button type="primary" @click="searchData" size="mini">查询</el-button>
+                </el-form-item>
+                </el-form>
+            </div>
+            <div class="reportGraphics">
+                 <el-row :gutter="24" class="report-margin">
+                    <el-col :span="24"><div class="grid-content bg-purple report-line">
+                        <div class="report-gang">
+                            <span>客流性别对比</span>
+                            <el-button size="mini" @click="saveImage('weekChart')">保存图片</el-button>
+                        </div>
+                        <div style="width:100%;height:100%;">
+                            <week-chat :data='weekData' ref="weekChart"/>
+                        </div>
+                        </div></el-col>
+
+                </el-row>
+            </div>
+        </div>
+        <div class="tableDataBox report-margin" v-show="radio == '数据报表'">
+            <div class="tableTop report-margin">
+                <div>
+                    <span>{{startWeekTime + ' - ' + endWeekTime }}</span>
+                    <span>08:00 - 22:00</span>
+                </div>
+                <el-button type="primary" plain style="background-color: #1881a0;color: #494c50;" size="mini"><a href="#">下载数据</a></el-button>
+            </div>
+            <div class="report-margin">
+                <el-row :gutter="24" class="report-margin">
+                    <el-col :span="24"><div class="grid-content bg-purple report-line">
+                        <div class="report-gang">
+                            <span>客流报表</span>
+                        </div>
+                        <div style="width:90%;height:100%;margin: 2% auto">
+                             <el-table
+                            :data="tableData"
+                            style="width: 100%">
+                                <el-table-column
+                                    prop="hh"
+                                    label="时间段"
+                                    >
+                                </el-table-column>
+                                <el-table-column
+                                    prop="weekday1"
+                                    label="周一"
+                                    >
+                                </el-table-column>
+                                <el-table-column
+                                    prop="weekday2"
+                                    label="周二">
+                                </el-table-column>
+                                 <el-table-column
+                                    prop="weekday3"
+                                    label="周三"
+                                    >
+                                </el-table-column>
+                                <el-table-column
+                                    prop="weekday4"
+                                    label="周四"
+                                    >
+                                </el-table-column>
+                                <el-table-column
+                                    prop="weekday5"
+                                    label="周五">
+                                </el-table-column>
+                                 <el-table-column
+                                    prop="weekday6"
+                                    label="周六"
+                                    >
+                                </el-table-column>
+                                <el-table-column
+                                    prop="weeday7"
+                                    label="周日"
+                                    >
+                                </el-table-column>
+                            </el-table>
+                        </div>
+                    </div></el-col>
+                </el-row>
+            </div>
+
+        </div>
+
+    </div>
+</template>
+<script>
+import moment from "moment";
+import labelView from  '@/components/Label/index'
+import WeekChat from "@/components/Charts/WeekChat"
+import { getWeekFlowData } from "@/api/report"
+export default {
+    name:'intoShopFlow',
+    components: {labelView, WeekChat},
+    data(){
+        return{
+            radio:'图形报表',
+            showNum:true,
+            formInline:{
+                dateTimeDay:new Date()
+            },
+            weekData:{},
+            startWeekTime:'',
+            endWeekTime:'',
+            tableData: [
+                {
+                    "date": "2019-07-07",
+                    "hh": 11,
+                    "mainAge": "19-29岁",
+                    "totalFlow": 50,
+                    "maleFlow": 25,
+                    "femaleFlow": 25,
+                    "vipFlow": 999,
+                    "vipRate": 1,
+                    "mainAgeFlow": 15
+                },
+                {
+                    "date": "2019-07-07",
+                    "hh": 12,
+                    "mainAge": "29-39岁",
+                    "totalFlow": 100,
+                    "maleFlow": 25,
+                    "femaleFlow": 50,
+                    "vipFlow": 999,
+                    "vipRate": 1,
+                    "mainAgeFlow": 25
+                }
+                ]
+        }
+    },
+    created(){
+        this.init();
+    },
+     methods:{
+        onSubmit() {
+            console.log('submit!');
+        },
+        init(){
+          let start_time = moment(new Date()).format("YYYY-MM-DD");
+            let _storeId = 1;
+            let _params = {
+                store_id: _storeId,
+                starttime: start_time,
+                endtime: start_time,
+                hh:'00,23'
+            };
+            this.loadData(_params)
+        },
+        searchData(){
+            let weekOfday = moment(this.formInline.dateTimeDay).format('E');//计算今天是这周第几天
+            this.startWeekTime = moment(this.formInline.dateTimeDay).add(-weekOfday,'days').format('YYYY-MM-DD')
+            this.endWeekTime = moment(this.formInline.dateTimeDay).add(6-weekOfday,'days').format('YYYY-MM-DD')
+            console.log(weekOfday,this.startWeekTime,this.endWeekTime)
+             let _storeId = 1;
+            let _params = {
+                store_id: _storeId,
+                starttime: this.startWeekTime,
+                endtime: this.endWeekTime,
+                hh:'00,23'
+            };
+            this.loadData(_params)
+        },
+        changeStatus: function(callback){
+				console.log(callback);
+        },
+         saveImage(name){
+          let _name = name;
+          this.$refs[name].saveImage(_name);
+        },
+        loadData(params){
+            this.weekData = {};
+           getWeekFlowData(params).then(res =>{
+               console.log("返回的周时段客流数据-》",res)
+               let res_data = res.data.weekflow;
+               this.tableData = res.data.weekHeatTable;
+               let arr = [];
+                 for (let i = 0; i < res_data.length; i++) {
+                   arr.push([res_data[i].weekday - 1,res_data[i].hh - 8,res_data[i].count]);
+                }
+                console.log("返回的周时段客流数据变化前-》>>>",arr)
+                arr = arr.map(function (item) {
+                    return [item[0], item[1], item[2] || '-'];
+                });
+                this.$set(this.weekData,'data',arr)
+                console.log("返回的周时段客流数据变化后-》>>>",arr)
+
+           })
+        }
+    }
+}
+</script>
+<style lang="scss">
+@import "@/styles/report.scss";
+.top{
+    display: flex;
+    justify-content: flex-start;
+
+}
+.tableTop{
+    display: flex;
+    justify-content: space-between;
+}
+
+.el-radio-button__orig-radio:checked + .el-radio-button__inner {
+    color: #FFFFFF;
+    background-color: #13375d;
+    border-color: #409EFF;
+ }
+ .el-radio-button__inner {
+    background: #0f384a;
+    border: 1px solid #2480b3;
+    color: #909399;
+}
+</style>
+

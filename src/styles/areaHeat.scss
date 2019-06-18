@@ -1,0 +1,114 @@
+.app-container {
+  background: none;
+  padding: 0px;
+  .block {
+    width: 100%;
+    height: 40px;
+    margin-bottom: 30px;
+    margin-top: 10px;
+    .slider {
+      padding: 0px 15px;
+    }
+    .slider-label {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #f8e71c;
+      font-size: .5rem;
+    }
+  }
+  .container{
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    .left,.right{
+      width: 8%;
+      height: 25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .gradient-bar-warp {
+
+        font-size: 1rem;
+        color: #71dcff;
+        align-items: center;
+        margin-top: 1.4rem;
+        margin-left: 2rem;
+        > .bar {
+          margin: 20px auto;
+          height: 14rem;
+          width: 0.4rem;
+          border-radius: 0.2rem;
+          background-image: linear-gradient(
+            0deg,
+            #ffa100 0%,
+            #fbe800 37%,
+            #7ed321 62%,
+            #003067 95%
+          );
+        }
+      }
+    }
+    .center{
+      width: 100%;
+      .heat-map-container {
+        width: 100%;
+        height: 25rem;
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+      }
+      .bar-wrapper{
+        width: 100%;
+        height: 200px;
+      }
+    }
+  }
+}
+.box-card {
+  width: 100%;
+  margin-left: 2%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  border: 1px solid rgba(113, 220, 255, 0.3);
+  position: relative;
+  background: #082849;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.box-header {
+  width: 100%;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  padding-left: 10px;
+  color: #71dcff;
+  position: relative;
+  &::after {
+    position: absolute;
+    content: "";
+    display: block;
+    top: 14px;
+    background: #71dcff;
+    width: 0.2rem;
+    height: 0.9rem;
+    margin-top: -0.35rem;
+    left: 0px;
+    border-radius: 0.1rem;
+  }
+}
+.search {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  .el-form-item {
+    margin-bottom: 0px;
+  }
+}

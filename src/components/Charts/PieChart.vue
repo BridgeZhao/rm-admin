@@ -1,0 +1,119 @@
+<template>
+  <v-chart
+    theme="dark"
+    :class="className"
+    :style="{height:height,width:width}"
+    :options="options"
+    ref="chart"
+  />
+</template>
+
+<script>
+import echarts from "echarts";
+const animationDuration = 2000;
+
+export default {
+  props: {
+    className: {
+      type: String,
+      default: "chart"
+    },
+    width: {
+      type: String,
+      default: "100%"
+    },
+    height: {
+      type: String,
+      default: "300px"
+    },
+    data: {
+      type: Object,
+      default() {
+        return {
+          data: [],
+          legendData: [],
+          name: "性别"
+        };
+      }
+    }
+  },
+  data() {
+    return {
+      options: {
+        tooltip: {
+          trigger: "item",
+          formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+          orient: "vertical",
+          right: 10,
+          top: "middle",
+          data: []
+        },
+        color:[ '#00B4D9', '#50E3C2'],
+        series: [
+          {
+            name: "",
+            type: "pie",
+            radius: "40%",
+            center: ["40%", "50%"],
+            data: [],
+            itemStyle: {
+              emphasis: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: "rgba(0, 0, 0, 0.5)"
+              },
+
+            }
+          }
+        ]
+      }
+    };
+  },
+  beforeDestroy() {
+    this.options = null;
+  },
+  watch:{
+     data(val){
+      let  _val = JSON.parse(JSON.stringify(val))
+       console.log("xingbioe",_val)
+       this.options.series[0].data = _val.data;
+        this.options.series[0].name = _val.name;
+        this.options.legend.data = _val.legendData;
+    }
+  },
+  created() {
+    console.warn(this.data);
+    this.options.series[0].data = this.data.data;
+    this.options.series[0].name = this.data.name;
+    this.options.legend.data = this.data.legendData;
+  },
+  methods: {
+    base64ToBlob(code) {
+      let parts = code.split(";base64,");
+      let contentType = parts[0].split(":")[1];
+      let raw = window.atob(parts[1]);
+      let rawLength = raw.length;
+      let uInt8Array = new Uint8Array(rawLength);
+      for (let i = 0; i < rawLength; ++i) {
+        uInt8Array[i] = raw.charCodeAt(i);
+      }
+      return new Blob([uInt8Array], {
+        type: contentType
+      });
+    },
+    saveImage(fileName) {
+      let aLink = document.createElement("a");
+      let base64 = this.$refs.chart.getDataURL();
+      let blob = this.base64ToBlob(base64); //new Blob([content]);
+
+      let evt = document.createEvent("HTMLEvents");
+      evt.initEvent("click", true, true); //initEvent 不加后两个参数在FF下会报错  事件类型，是否冒泡，是否阻止浏览器的默认行为
+      aLink.download = fileName;
+      aLink.href = URL.createObjectURL(blob);
+      aLink.click();
+    }
+  }
+};
+</script>

@@ -1,0 +1,380 @@
+// cover some element-ui styles
+.el-form-item__label,.el-radio__label,.el-radio__input.is-checked+.el-radio__label,.el-breadcrumb__separator,.expanded{
+  color: $menuText!important;
+  font-weight: normal;
+}
+.el-breadcrumb__inner,
+.el-breadcrumb__inner a {
+  font-weight: 400 !important;
+  color: #71dcff;
+}
+.el-dialog__header{
+  background: $borderColor;
+  padding: 15px 20px;
+  border-bottom: 1px solid $bgColor;
+}
+.el-select{ width: 100%;}
+.el-button--primary,.el-button--primary:focus{
+  background-color:$menuActiveText!important;
+  border-color: $menuText!important;
+  color: $bgColor;
+  &:hover{
+    color:$subMenuBg!important;
+    background-color:$menuText!important;
+  }
+}
+.el-button--default{
+  &:hover{
+    color:$menuActiveText!important;
+  }
+}
+.el-popper[x-placement^=bottom]{
+  margin-top: 10px!important;
+}
+.el-dialog{
+  border: 1px solid $subMenuBg!important;
+}
+table,table th,table td,.el-table--border,.el-button--default,.el-message-box,.el-dialog,.el-button--danger,.el-select-dropdown.is-multiple .el-select-dropdown__item.selected,.el-cascader-menus,.el-cascader-menu__item{
+  background-color:$subMenuBg!important;
+  border-color: #195569!important;
+  color: $menuText;
+}
+.el-button--danger{
+  color: #af4a4a!important;
+  &:hover{
+    color: red!important;
+    border-color:red!important;
+  }
+}
+.el-dialog__headerbtn{
+  background: $menuActiveText;
+  height: 40px;
+  width: 40px;
+  padding:8px 10px 10px 9px;
+  top:-10px;
+  right: -10px;
+  border-radius: 100%;
+  box-shadow: 0 3px 4px 0 #000;
+  i.el-icon-close:before{
+    font-size: 24px;
+    font-weight: bolder;
+    color: $bgColor;
+  }
+  &:hover{
+    background:$menuText;
+  }
+}
+.el-button--default,.el-select .el-tag{
+  &:hover{
+    border-color:$menuActiveText!important;
+  }
+}
+.el-cascader-menu,.el-range-separator{
+  border:none!important;
+  min-width: 120px;
+}
+.el-cascader-menu__item--extensible:after,.el-range-separator,.el-cascader__label,.el-step__icon-inner,.el-step__title,.el-upload__tip,.el-message--success,.area-list.el-tag,.area-list.el-tag .el-icon-close,.el-message-box__headerbtn .el-message-box__close{
+  color:$menuText!important;
+}
+.area-list.el-tag{
+  border-color:$menuText!important;
+}
+.el-steps{
+  margin-bottom: 20px;
+}
+.el-checkbox__input.is-disabled .el-checkbox__inner{
+  background-color:#365d6f !important
+}
+.el-step__icon.is-text,.el-step__head.is-finish{
+  border-color:$menuText;
+}
+.el-step__head.is-success,.el-button{
+ border-color:$menuActiveText;
+  .el-step__icon-inner, .el-step__icon.is-text{
+    color:$menuActiveText!important;
+  }
+}
+.el-button:not(.el-button--primary,.el-button--danger){
+  *:active,*:focus{
+    color:$menuActiveText!important;
+  }
+}
+.el-select .el-tag,.el-select .el-tag__close.el-icon-close,.el-cascader-menu__item.is-active,.el-date-table td.in-range div, .el-date-table td.in-range div:hover, .el-date-table.is-week-mode .el-date-table__row.current div, .el-date-table.is-week-mode .el-date-table__row:hover div{
+  background: $borderColor;
+  color:$menuActiveText;
+  &.el-cascader-menu__item--extensible:after{
+    color:$menuActiveText;
+  }
+}
+.el-step__title{
+  font-size: 13px;
+  font-weight: normal;
+}
+.is-process{
+  &.el-step__title{
+    color: $menuActiveText!important;
+  }
+  .el-step__icon{
+    background: $menuActiveText;
+    border-color:$menuText;
+  }
+}
+.el-loading-mask{
+  background:#031223b8;
+  .el-loading-spinner .path{
+    stroke: #71dcff;
+  }
+}
+.el-message-box__title,.el-message-box__status.el-icon-warning,.el-dialog__title,.el-message-box__message,.el-cascader__label span{
+  color: $menuActiveText!important;
+}
+.el-date-table td.available:hover{
+  color: $menuActiveText!important;
+}
+table th,.el-step__line{
+  background-color:$menuText!important;
+  color: $menuActiveText!important;
+}
+table td{
+  background-color: $bgColor!important;
+}
+.el-table__body tr.current-row>td{
+  background-color:$borderColor!important;
+  box-shadow: 1px 1px 1px #000;
+}
+table tr.hover-row td,table tr.current-row>td,.el-cascader-menu__item:focus:not(:active), .el-cascader-menu__item:hover{
+  background-color:$tbHover!important;
+  &:focus{
+    background: none;
+  }
+}
+.el-table--border::after, .el-table--group::after, .el-table::before{
+  background-color: $borderColor!important;
+}
+.el-popper[x-placement^=top] .popper__arrow::after,.el-popper[x-placement^=top] .popper__arrow{
+  border-top-color: $menuText!important;
+}
+.el-cascader-menus,.el-cascader-menu,.el-step__icon,.el-message--success,.el-message--warning{
+  background: $bgColor;
+  border-color: $menuText;
+  .popper__arrow{
+    top:-7px!important;
+    border-bottom-color: $menuText!important;
+    &::after{
+      border-bottom-color: $menuText!important;
+    }
+  }
+}
+.el-step__head.is-wait{
+  border-color: $menuText;
+}
+.el-table {
+  box-shadow: 0 0 6px #01182f;
+  .el-table__row--striped{
+    td{
+      background: $subMenuBg!important;
+    }
+  }
+  .cell {
+    text-align: center
+  }
+}
+button{
+  .el-icon-loading:before{
+    color: $bgColor;
+  }
+}
+.el-message .el-icon-error:before{
+  color: red;
+}
+.el-button--primary.is-disabled{
+  background-color:$borderColor!important;
+  border-color:$borderColor!important;
+  color: $menuText!important;
+}
+input,select,textarea,.el-input__inner,.el-message--error,textarea{
+  background-color: $bgColor!important;
+  border-color:$borderColor!important;
+  color: $menuText!important;
+  &::placeholder{
+    color: $menuText!important;
+  }
+  &:hover{
+    border-color: #257a96!important;
+    color: #257a96!important;
+  }
+  &:focus{
+    border-color: $menuActiveText!important;
+    color: $menuActiveText!important;
+  }
+}
+.el-input__icon{
+  &:before{
+    border-color: $menuActiveText!important;
+    color: $menuActiveText!important;
+  }
+}
+.active{
+  .el-input__inner{
+    border-color: $menuActiveText!important;
+    color: $menuActiveText!important;
+  }
+}
+.el-dialog.is-fullscreen{
+  .el-dialog__body{
+    height: 90%;
+    padding: 20px!important;
+  }
+}
+.el-dialog__body{
+  padding: 20px!important;
+}
+.chart-card{
+  width: 100%;
+  background: $menuBg!important;
+  color: $menuText!important;
+  border-color:$borderColor!important;
+  margin-bottom: 20px;
+  &:last-child{
+    margin-bottom: 0;
+  }
+  .el-card__body{
+    padding: 20px 10px;
+  }
+  .el-card__header{
+    border-bottom-color:$borderColor!important;
+    color: $menuActiveText!important;
+  }
+}
+.el-tree{
+  border: 1px solid $borderColor!important;
+  div{
+    background: $menuBg!important;
+  }
+  span{
+    color: $menuText!important;
+  }
+}
+.el-select-dropdown,.el-picker-panel,.el-dropdown-menu,.el-tree-node,.el-pager li,.el-pagination,.el-pagination button{
+  background: $menuBg!important;
+  border-color:$menuActiveText!important;
+  color: $menuText!important;
+  .el-select-dropdown__item,.el-dropdown-menu__item,.el-tree-node__content,.el-tree-node__children,li{
+    color: $menuText!important;
+    &.hover,&:hover,&:focus,&.is-current,.is-current{
+      background-color: $subMenuBg!important;
+      color: $menuActiveText!important;
+    }
+  }
+  .popper__arrow {
+    border-bottom-color: $menuActiveText !important;
+    top: -7px!important;
+    &:after {
+      border-bottom-color: $menuActiveText !important;
+    }
+  }
+}
+.el-checkbox__input,.el-radio{
+  .el-checkbox__inner,.el-radio__inner{
+    background-color: $subMenuBg !important;
+    border-color: $menuText !important;
+    &:after {
+      border-color: $menuActiveText !important;
+    }
+  }
+  &.is-checked{
+    .el-checkbox__inner,.el-radio__inner {
+      background-color: $menuActiveText !important;
+      border-color: $menuText !important;
+      &:after {
+        border-color: $bgColor!important;
+      }
+    }
+  }
+}
+.el-date-table td.today span,.el-button--primary{
+  background-color: $menuActiveText!important;
+  color: $bgColor;
+  text-shadow:none;
+}
+.el-input__icon,.el-input__suffix,.el-checkbox__label,.el-pagination__jump,.el-table__empty-text{
+  color: $menuText!important;
+  font-weight: normal;
+}
+.el-submenu__icon-arrow:before,.el-date-picker__header-label,.el-pager li.active{
+  color: $menuActiveText!important;
+}
+.el-switch {
+  .el-switch__core {
+    background-color: $subMenuBg !important;
+    border-color: $menuText !important;
+    &:after {
+      background-color: $menuText !important;
+    }
+  }
+  &.is-checked{
+    .el-switch__core {
+      background-color: $menuText !important;
+      border-color: $menuActiveText !important;
+      &:after {
+        background-color: $menuActiveText !important;
+      }
+    }
+  }
+}
+.el-upload {
+  input[type="file"] {
+    display: none !important;
+  }
+}
+
+.el-upload__input {
+  display: none;
+}
+
+
+// to fixed https://github.com/ElemeFE/element/issues/2461
+.el-dialog {
+  transform: none;
+  left: 0;
+  position: relative;
+  margin: 0 auto;
+}
+
+// refine element ui upload
+.upload-container {
+  .el-upload {
+    width: 100%;
+
+    .el-upload-dragger {
+      width: 100%;
+      height: 200px;
+    }
+  }
+}
+.avatar-container {
+  margin-right: 15px;
+  cursor: pointer;
+  color: #71dcff;
+  vertical-align: text-bottom;
+  position: relative;
+  &.lang{
+  }
+  svg{
+    margin-left: 5px;
+  }
+  .avatar-wrapper {
+    .el-icon-caret-bottom {
+      position: absolute;
+      right: 0;
+      top: 16px;
+      font-size: 18px;
+    }
+  }
+}
+// dropdown
+.el-dropdown-menu {
+  a {
+    display: block;
+  }
+}
