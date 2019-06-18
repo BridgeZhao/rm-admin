@@ -31,6 +31,7 @@ export function checkPermissionButton(pathname,btnType){
 }
 export function checkPermission() {
   const roles = store.getters && store.getters.menus
+	roles.push({name:'welcome',parentId:0,title:''})
   const routes = router.options.routes
   let route_obj = {}
   const route_filter = []

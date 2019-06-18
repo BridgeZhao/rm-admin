@@ -2,7 +2,13 @@
 
 
 **URL预览地址:** http://172.16.2.118
-frontend-admin-retail
+
+### frontend-admin-retail
+
+#### npm 6.5.0
+
+#### node v11.8.0
+
 
 ## 打包部署
 

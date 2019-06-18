@@ -6,7 +6,7 @@ import getPageTitle from '@/utils/get-page-title'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const whiteList = ['/login','/welcome','/404','/401'] // no redirect whitelist
+const whiteList = ['/login','/404','/401'] // no redirect whitelist
 
 router.beforeEach(async(to, from, next) => {
   // start progress bar
@@ -24,7 +24,7 @@ router.beforeEach(async(to, from, next) => {
       next({path: '/'})
       NProgress.done()
     } else {
-      if (whiteList.indexOf(to.path) !== -1) {
+      if (whiteList.indexOf(to.path) !== -1||to.path==='/welcome') {
         next()
       } else {
         // 权限控制
