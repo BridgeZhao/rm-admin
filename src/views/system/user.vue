@@ -235,12 +235,15 @@ export default {
     },
     storeTransName(idAry) {
       const nameAry = []
-      for (let i = 0; i < idAry.storeIds.length; i++) {
-        nameAry.push(this.storeList.find(s_item => {
-          return s_item.id === idAry.storeIds[i]
-        }).name || '')
-      }
-      return nameAry.join('；')
+			for (let i = 0; i < idAry.storeIds.length; i++) {
+				const t=this.storeList.find(s_item => {
+					return s_item.id === idAry.storeIds[i]
+				})
+				if(t){
+					nameAry.push(t.name)
+				}
+			}
+      return nameAry.join('-')
     },
     roleTransName(idAry) {
       const nameAry = []
