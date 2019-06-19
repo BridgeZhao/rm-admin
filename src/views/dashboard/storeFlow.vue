@@ -1,34 +1,35 @@
 <template>
   <div class="app-container">
-    <div>
+    <div class="layoutTitle">
       <label-view labelFather="门店客流分析"></label-view>
+			<div>
+				<el-form :inline="true" :model="formInline" class="demo-form-inline">
+					<!--        <el-form-item>-->
+					<!--          <el-select v-model="formInline.value" placeholder="请选择">-->
+					<!--            <el-option-->
+					<!--              v-for="item in formInline.options"-->
+					<!--              :key="item.value"-->
+					<!--              :label="item.label"-->
+					<!--              :value="item.value"-->
+					<!--            ></el-option>-->
+					<!--          </el-select>-->
+					<!--        </el-form-item>-->
+					<el-form-item>
+						<el-date-picker
+							v-model="formInline.date"
+							type="daterange"
+							range-separator="至"
+							start-placeholder="开始日期"
+							end-placeholder="结束日期"
+						></el-date-picker>
+					</el-form-item>
+					<el-form-item>
+						<el-button type="primary" @click="searchData">查询</el-button>
+					</el-form-item>
+				</el-form>
+			</div>
     </div>
-    <div class="queryConditions report-margin">
-      <el-form :inline="true" :model="formInline" class="demo-form-inline" size="mini">
-        <el-form-item>
-          <el-select v-model="formInline.value" placeholder="请选择">
-            <el-option
-              v-for="item in formInline.options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-date-picker
-            v-model="formInline.date"
-            type="daterange"
-            range-separator="至"
-            start-placeholder="开始日期"
-            end-placeholder="结束日期"
-          ></el-date-picker>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" size="mini">查询</el-button>
-        </el-form-item>
-      </el-form>
-    </div>
+
     <div class="top report-margin">
       <el-row :gutter="24">
         <el-col :span="6">
@@ -196,7 +197,6 @@
   export default {
     name: 'storesFlow',
     components: {labelView, LineTimeChart, BarChartAge, PieChart, LineChart},
-
     data() {
       return {
         chartHeight:'222px',
@@ -212,8 +212,6 @@
         componentData: null,
         formInline: {
           date: '',
-          startTime: '',
-          endTime: '',
           options: [
             {
               value: '1',
@@ -231,26 +229,17 @@
           value: ''
         },
         SummaryData: {
-          totalNum: 100,
-          totalNew: 20,
-          totalOld: 80,
-          totalAvgFrequency: 2.1
+          totalNum: 0,
+          totalNew: 0,
+          totalOld: 0,
+          totalAvgFrequency: 0
         },
         hourData: {},
         options1: {},
         options2: {},
         options3: {},
         data3: {
-          legendData: [
-            '碳酸饮料区',
-            '矿泉水区',
-            '果橙区',
-            '收银区',
-            '生活区',
-            '凉茶区',
-            '家电区',
-            '一楼入口'
-          ],
+          legendData: [],
           xAxisData: [
             '00:00',
             '01:00',
@@ -280,272 +269,39 @@
           seriesData: [
             {
               name: '碳酸饮料区',
-              data: [
-                120,
-                132,
-                101,
-                134,
-                90,
-                230,
-                210,
-                220,
-                182,
-                191,
-                234,
-                234,
-                932,
-                901,
-                934,
-                1290,
-                1330,
-                1320,
-                301,
-                334,
-                390,
-                330,
-                320,
-                460
-              ]
+							data:[]
             },
             {
               name: '矿泉水区',
-              data: [
-                150,
-                232,
-                201,
-                154,
-                190,
-                330,
-                410,
-                320,
-                332,
-                301,
-                334,
-                234,
-                820,
-                932,
-                901,
-                934,
-                1290,
-                1330,
-                1320,
-                301,
-                334,
-                390,
-                330,
-                320,
-                460
-              ]
+							data:[]
             },
             {
               name: '碳酸饮料区',
-              data: [
-                156,
-                132,
-                101,
-                134,
-                90,
-                78,
-                210,
-                220,
-                500,
-                191,
-                234,
-                234,
-                820,
-                932,
-                901,
-                934,
-                78,
-                1330,
-                16,
-                301,
-                334,
-                390,
-                330,
-                320,
-                460
-              ]
+							data:[]
             },
             {
               name: '果橙区',
-              data: [
-                150,
-                232,
-                201,
-                154,
-                190,
-                330,
-                410,
-                320,
-                332,
-                301,
-                334,
-                234,
-                820,
-                932,
-                901,
-                934,
-                89,
-                1330,
-                1320,
-                301,
-                334,
-                390,
-                330,
-                320,
-                460
-              ]
+							data:[]
             },
             {
               name: '收银区',
-              data: [
-                120,
-                132,
-                101,
-                134,
-                90,
-                3,
-                210,
-                21,
-                182,
-                191,
-                234,
-                234,
-                820,
-                932,
-                901,
-                934,
-                29,
-                1330,
-                1320,
-                278,
-                334,
-                390,
-                99,
-                320,
-                460
-              ]
+              data:[]
             },
             {
               name: '生活区',
-              data: [
-                150,
-                232,
-                201,
-                89,
-                190,
-                330,
-                600,
-                320,
-                332,
-                301,
-                334,
-                234,
-                820,
-                932,
-                901,
-                934,
-                1290,
-                1330,
-                1320,
-                301,
-                334,
-                390,
-                330,
-                320,
-                460
-              ]
+							data:[]
             },
             {
               name: '凉茶区',
-              data: [
-                120,
-                132,
-                101,
-                134,
-                90,
-                230,
-                210,
-                220,
-                182,
-                191,
-                234,
-                234,
-                820,
-                932,
-                901,
-                934,
-                1290,
-                20,
-                1320,
-                301,
-                300,
-                390,
-                330,
-                320,
-                460
-              ]
+							data:[]
             },
             {
               name: '家电区',
-              data: [
-                150,
-                232,
-                201,
-                154,
-                24,
-                330,
-                410,
-                320,
-                20,
-                301,
-                334,
-                234,
-                820,
-                932,
-                901,
-                934,
-                1290,
-                1330,
-                1320,
-                301,
-                334,
-                390,
-                330,
-                320,
-                460
-              ]
+							data:[]
             },
             {
               name: '一楼入口',
-              data: [
-                150,
-                67,
-                201,
-                89,
-                190,
-                330,
-                410,
-                320,
-                300,
-                301,
-                334,
-                234,
-                820,
-                932,
-                901,
-                934,
-                1290,
-                1330,
-                1320,
-                301,
-                334,
-                390,
-                330,
-                320,
-                460
-              ]
+							data:[]
             }
           ]
         },
@@ -555,6 +311,19 @@
         genderData: {}
       }
     },
+		computed: {
+			listenstage() {
+				return this.$store.state.app.storeId
+			}
+		},
+		watch: {
+			listenstage(newVal) {
+				this.formInline = {
+					date: ''
+				}
+				this.init(newVal)
+			}
+		},
     created() {
       this.init()
     },
@@ -565,10 +334,10 @@
         this.componentData = data
         this.fullVisible = true
       },
-      init() {
-        let start_time = moment(new Date()).format('YYYY-MM-DD')
-        let _storeId = 1
-        let _params = {
+      init(storeId) {
+				const start_time = moment(new Date()).format('YYYY-MM-DD')
+				const _storeId = storeId || this.$store.state.app.storeId
+				const _params = {
           store_id: _storeId,
           starttime: start_time,
           endtime: start_time,
@@ -576,26 +345,33 @@
         }
         this.loadData(_params)
       },
+			searchData(){
+        console.log(this.formInline.date)
+				const startTime = moment(this.formInline.date[0]).format('YYYY-MM-DD')
+				const endTime = moment(this.formInline.date[1]).format('YYYY-MM-DD')
+				const _storeId = this.$store.state.app.storeId
+				const _params = {store_id:_storeId,starttime:startTime,endtime:endTime,hh: '08,22'}
+				this.loadData(_params)
+			},
       loadData(params) {
         getStoreFlowData(params).then(res => {
           console.log('loadData->', res)
-          let _data = res.data
-          this.SummaryData = _data.SummaryData[0]
-
+					const _data = res.data
+          this.SummaryData = _data.summaryData[0]
           this.$nextTick(() => {
-            this.loadData1(_data.FlowData)
-            this.loadData2(_data.TotalHourData)
-            this.loadData2Sum(_data.TotalHourData)
-            this.laodFrequencyData(_data.FrequencyData)
-            this.laodAreaTopData(_data.BlockData)
-            this.laodAreaAge(_data.AgeData)
-            this.loadGender(_data.GenderData)
+            this.loadData1(_data.flowData)
+            this.loadData2(_data.totalHourData)
+            this.loadData2Sum(_data.totalHourData)
+            this.laodFrequencyData(_data.frequencyData)
+            this.laodAreaTopData(_data.areaData)
+            this.laodAreaAge(_data.ageData)
+            this.loadGender(_data.genderData)
           })
         })
       },
-      //客流类型分布
+      // 客流类型分布
       loadData1(data) {
-        let obj = Object.assign({}, this.mockdata)
+				const obj = Object.assign({}, this.mockdata)
         obj.legendData = ['新顾客', '老顾客']
         obj.seriesData = [
           {
@@ -608,24 +384,24 @@
           }
         ]
         data.forEach(element => {
-          obj.xAxisData.push(element.date)
+          obj.xAxisData.push(moment(element.date).format('YYYY-MM-DD'))
           obj.seriesData[0].data.push(element.customerNewTotal)
           obj.seriesData[1].data.push(element.customerOldTotal)
         })
         this.options1 = obj
       },
-      //小时客流汇总
+      // 小时客流汇总
       loadData2Sum(data) {
         console.log('))))))---', data)
-        let arry = []
+				const arry = []
         const _seriesData = []
         const hh = []
-        for (let i in data) {
+        for (const i in data) {
           arry.push(data[i].customerNum)
         }
         _seriesData.push(arry)
-        let _hh = []
-        for (let i in data) {
+				const _hh = []
+        for (const i in data) {
           _hh.push(data[i].hh)
         }
         hh.push(_hh)
@@ -634,14 +410,14 @@
         this.$set(this.options3, 'xAxisData', hh)
         console.log('this.options3', this.options3)
       },
-      //小时客流
+      // 小时客流
       loadData2(data) {
-        let obj = Object.assign({}, this.mockdata)
-        let xAxisData = new Set()
-        let legendData = new Set()
-        let mock = {}
+				const obj = Object.assign({}, this.mockdata)
+				const xAxisData = new Set()
+				const legendData = new Set()
+				const mock = {}
         data.forEach(element => {
-          let has = xAxisData.has(element.hh)
+					const has = xAxisData.has(element.hh)
           legendData.add(element.blockName)
           if (!has) {
             mock[element.hh] = {}
@@ -651,9 +427,9 @@
           mock[element.hh]
           xAxisData.add(element.hh)
         })
-        let seriesData = [];
+				const seriesData = [];
         [...legendData].forEach(it => {
-          let dataList = [];
+					const dataList = [];
           [...xAxisData].forEach(item => {
             if (mock[item].hasOwnProperty(it)) {
               dataList.push(mock[item][it])
@@ -666,7 +442,7 @@
             data: dataList
           })
         })
-        let op = {
+				const op = {
           xAxisData: [...xAxisData],
           legendData: [...legendData],
           seriesData: [...seriesData]
@@ -676,51 +452,51 @@
       },
       // 到店频次
       laodFrequencyData(data) {
-        let arry = []
-        for (let i in data) {
+				const arry = []
+        for (const i in data) {
           arry.push(data[i].customerNum)
         }
         this.$set(this.frequencyData, 'data', arry)
-        let _ci = ['1-2次', '3-5次', '6-7次', '8-10次', '11-15次', '16次以上']
+        const _ci = ['1-2次', '3-5次', '6-7次', '8-10次', '11-15次', '16次以上']
         this.$set(this.frequencyData, 'xAxisData', _ci)
         this.$set(this.frequencyData, 'xAxisName', '频次')
       },
-      //区域客流Top10
+      // 区域客流Top10
       laodAreaTopData(data) {
-        let _blockName = []
-        for (let i in data) {
-          _blockName.push(data[i].blockName)
+				const _blockName = []
+        for (const i in data) {
+          _blockName.push(data[i].areaName)
         }
-        let arry = []
-        for (let i in data) {
-          arry.push(data[i].count)
+				const arry = []
+        for (const i in data) {
+          arry.push(data[i].customerTotal)
         }
         this.$set(this.areaTopData, 'data', arry)
         this.$set(this.areaTopData, 'xAxisData', _blockName)
         this.$set(this.areaTopData, 'xAxisName', '区域')
       },
-      //区域客流年龄
+      // 区域客流年龄
       laodAreaAge(data) {
-        let _data = data[0]
-        let arr = []
-        for (let i in _data) {
+				const _data = data[0]
+				const arr = []
+        for (const i in _data) {
           arr.push(_data[i])
         }
         this.$set(this.ageData, 'data', arr)
-        let _age = ['0-18', '18-24', '25-34', '35-44', '45-54', '54-64', '>65']
+				const _age = ['0-18', '18-24', '25-34', '35-44', '45-54', '54-64', '>65']
         this.$set(this.ageData, 'xAxisData', _age)
         this.$set(this.ageData, 'xAxisName', '年龄')
       },
-      //区域客流性别
+      // 区域客流性别
       loadGender(data) {
         console.log('$$$$', data)
-        let gender = data[0]
+				const gender = data[0]
 
-        let arr = []
+				const arr = []
         for (const key in gender) {
           if (gender.hasOwnProperty(key)) {
             const element = gender[key]
-            let name = key == '男性' ? '男' : '女'
+						const name = key === '男性' ? '男' : '女'
             arr.push({
               value: element,
               name: name
@@ -730,17 +506,14 @@
         this.$set(this.genderData, 'legendData', ['男', '女'])
         this.$set(this.genderData, 'data', arr)
         this.$set(this.genderData, 'name', '性别')
-
       }
     }
   }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
   @import "@/styles/report.scss";
-
   .app-container {
     background: none;
-
     .el-tooltip__popper.is-dark {
       background: #1a2e49;
       border: 1px solid rgba(113, 220, 255, 0.3);

@@ -7,7 +7,7 @@ export function getRealTimeData(params) {
     params
   })
 }
-//周时段客流统计
+// 周时段客流统计
 export function getWeekFlowData(params) {
     return request({
       url: '/mg/dashboard/weekflow',
@@ -16,7 +16,7 @@ export function getWeekFlowData(params) {
     })
   }
 
-  //门店客流统计
+  // 门店客流统计
   export function getStoreFlowData(params) {
     return request({
       url: '/mg/dashboard/faceidFlow',
@@ -24,7 +24,7 @@ export function getWeekFlowData(params) {
       params
     })
   }
-  //客流热力图
+  // 客流热力图
   export function getAreaHotData(params) {
     return request({
       url: '/mg/dashboard/heatmap',
@@ -40,7 +40,7 @@ export function getWeekFlowData(params) {
     })
   }
 
-//4K屏幕图片
+// 4K屏幕图片
 export function getImageData(params) {
     return request({
       url: '/backend/camera/entries',
@@ -54,6 +54,14 @@ export function getPinData(params) {
     method: 'get',
     params
   })
+}
+// 左侧轮播
+export function getLeftImg(params) {
+	return request({
+		url: '/backend/members_4k',
+		method: 'get',
+		params
+	})
 }
 // http://172.16.2.182:8000/api/mg/dashboard/supermonitor?store_id=test0523
 

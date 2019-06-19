@@ -18,8 +18,9 @@ export default {
 <style lang="scss" scoped>
 .labelView{
     font-size: 1.2rem;
-    line-height: 1.6rem;
-    height: 1.6rem;
+	margin-left: 1.2%;
+    /*line-height: 1.6rem;*/
+    /*height: 1.6rem;*/
     color: #71dcff;
     position: relative;
     display: -ms-flexbox;
@@ -31,15 +32,15 @@ export default {
         display: block;
         position: absolute;
         left: -1rem;
-        top: 15%;
+        /*top: 15%;*/
         width: .3rem;
-        height: 1.1rem;
+        height: 1.2rem;
         background: #71dcff;
         border-radius: .15rem;
     }
     .label-title{
-        font-size: 16px;
+        font-size: 1.3rem;
     }
-    
+
 }
 </style>

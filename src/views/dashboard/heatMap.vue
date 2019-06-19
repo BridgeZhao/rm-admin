@@ -1,14 +1,13 @@
 <template>
   <div class="app-container" v-loading="bigLaoding">
     <div class="box-header">
-      <span>客流热力图</span>
+      <span style="font-size: 1.3rem">客流热力图</span>
       <div class="search">
         <el-form
           :inline="true"
           :model="formInline"
           class="demo-form-inline"
           label-width="10px"
-          size="mini"
         >
           <el-form-item label>
             <el-date-picker
@@ -20,7 +19,7 @@
             ></el-date-picker>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="searchData()" size="mini">查询</el-button>
+            <el-button type="primary" @click="searchData()">查询</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -191,7 +190,7 @@
 import moment from "moment";
 import { getAreaHotData, getDurationData } from "@/api/report";
 import h337 from "heatmap.js";
-const MAX_HEAT_VALUE = 10;
+const MAX_HEAT_VALUE = 10
 import BarChartNew from "@/components/Charts/BarChartNew";
 import optionConfig from "@/utils/echartConfig";
 export default {
@@ -207,8 +206,7 @@ export default {
       bottomBoxLoading:false,
       radio2: 5,
       formInline: {
-        time: [moment(new Date()).add(-1,'days').format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')]
-
+        time: ''
       },
       SummaryData: {
         duration: 0,
@@ -229,7 +227,7 @@ export default {
         yAxisName: "区域人数",
         barList: [330, 22, 456, 123, 57]
       }
-    };
+    }
   },
   methods: {
     openFull(componentName, data, title) {
@@ -239,46 +237,45 @@ export default {
       this.fullVisible = true
     },
     searchData() {
-      console.log(this.formInline.time)
-      const time = this.formInline.time;
-      let start_time = moment(new Date()).format("YYYY-MM-DD");
-      let _storeId = 1;
-      let _params = {
+			this.radio2 = 5
+      const time = this.formInline.time
+			const start_time = moment(new Date()).format("YYYY-MM-DD")
+			const _store_id = this.$store.state.app.storeId
+			const _params = {
         filter: this.radio2,
-        store_id: "test",
-        starttime: time == null ? start_time : this.formInline.time[0],
-        endtime: time == null ? start_time : this.formInline.time[1],
-        hh: "08:00,22:00"
-      };
-      this.laodData(_params);
+        store_id: _store_id,
+        starttime: time == null ? start_time : moment(time[0]).format('YYYY-MM-DD'),
+        endtime: time == null ? start_time : moment(time[1]).format('YYYY-MM-DD'),
+        hh: '08,22'
+      }
+      this.laodData(_params)
     },
     sliderChange(key) {//滑块change事件
       console.log(key);
-      let _hh1 = key[0] + ':00', _hh2 = key[1] + ':00';
-      const time = this.formInline.time;
-      let start_time = moment(new Date()).format("YYYY-MM-DD");
-      let _storeId = 1;
+			let _hh1 = key[0], _hh2 = key[1];
+      const time = this.formInline.time
+      let start_time = moment(new Date()).format("YYYY-MM-DD")
+			const _store_id = this.$store.state.app.storeId
       let _params = {
         filter: this.radio2,
-        store_id: "test",
-        starttime: time == null ? start_time : this.formInline.time[0],
-        endtime: time == null ? start_time : this.formInline.time[1],
+        store_id: _store_id,
+				starttime: time == null ? start_time : moment(this.formInline.time[0]).format('YYYY-MM-DD'),
+				endtime: time == null ? start_time : moment(this.formInline.time[1]).format('YYYY-MM-DD'),
         hh: _hh1 +"," + _hh2
-      };
+      }
       this.setHeampData(_params)
-
     },
     radioChage(value){
-      const time = this.formInline.time;
+      const time = this.formInline.time
       let start_time = moment(new Date()).format("YYYY-MM-DD");
-      let _filter = value;
+      let _filter = value
       let _params = {
         filter: _filter,
-        store_id: "test",
-        starttime: time == null ? start_time : this.formInline.time[0],
-        endtime: time == null ? start_time : this.formInline.time[1],
-        hh: this.dataTime[0] +':00,' + this.dataTime[1] +':00'
-      };
+        store_id: this.$store.state.app.storeId,
+				starttime: time == null ? start_time : moment(time[0]).format('YYYY-MM-DD'),
+				endtime: time == null ? start_time : moment(time[1]).format('YYYY-MM-DD'),
+        hh: this.dataTime[0] +',' + this.dataTime[1]
+      }
        this.setDurationData(_params)
     },
     setData(heatmapData) {
@@ -286,7 +283,7 @@ export default {
         min: 0,
         max: MAX_HEAT_VALUE,
         data: heatmapData
-      });
+      })
     },
     transformData(xdata, s_data, name) {
       return optionConfig({
@@ -312,12 +309,12 @@ export default {
           }
         },
         yAxis: {
-          name: name || "人数",
-          type: "value",
+          name: name || '人数',
+          type: 'value',
           nameTextStyle: {
              color:'#ffffff',
              fontSize: 12,
-            lineHeight: 10,
+            lineHeight: 10
           },
            axisLine:{
             show:true,
@@ -337,7 +334,7 @@ export default {
         },
         series: [
           {
-            barWidth: 20, //柱图宽度
+            barWidth: 20, // 柱图宽度
             itemStyle: {
               barBorderRadius: [10, 10, 0, 0]
             },
@@ -346,104 +343,119 @@ export default {
             barWidth: "10"
           }
         ]
-      });
+      })
     },
-    init() {
-      let _storeId = 1;
-      let _params = {
+    init(storeId) {
+			const _storeId = storeId || this.$store.state.app.storeId
+			const startTime = moment(new Date()).add(-1,'days').format('YYYY-MM-DD')
+			const endTime = moment(new Date()).format('YYYY-MM-DD')
+			const _params = {
         filter: this.radio2,
-        store_id: "test",
-        starttime: this.formInline.time[0],
-        endtime: this.formInline.time[1],
-        hh: "08:00,22:00"
-      };
-      this.laodData(_params);
+        store_id: _storeId,
+        starttime: startTime,
+        endtime: endTime,
+        hh: '08,22'
+      }
+      this.laodData(_params)
     },
-    laodData(data) { //首次加载数据
+    laodData(data) { // 首次加载数据
       this.setHeampData(data)
       this.setDurationData(data)
     },
-    setHeampData(data){//获取热力图数据
+    setHeampData(data){// 获取热力图数据
        getAreaHotData(data).then(res => {
-        console.log("热点", res);
-        console.log(res.data.heatmap);
-        let _heatmap = res.data.heatmap;
-        let heatmapData = [];
-        const originalWidth = 900;
-        const originalHeight = 300;
-        let containerRect = this.$refs.heatmapContainer.getBoundingClientRect();
-        let xScale = containerRect.width / originalWidth;
-        let yScale = containerRect.height / originalHeight;
-        //进行坐标轴数据解析
+        console.log("热点", res)
+        console.log(res.data.heatmap)
+        let _heatmap = res.data.heatmap
+        let heatmapData = []
+        const originalWidth = 900
+        const originalHeight = 300
+        let containerRect = this.$refs.heatmapContainer.getBoundingClientRect()
+        let xScale = containerRect.width / originalWidth
+        let yScale = containerRect.height / originalHeight
+        // 进行坐标轴数据解析
         for (let item of _heatmap) {
             heatmapData.push({
               x: Number((item.field_x * xScale).toFixed(0)),
               y: containerRect.height - Number((item.field_y * yScale).toFixed(0)),
               value: item.heat_map_value
-            });
+            })
         }
         this.$nextTick(() => {
           this.heatmap.setData({
             min: 0,
             max: MAX_HEAT_VALUE,
             data: heatmapData
-          });
-        });
+          })
+        })
         this.bigLaoding = false
         console.log(console.log("热点arr", heatmapData));
-      });
+      })
     },
-    setDurationData(data){//获取客流量等数据
+    setDurationData(data){// 获取客流量等数据
       getDurationData(data).then(res => {
-        console.log("$$$$$$", res);
-        const durData = res.data;
-        this.SummaryData = durData;
-        //平均停留时长
-        let stay_xdata = [],
+        const durData = res.data
+        this.SummaryData = durData
+        // 平均停留时长
+				let stay_xdata = [],
           stay_sdata = [];
-        for (let key in durData.durationMap) {
-          stay_xdata.push(key);
-          stay_sdata.push(durData.durationMap[key]);
+        for (const key in durData.durationMap) {
+          stay_xdata.push(key)
+          stay_sdata.push(durData.durationMap[key])
         }
         this.areaStayAverageOptions = this.transformData(
           stay_xdata,
           stay_sdata,
           "时长"
-        );
-        //stayMap区域驻足客流
-        let stay_area_xdata = [],
-          stay_area_sdata = [];
-        for (let key in durData.stayMap) {
-          stay_area_xdata.push(key);
-          stay_area_sdata.push(durData.stayMap[key]);
+        )
+        // stayMap区域驻足客流
+				const stay_area_xdata = [],
+            stay_area_sdata = [];
+        for (const key in durData.stayMap) {
+          stay_area_xdata.push(key)
+          stay_area_sdata.push(durData.stayMap[key])
         }
         this.areaStayOptions = this.transformData(
           stay_area_xdata,
           stay_area_sdata
-        );
-        //totalMap 区域客流分布
-        let stay_flow_xdata = [],
-          stay_flow_sdata = [];
-        for (let key in durData.totalMap) {
-          stay_flow_xdata.push(key);
-          stay_flow_sdata.push(durData.totalMap[key]);
+        )
+        // totalMap 区域客流分布
+        let stay_flow_xdata = [],stay_flow_sdata = [];
+
+        for (const key in durData.totalMap) {
+          stay_flow_xdata.push(key)
+          stay_flow_sdata.push(durData.totalMap[key])
         }
         this.areaFlowOptions = this.transformData(
           stay_flow_xdata,
           stay_flow_sdata
-        );
-      });
+        )
+      })
     }
   },
+	computed: {
+		listenstage() {
+			return this.$store.state.app.storeId
+		}
+	},
+	watch: {
+		listenstage(newVal) {
+			this.formInline = {
+				time: ''
+			}
+			this.radio2 = 5
+			this.init(newVal)
+		}
+	},
   created() {
     for (let i = 8; i < 23; i++) {
-      let item = ``;
+      let item = ``
       if (i < 10) {
-        item = `0${i}:00`;
+        item = `0${i}:00`
       } else {
-        item = `${i}:00`;
+        item = `${i}:00`
       }
-      this.list.push(item);
+      this.list.push(item)
     }
   },
   mounted() {
@@ -458,11 +470,11 @@ export default {
       radius: 60,
       opacity: 0.6,
       blur: 1
-    });
-    //当页面首次加载完毕渲染两大模块数据
-    this.init();
+    })
+    // 当页面首次加载完毕渲染两大模块数据
+    this.init()
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 @import "@/styles/areaHeat.scss";

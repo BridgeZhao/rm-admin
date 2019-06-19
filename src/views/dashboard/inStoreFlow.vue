@@ -1,54 +1,55 @@
 <template>
-    <div class="app-container" style="background:none">
+    <div class="app-container reportInput" style="background:none">
         <div class="top">
-            <div style="width:120px;">
+            <div style="width: 10%;float: left;margin-left: 1%;">
                 <label-view labelFather="进店客流统计"></label-view>
             </div>
-           <div style="width:50%;margin-left:10px;">
-                <el-radio-group v-model="radio" size="mini">
+           <div style="float: left">
+                <el-radio-group v-model="radio">
                     <el-radio-button label="图形报表" class="radioBtn"></el-radio-button>
                     <el-radio-button label="数据报表" class="radioBtn"></el-radio-button>
                 </el-radio-group>
            </div>
-        </div>
-        <div class="middle" v-show="radio == '图形报表'">
-            <div class="queryConditions report-margin">
-                <el-form :inline="true" :model="formInline" class="demo-form-inline" size="mini">
-                <el-form-item label="日期">
-                    <el-date-picker
-                      class="input-shadow"
-                    v-model="formInline.date"
-                    type="date"
-                    placeholder="选择日期">
-                    </el-date-picker>
-                </el-form-item>
-                <el-form-item label="">
-                    <el-time-select
-                    placeholder="起始时间"
-                    v-model="formInline.startTime"
-                    :picker-options="{
-                    start: '08:30',
-                    step: '00:15',
-                    end: '18:30'
+					<div  v-show="radio == '图形报表'" style="float: right">
+						<el-form :inline="true" :model="formInline" class="demo-form-inline">
+							<el-form-item label="日期">
+								<el-date-picker
+									class="input-shadow"
+									v-model="formInline.date"
+									type="date"
+									placeholder="选择日期">
+								</el-date-picker>
+							</el-form-item>
+							<el-form-item label="">
+								<el-time-select
+									placeholder="起始时间"
+									v-model="formInline.startTime"
+									:picker-options="{
+                    start: '08:00',
+                    step: '01:00',
+                    end: '22:00'
                     }">
-                </el-time-select>
-                -
-                <el-time-select
-                    placeholder="结束时间"
-                    v-model="formInline.endTime"
-                    :picker-options="{
-                    start: '08:30',
-                    step: '00:15',
-                    end: '18:30',
+								</el-time-select>
+								-
+								<el-time-select
+									placeholder="结束时间"
+									v-model="formInline.endTime"
+									:picker-options="{
+                    start: '08:00',
+                    step: '01:00',
+                    end: '22:00',
                     minTime: formInline.startTime
                     }">
-                </el-time-select>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="searchData" size="mini">查询</el-button>
-                </el-form-item>
-                </el-form>
-            </div>
+								</el-time-select>
+							</el-form-item>
+							<el-form-item>
+								<el-button type="primary" @click="searchData">查询</el-button>
+							</el-form-item>
+						</el-form>
+					</div>
+        </div>
+        <div class="middle" v-show="radio == '图形报表'">
+
             <div class="reportGraphics">
                 <el-row :gutter="24" class="report-margin">
                     <el-col :span="12"><div class="grid-content bg-purple report-line">
@@ -102,7 +103,7 @@
         </div>
         <div class="tableDataBox report-margin" v-show="radio == '数据报表'">
             <div class="tableTop report-margin">
-                <div>
+        <div>
                     <span>{{downTime}}</span>
                     <span style="margin-left:10px;">{{downTimeLine}}</span>
                 </div>
@@ -232,54 +233,69 @@ export default {
             ]
         }
     },
-    created(){
-        this.init();
+		computed: {
+			listenstage() {
+				return this.$store.state.app.storeId
+			}
+		},
+		watch: {
+			listenstage(newVal) {
+				this.formInline = {
+					date: '',
+					startTime: '',
+					endTime: ''
+				}
+				this.init(newVal)
+			}
+		},
+	  mounted(){
+        this.init()
     },
      methods:{
-        init(){
-            let start_time=moment(new Date()).format('YYYY-MM-DD');
-            this.downTime = start_time;
-            this.downTimeLine = '00:00 - 23:59';
-            let _storeId = 1;
+        init(storeId){
+            let start_time=moment(new Date()).format('YYYY-MM-DD')
+            this.downTime = start_time
+            this.downTimeLine = '00:00 - 23:59'
+					  const _storeId = storeId || this.$store.state.app.storeId
             let _params = {store_id:_storeId,starttime:start_time,endtime:start_time,hh:'00,23'}
             this.loadData(_params)
         },
         searchData(){
-            let start_time=moment(this.formInline.date).format('YYYY-MM-DD');
-            this.downTime = start_time;
+					  const start_time=moment(this.formInline.date).format('YYYY-MM-DD')
+            this.downTime = start_time
             this.downTimeLine = this.formInline.startTime +' - '+ this.formInline.endTime
-            let _hh = this.formInline.startTime +','+ this.formInline.endTime
-            let _storeId = 1;
-            let _params = {store_id:_storeId,starttime:start_time,endtime:start_time,hh:_hh}
+					  const _hh = this.formInline.startTime.substr(0,this.formInline.startTime.indexOf(':'))+','+this.formInline.endTime.substr(0,this.formInline.endTime.indexOf(':'))
+					  const _storeId = this.$store.state.app.storeId
+					  const _params = {store_id:_storeId,starttime:start_time,endtime:start_time,hh:_hh}
             this.loadData(_params)
         },
         loadData(params){
             getRealTimeData(params).then(res =>{
             console.log("!!!!!---",res)
-            let res_data=res.data;
-            this.optionPieData.vip = res_data.vip;
-            this.tableData=res_data.hour;
-            this.hourData = res_data.hour;
-            let arr = []
-            for (let i in res_data.age) {
-              arr.push(res_data.age[i]);
+            const res_data=res.data
+            this.optionPieData.vip = res_data.vip
+            this.tableData=res_data.hour
+            this.hourData = res_data.hour
+            const arr = []
+            for (const i in res_data.age) {
+              arr.push(res_data.age[i])
             }
-            let xData = ["0-18", "19-29", "30-39", "40-64", ">65"];
+            const xData = ["0-18", "19-29", "30-39", "40-64", ">65"]
               this.$set(this.ageData,'xAxisData',xData)
               this.$set(this.ageData,'xAxisName','年龄')
               this.$set(this.ageData,'data',arr)
             this.loadVip()
-            this.loadHourPeople();
+            this.loadHourPeople()
          })
         },
 
         loadVip() {
-            let vip = this.optionPieData.vip;
-            let arr = [];
+            const vip = this.optionPieData.vip
+            const arr = []
             for (const key in vip) {
                 if (vip.hasOwnProperty(key)) {
-                const element = vip[key];
-                let name = key == "vipFlow" ? "会员" : "非会员";
+                const element = vip[key]
+                const name = key === 'vipFlow' ? '会员' : '非会员'
                 arr.push({
                     value: element,
                     name: name
@@ -321,16 +337,17 @@ export default {
     }
 }
 </script>
-<style lang="scss" >
+<style lang="scss" scoped>
 @import "@/styles/report.scss";
 .top{
-    display: flex;
-    justify-content: flex-start;
-    // .radioBtn{
-    //     background-color: #2b7a94 !important;
-    //     color: #00172f;
-    //     text-shadow: none;
-    // }
+    /*display: flex;*/
+    /*justify-content: flex-start;*/
+	overflow: hidden;
+     .radioBtn{
+         background-color: #2b7a94 !important;
+         color: #00172f;
+         text-shadow: none;
+     }
 }
 .queryConditions{
   position: absolute;
