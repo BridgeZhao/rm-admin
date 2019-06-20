@@ -17,7 +17,6 @@ service.interceptors.request.use(
     if(config.url.indexOf('/dashboard')!==-1){
       config.baseURL = process.env.VUE_APP_BASE_REPORT
     }else if(config.url.indexOf('/auth')!==-1){
-    	alert(config.url.indexOf('/auth')!==-1)
       config.baseURL= process.env.VUE_APP_HTTP_AUTH
     }else{
 			config.baseURL= process.env.VUE_APP_HTTP_MG
