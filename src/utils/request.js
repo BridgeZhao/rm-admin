@@ -18,10 +18,11 @@ service.interceptors.request.use(
       config.baseURL = process.env.VUE_APP_BASE_REPORT
     }else if(config.url.indexOf('/auth')!==-1||config.url.indexOf('/login')!==-1||config.url.indexOf('/role')!==-1||config.url.indexOf('/user')!==-1||config.url.indexOf('/menus')!==-1){
       config.baseURL= process.env.VUE_APP_HTTP_AUTH
-    }else{
+    }else if(config.url.indexOf('/backend')!==-1){
+			config.baseURL = process.env.VUE_APP_HTTP_BACKEND
+		}else{
 			config.baseURL= process.env.VUE_APP_HTTP_MG
 		}
-
     return config
   },
   error => {
