@@ -7,28 +7,15 @@
       :width="'620px'"
       :visible.sync="dialogVisible"
       :close-on-click-modal="false"
-      @click="dialogVisible = false">
-      <el-form v-loading="loading" :model="form" ref="myform">
-        <el-form-item label="账号类型" :label-width="formLabelWidth">
-          <el-select
-            v-model="form.userType"
-            placeholder="请选择">
-            <el-option
-              v-for="item in accountList"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="登录名" :label-width="formLabelWidth">
+      @click="clearClose">
+      <el-form v-loading="loading" :model="form" :rules="rules" ref="myform">
+        <el-form-item label="登录名" prop="username" :label-width="formLabelWidth">
           <el-input v-model="form.username" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item v-if="dialogType!=='edit'" label="登陆密码" :label-width="formLabelWidth">
+        <el-form-item v-if="dialogType==='edit'" label="登陆密码" :label-width="formLabelWidth">
           <el-input v-model="form.password" type="password" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="所属门店" :label-width="formLabelWidth">
+        <el-form-item label="所属门店" prop="storeIds"  :label-width="formLabelWidth">
           <el-select
             v-model="form.storeIds"
             multiple
@@ -42,7 +29,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item v-show="form.userType==='hall'" label="所属角色" :label-width="formLabelWidth">
+        <el-form-item label="所属角色" prop="roleIds" :label-width="formLabelWidth">
           <el-select
             v-model="form.roleIds"
             multiple
@@ -165,13 +152,21 @@ export default {
     return {
       dialogType: 'add',
       stopRefresh: true,
-      formLabelWidth: '70px',
+      formLabelWidth: '85px',
       loading: true,
       dialogVisible: false,
       menusData: [],
       menuList: [],
       rolesList: [],
       tableData: [],
+			rules: {
+				username: [
+					{required: true, message: '请输入登陆名称', trigger: 'blur'},
+					{min: 4, max: 10, message: '长度在 4 到 10 个字符', trigger: 'blur'}
+				],
+				storeIds:[{ required: true, message: '请选择所属门店', trigger: 'change'}],
+				roleIds:[{ required: true, message: '请选择所属角色', trigger: 'change'}]
+			},
       form: {
         username: '',
         password: '',
@@ -181,13 +176,6 @@ export default {
         enabled: true,
         userType: 'hall'
       },
-      accountList: [{
-        value: 'hall',
-        label: '普通账号'
-      }, {
-        value: 'device',
-        label: '设备账号'
-      }],
       defaultProps: {
         children: 'children',
         label: 'label'
@@ -257,14 +245,13 @@ export default {
     btnSubmit(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          console.log(this.form)
           this.loading = true
-          let _data=this.form
+          const _data=this.form
           let _function=addUser
           if(this.dialogType === 'edit'){
             _function=updateUser
-            _data=this.form.id
           }
+          console.log(_data)
           _function(_data).then(() => {
             this.clearClose('reload')
             this.$message.success('操作成功')

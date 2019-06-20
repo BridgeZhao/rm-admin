@@ -189,6 +189,9 @@ background: $menuBg;
     opacity: 1;
   }
 }
+.color-active{
+	color: $menuActiveText;
+}
 .el-date-table td.disabled div{
   background-color: #02050a;
     opacity: 1;
@@ -202,10 +205,4 @@ background: $menuBg;
   font-size: 14px;
   color: #0874e4;
 }
-.input,select,textarea,.el-input__inner,.el-message--error,textarea {
-	border-radius: 0;
-	border: 1px solid rgba(113,220,255,0.30);
-	-moz-box-shadow: inset 0 0 6px rgba(113,220,255,0.30);
-	-webkit-box-shadow: inset 0 0 6px rgba(113,220,255,0.30);
-	box-shadow: inset 0 0 6px rgba(113,220,255,0.30);
-}
+

@@ -42,29 +42,28 @@ service.interceptors.response.use(
    * You can also judge the status by HTTP Status Code
    */
   response => {
-    const res = response.data
-    if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
-      // to re-login
-      MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
-        confirmButtonText: 'Re-Login',
-        cancelButtonText: 'Cancel',
-        type: 'warning'
-      }).then(() => {
-        store.dispatch('user/resetToken').then(() => {
-          location.reload()
-        })
-      })
-      return Promise.reject(new Error(res.message || 'Error'))
-    } else {
-      return res
-    }
-  },
+		const res = response.data
+		return res
+	},
   error => {
-    Message({
-      message: '服务器错误',
-      type: 'error',
-      duration: 5 * 1000
-    })
+  	console.log(error.response)
+		if(error.response.status===401){
+			MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
+				confirmButtonText: 'Re-Login',
+				cancelButtonText: 'Cancel',
+				type: 'warning'
+			}).then(() => {
+				store.dispatch('user/resetToken').then(() => {
+					location.reload()
+				})
+			})
+		}else{
+			Message({
+				message: '服务器错误',
+				type: 'error',
+				duration: 5 * 1000
+			})
+		}
     return Promise.reject(error)
   }
 )

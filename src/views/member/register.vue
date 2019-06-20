@@ -5,6 +5,7 @@
       <el-form-item label="注册时间">
         <el-date-picker
           v-model="dateTimes"
+					style="width: 370px"
           type="daterange"
           format="yyyy 年 MM 月 dd 日"
           value-format="timestamp"
@@ -83,6 +84,7 @@
   </div>
 </template>
 <script>
+import moment from 'moment'
 import { mapGetters } from 'vuex'
 import {getRegisterMember} from '@/api/member'
 export default {
@@ -130,8 +132,8 @@ export default {
     getTableData() {
       this.tableLoading = true
       if (this.dateTimes.length) {
-        this.form.begin = this.dateTimes[0]
-        this.form.end = this.dateTimes[1]
+				this.form.begin =moment(this.dateTimes[0]).format('X')
+				this.form.end = moment(this.dateTimes[1]).format('X')
       }
       const _pagination = Object.assign(this.form, this.pagination)
       for (const k in _pagination) {
@@ -155,7 +157,7 @@ export default {
       this.dateTimes = []
       this.form = {
         name: '',
-        storeId: '',
+				storeId:this.storeId,
         begin: '',
         end: ''
       }

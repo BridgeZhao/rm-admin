@@ -22,10 +22,11 @@ export function addUser(data) {
     data
   })
 }
-export function updateUser(id) {
+export function updateUser(data) {
   return request({
-    url: `/user/${id}`,
-    method: 'put'
+    url: `/user/${data.id}`,
+    method: 'put',
+		data
   })
 }
 export function delUser(id) {

@@ -3,7 +3,7 @@
     <el-row  type="flex">
       <el-col :span="8">
         <el-form ref="myform" :model="form" :rules="rules">
-          <el-form-item label="父级菜单" :label-width="formLabelWidth">
+          <el-form-item label="父级菜单" p :label-width="formLabelWidth">
             <el-select v-model="form.parentId" placeholder="请选择">
               <el-option label="无" :value="0"></el-option>
               <el-option

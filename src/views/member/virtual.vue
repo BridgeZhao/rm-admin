@@ -4,10 +4,10 @@
     <el-form :inline="true" class="demo-form-inline">
       <el-form-item label="注册时间">
         <el-date-picker
+					style="width: 370px"
           v-model="dateTimes"
           type="daterange"
           format="yyyy 年 MM 月 dd 日"
-          value-format="timestamp"
           range-separator="至"
           start-placeholder="开始日期"
           end-placeholder="结束日期">
@@ -78,7 +78,7 @@
   <el-row v-loading="tableLoading">
     <el-col :xs="8" :sm="4" :md="5" :lg="4" :xl="3" v-for="(item, index) in tableData" :key="index">
       <div class="user-box">
-        <img :src="item.avatar" class="avatar" />
+        <p class="avatar"><img :src="item.avatar" /></p>
         <p><span>{{ storeList.find(s_item => { return s_item.id === item.storeId }).name }}</span></p>
         <p class="inline"><label>性别：</label><span>{{ item.gender==='m'?'男':item.gender==='w'?'女':'未知' }}</span></p>
         <p class="inline"><label>年龄：</label><span>{{ item.age }}</span></p>
@@ -99,6 +99,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import { mapGetters } from 'vuex'
 import { getVirtualMember } from '@/api/member'
 export default {
@@ -135,8 +136,8 @@ export default {
     getTableData() {
       this.tableLoading = true
       if (this.dateTimes.length) {
-        this.form.begin = this.dateTimes[0]
-        this.form.end = this.dateTimes[1]
+        this.form.begin =moment(this.dateTimes[0]).format('X')
+				this.form.end = moment(this.dateTimes[1]).format('X')
       }
       const _pagination = Object.assign(this.form, this.pagination)
       for (const k in _pagination) {
@@ -160,7 +161,7 @@ export default {
       this.dateTimes = []
       this.form = {
         name: '',
-        storeId: '',
+        storeId:this.storeId,
         begin: '',
         end: ''
       }
@@ -189,7 +190,7 @@ export default {
   background: #00172f !important;
   border: 1px solid #418aaa;
   box-shadow: 1px 1px 4px 1px #000000;
-  padding: 10px;
+  padding:0 10px 10px 10px;
 	margin: 10px;
   font-size: 12px;
   font-weight: normal;
@@ -202,6 +203,12 @@ export default {
 	}
 }
 .avatar{
-  width: 100%;
+	height:160px;
+	margin: 0;
+	vertical-align: top;
+	overflow:hidden;
+  img{width: 100%;
+	vertical-align: top;
+	}
 }
 </style>
