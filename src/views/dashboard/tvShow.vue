@@ -9,22 +9,22 @@
       <div class="member-list-warp">
         <div class="wrapper-item" v-for="item in list2" :key="item.id">
           <div class="box-card list-item">
-            <img :src="item.href" alt>
+            <img :src="item.avatar" alt>
             <div class="content">
-              <div class="title">{{item.title}}</div>
-              <div class="value" v-if="item.status">{{item.name}}</div>
+              <div class="title">优惠券名称</div>
+              <div class="value" v-if="item.avgWeekCount < 3">{{item.couponName}}</div>
               <div class="area-start" v-else>
-                <div class="value-area-left">{{item.code1}}</div>
-                <div class="value-area-right">{{item.code2}}</div>
+                <div class="value-area-left">{{item.tags[0]}}</div>
+                <div class="value-area-right">{{item.tags[1]}}</div>
               </div>
               <div class="area-between">
                 <div>
-                  <div class="title">{{item.code3}}</div>
-                  <div class="sub-title">{{item.code4}}</div>
+                  <div class="title">领取场景:{{item.scenarioName}}</div>
+                  <div class="sub-title">客单价{{item.accCount}}</div>
                 </div>
                 <div>
-                  <div class="title">{{item.code5}}</div>
-                  <div class="sub-title">{{item.code6}}</div>
+                  <div class="title">最近到店时间</div>
+                  <div class="sub-title">{{setMoment(item.time)}}</div>
                 </div>
               </div>
             </div>
@@ -169,13 +169,13 @@ import moment from "moment";
 import h337 from "heatmap.js";
 import BarChartNew from "@/components/Charts/BarChartNew";
 const MAX_HEAT_VALUE = 10;
-import { getAreaHotData, getImageData, getPinData} from "@/api/report";
-
+import {getAreaHotData, getImageData, getPinData, getLeftImg} from "@/api/report";
 export default {
   name: "aptitude-demonstration",
   components: { BarChartNew },
   data() {
     return {
+			timer: null,
       timeData:[moment(new Date()).add(-1,'days').format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')],
       maxHeight: 0,
       summary:{
@@ -232,49 +232,67 @@ export default {
       heatmap: null,
       heampChartdataList: {},
       viewDataList: {}
-    };
+    }
   },
   methods: {
+  	setMoment(data){
+  		return  moment(data).format('HH:mm:ss')
+		},
     tableHeight() {
-      const { clientHeight } = this.$refs.table;
-      this.maxHeight = clientHeight;
+      const { clientHeight } = this.$refs.table
+      this.maxHeight = clientHeight
       window.onresize = () => {
-        this.tableHeight();
-      };
+        this.tableHeight()
+      }
     },
-    setBigDatas(){
-      let _store_id = {
-        store_id:'test0523'
+    setBigDatas(storeId){
+    	const _storeId = storeId
+      const _store_id = {
+        store_id:_storeId
       }
       getPinData(_store_id).then(res =>{
-        console.log("shushushsu00000",res)
-        //设置summary
-        let _summary = res.data.summary[0];
-        this.summary = _summary;
-        //设置期间浏览人数
-        let _viewData = res.data.viewData;
-        let xData = [];
-        let yData = [];
-        for (let item of _viewData) {
-          xData.push(item.hh+":00");
-          yData.push(item.customerNum);
+        // 设置summary
+        let _summary = res.data.summary[0]
+        this.summary = _summary
+        // 设置期间浏览人数
+				const _viewData = res.data.viewHourData
+				const xData = []
+				const yData = []
+        for (const item of _viewData) {
+          xData.push(item.hour+":00")
+          yData.push(item.customerNum)
         }
          this.$set(this.viewDataList,'xAxisData',xData)
          this.$set(this.viewDataList,'barList',yData)
          this.$set(this.viewDataList,'xAxisName','小时')
          this.$set(this.viewDataList,'yAxisName','客流人数')
-        //场景检测
-        let _tableData = res.data.scenarioData;
-        this.tableData = _tableData;
-        //区域检测areaDataList
-        let _areaDataList = res.data.areaData;
-        this.areaDataList = _areaDataList;
+        // 场景检测
+        let _tableData = res.data.scenarioData
+        this.tableData = _tableData
+        // 区域检测areaDataList
+        let _areaDataList = res.data.areaData
+        this.areaDataList = _areaDataList
+				// 热力图
+				const _heatmap = res.data.heatmap
+				this.setHeampData(_heatmap)
+				// 设置小时客流
+				const _flowHourData = res.data.flowHourData
+				this.setHeampChartData(_flowHourData)
       })
     },
+		setLeftImg(){
+    	const size = {
+    		size: 20
+			}
+			getLeftImg(size).then(res =>{
+				console.log("0000000---",res)
+				this.list2 = res
+			})
+		},
     setImgData(){//获取下方抓去图片
-      let _size = {
+			const _size = {
         size:40
-      };
+      }
       getImageData(_size).then(res =>{
         console.log("tututu",res)
         this.$nextTick(()=>{
@@ -282,68 +300,79 @@ export default {
         })
       })
     },
+		// 设置每小时客流数
     setHeampChartData(data){
-      let _viewData = data;
-      let xData = [];
-      let yData = [];
+    	console.log("-----",data)
+      const _viewData = data
+			const xData = []
+			const yData = []
       for (let item of _viewData) {
-        xData.push(item.hour+":00");
-        yData.push(item.count);
+        xData.push(item.hour+":00")
+        yData.push(item.customerNum)
       }
       this.$set(this.heampChartdataList,'xAxisData',xData)
       this.$set(this.heampChartdataList,'barList',yData)
       this.$set(this.heampChartdataList,'xAxisName','小时')
       this.$set(this.heampChartdataList,'yAxisName','客流人数')
     },
-    setHeampData(data){//获取热力图数据
-      getAreaHotData(data).then(res => {
-        console.log("热点", res);
-        console.log(res.data.heatmap);
-        const chartData = res.data.hour;
-        let _heatmap = res.data.heatmap;
-        let heatmapData = [];
-        const originalWidth = 900;
-        const originalHeight = 300;
-        let containerRect = this.$refs.heatmapContainer.getBoundingClientRect();
-        let xScale = containerRect.width / originalWidth;
-        let yScale = containerRect.height / originalHeight;
-        //进行坐标轴数据解析
-        for (let item of _heatmap) {
+    setHeampData(data){// 获取热力图数据
+				const _heatmap = data
+				const heatmapData = []
+        const originalWidth = 900
+        const originalHeight = 300
+				const containerRect = this.$refs.heatmapContainer.getBoundingClientRect()
+				const xScale = containerRect.width / originalWidth
+				const yScale = containerRect.height / originalHeight
+        // 进行坐标轴数据解析
+        for (const item in _heatmap) {
           heatmapData.push({
             x: Number((item.field_x * xScale).toFixed(0)),
             y: containerRect.height - Number((item.field_y * yScale).toFixed(0)),
             value: item.heat_map_value
-          });
+          })
         }
-        console.log("--------",heatmapData);
+        console.log("--------",heatmapData)
         this.$nextTick(() => {
           this.tableHeight()
           this.heatmap.setData({
             min: 0,
             max: MAX_HEAT_VALUE,
             data: heatmapData
-          });
-        });
-        this.setHeampChartData(chartData);
-      });
+          })
+        })
     },
-    init() {
-      let _storeId = 1;
-      let _params = {
+    init(storeId) {
+			const _storeId = storeId || this.$store.state.app.storeId
+			const _params = {
         filter: 2,
-        store_id: "test",
+        store_id: _storeId,
         starttime: this.timeData[0],
         endtime: this.timeData[1],
-        hh: "08:00,22:00"
-      };
-      this.setHeampData(_params);
-      this.setImgData();
-      this.setBigDatas()
+        hh: '08,22'
+      }
+      this.setHeampData(_params)
+      this.setImgData()
+      this.setBigDatas(_storeId)
+			this.setLeftImg()
     },
+		lunbo(){
+  		this.setLeftImg()
+			this.setImgData()
+		}
   },
   created(){
     // this.loadData();
   },
+	computed: {
+		listenstage() {
+			return this.$store.state.app.storeId
+		}
+	},
+	watch: {
+		listenstage(newVal) {
+			this.init(newVal)
+		}
+	},
   mounted() {
     this.heatmap = h337.create({
       container: this.$refs.heatmapContainer,
@@ -356,113 +385,48 @@ export default {
       radius: 60,
       opacity: 0.6,
       blur: 1
-    });
-    for (let i = 0; i < 5; i++) {
-      let obj = {
-        id: 0,
-        title: "优惠卷名称",
-        name: "9.99全场满减",
-        code1: "价格敏感",
-        code2: "高价值",
-        status: true,
-        code3: "领取场景",
-        code4: "红包雨",
-        code5: "领取时间",
-        code6: "2019-10-22 18:20",
-        href: ""
-      };
-      let status = [true, false, true, false, true];
-      let hrefs = [
-        "http://img5.imgtn.bdimg.com/it/u=2181714473,2247286204&fm=26&gp=0.jpg",
-        "http://img3.imgtn.bdimg.com/it/u=1828058422,2306320811&fm=26&gp=0.jpg",
-        "http://img1.imgtn.bdimg.com/it/u=201117052,1461216129&fm=26&gp=0.jpg",
-        "http://img4.imgtn.bdimg.com/it/u=2504015697,685651741&fm=26&gp=0.jpg",
-        "http://img2.imgtn.bdimg.com/it/u=922677876,3751376574&fm=26&gp=0.jpg",
-        "http://img2.imgtn.bdimg.com/it/u=1216645486,410358322&fm=11&gp=0.jpg"
-      ];
-      obj.id = i;
-      obj.status = status[i];
-      obj.href = hrefs[i];
-      this.list2.push(obj);
-    }
-    // for (let i = 0; i < 30; i++) {
+    })
+    // for (let i = 0; i < 5; i++) {
     //   let obj = {
-    //     href: "",
-    //     type: 1
-    //   };
+    //     id: 0,
+    //     title: "优惠卷名称",
+    //     name: "9.99全场满减",
+    //     code1: "价格敏感",
+    //     code2: "高价值",
+    //     status: true,
+    //     code3: "领取场景",
+    //     code4: "红包雨",
+    //     code5: "领取时间",
+    //     code6: "2019-10-22 18:20",
+    //     href: ""
+    //   }
+    //   let status = [true, false, true, false, true]
     //   let hrefs = [
-    //     "http://i1.whymtj.com/uploads/tu/201610/587/slt4.png",
-    //     "http://i1.whymtj.com/uploads/tu/201611/726/slt13.png",
-    //     "http://i1.whymtj.com/uploads/tu/201901/10477/c80e395b81_4.jpg",
-    //     "http://i1.whymtj.com/uploads/tu/201905/9999/rn31b1fa4d2a.jpg",
-    //     "http://i1.whymtj.com/uploads/tu/201905/9999/rnfa098bd2aa.jpg",
-    //     "http://i1.whymtj.com/uploads/tu/201805/9999/rn7522785563.jpg",
-    //     "http://i1.whymtj.com/uploads/tu/201610/587/slt4.png",
-    //     "http://i1.whymtj.com/uploads/tu/201611/726/slt13.png",
-    //     "http://i1.whymtj.com/uploads/tu/201901/10477/c80e395b81_4.jpg",
-    //     "http://i1.whymtj.com/uploads/tu/201905/9999/rn31b1fa4d2a.jpg",
-    //     "http://i1.whymtj.com/uploads/tu/201905/9999/rnfa098bd2aa.jpg",
-    //     "http://i1.whymtj.com/uploads/tu/201805/9999/rn7522785563.jpg",
-    //     "http://i1.whymtj.com/uploads/tu/201710/9999/931dde146b.jpg",
-    //     "http://i1.whymtj.com/uploads/tu/201710/9999/7ae8dba93b.jpg",
-    //     "http://i1.whymtj.com/uploads/tu/201901/10456/zc1a9qwa.jpg",
-    //     "http://i1.whymtj.com/uploads/tu/201612/190/slt16.png",
-    //     "http://i1.whymtj.com/uploads/tu/201612/486/slt4.png",
-    //     "http://i1.whymtj.com/uploads/tu/201701/257/st11.png",
-    //     "http://i1.whymtj.com/uploads/tu/201906/9999/rnfb3e6a6302.jpg",
-    //     "http://i1.whymtj.com/uploads/tu/201906/9999/05daaa129c.jpg",
-    //     "http://i1.whymtj.com/uploads/tu/201901/9999/dd05cf85c5.jpg",
-    //     "http://i1.whymtj.com/uploads/tu/201906/9999/513f86d2ec.jpg",
-    //     "http://i1.whymtj.com/uploads/tu/201612/190/slt16.png",
-    //     "http://i1.whymtj.com/uploads/tu/201612/486/slt4.png",
-    //     "http://i1.whymtj.com/uploads/tu/201701/257/st11.png",
-    //     "http://i1.whymtj.com/uploads/tu/201906/9999/rnfb3e6a6302.jpg",
-    //     "http://i1.whymtj.com/uploads/tu/201906/9999/05daaa129c.jpg",
-    //     "http://i1.whymtj.com/uploads/tu/201901/9999/dd05cf85c5.jpg",
-    //     "http://i1.whymtj.com/uploads/tu/201906/9999/513f86d2ec.jpg"
-    //   ];
-    //   let types = [
-    //     1,
-    //     2,
-    //     3,
-    //     1,
-    //     2,
-    //     3,
-    //     3,
-    //     2,
-    //     1,
-    //     2,
-    //     1,
-    //     2,
-    //     3,
-    //     2,
-    //     1,
-    //     1,
-    //     2,
-    //     3,
-    //     1,
-    //     2,
-    //     3,
-    //     3,
-    //     2,
-    //     1,
-    //     2,
-    //     1,
-    //     2,
-    //     3,
-    //     2,
-    //     1
-    //   ];
-    //   obj.href = hrefs[i];
-    //   obj.type = types[i];
-    //   this.list3.push(obj);
+    //     "http://img5.imgtn.bdimg.com/it/u=2181714473,2247286204&fm=26&gp=0.jpg",
+    //     "http://img3.imgtn.bdimg.com/it/u=1828058422,2306320811&fm=26&gp=0.jpg",
+    //     "http://img1.imgtn.bdimg.com/it/u=201117052,1461216129&fm=26&gp=0.jpg",
+    //     "http://img4.imgtn.bdimg.com/it/u=2504015697,685651741&fm=26&gp=0.jpg",
+    //     "http://img2.imgtn.bdimg.com/it/u=922677876,3751376574&fm=26&gp=0.jpg",
+    //     "http://img2.imgtn.bdimg.com/it/u=1216645486,410358322&fm=11&gp=0.jpg"
+    //   ]
+    //   obj.id = i
+    //   obj.status = status[i]
+    //   obj.href = hrefs[i]
+    //   this.list2.push(obj)
     // }
     this.init()
-    window.setInterval(() => {
-      setTimeout(this.init(), 0)
+    this.timer = setInterval(() => {
+      setTimeout(this.lunbo(), 0)
     }, 15000)
-  }
-};
+  },
+	beforeDestroy() {
+  	console.log("取消取消取消")
+		if(this.timer) { // 如果定时器还在运行 或者直接关闭，不用判断
+			clearInterval(this.timer) //关闭
+			this.timer = null
+		}
+	}
+}
 </script>
 <style lang="scss" scoped>
 @import "@/styles/apDemon.scss";
