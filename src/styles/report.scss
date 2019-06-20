@@ -24,32 +24,42 @@
     position: relative;
     background: #082849;
 }
+.box-chart{}
+.echarts{ padding-bottom: 20px}
+.full-chart{
+
+}
+.top{
+	.report-line{
+		padding: 20px 0;
+	}
+}
+.middle{
+	.report-line{
+		padding: 0;
+	}
+}
 .report-title{
     font-size: .8rem;
     color: #71dcff;
-    line-height: 1.3rem;
-    font-weight: 700;
-    margin-top: 1.05rem;
 }
 .report-num{
     font-size: 2rem;
     line-height: 2.4rem;
 }
 .report-small{
-    font-size: .6rem;
+    font-size: .8rem;
     color: #56b327;
-    line-height: 1rem;
-    font-weight: 700;
-    margin-top: .5rem;
 }
 .report-gang{
     width: 100%;
+	  font-size: 15px;
     height: 40px;
     border-bottom: 1px solid rgba(113,220,255,.3);
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    padding:0px 5px;
+    padding:0 10px;
     justify-content: space-between;
 }
 .report-tip{

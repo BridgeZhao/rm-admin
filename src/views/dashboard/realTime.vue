@@ -80,7 +80,7 @@
               <el-button size="mini" @click="saveImage('barChartAge')">保存图片</el-button>
             </div>
             <div style="width:100%;height:100%;">
-              <bar-chart-age :data="ageData" ref="barChartAge"/>
+              <bar-chart-age :data="ageData" ref="barChartAge" height="250px"/>
             </div>
           </div>
         </el-col>
@@ -95,7 +95,7 @@
               <!-- <el-button size="mini" >保存图片</el-button> -->
             </div>
             <div style="width:100%;height:100%;">
-              <people-chart :dataList="hourPeopleData"/>
+              <people-chart :dataList="hourPeopleData" height="300px"/>
             </div>
           </div>
         </el-col>
@@ -115,7 +115,7 @@ export default {
   components: { labelView, PieChart, BarChartAge, PeopleChart },
   data() {
     return {
-      height2: "400px",
+      height2: "300px",
       summary: {
         frontFlow: 0,
         entryFlow: 0,

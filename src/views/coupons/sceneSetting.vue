@@ -104,7 +104,7 @@
 <script>
 	import moment from "moment"
 	// eslint-disable-next-line no-unused-vars
-	import {setCouponsData, searchCouponsData, getCouponsData, delCouponsData } from '@/api/coupons'
+	import {setScenarioData, searchScenarioData, getScenarioData, delScenarioData } from '@/api/coupons'
 	export default {
 		name: 'SceneSetting',
 		data() {
@@ -163,7 +163,7 @@
 			},
 			search() {
 				const _id = this.formInline.scene
-					searchCouponsData(_id).then(res =>{
+				searchScenarioData(_id).then(res =>{
 						// this.da
 						console.log('resres',res)
 					})
@@ -190,7 +190,7 @@
 			deleteData(row){
 				const _id = row.id
 				console.log('删除',_id)
-				delCouponsData(_id).then(res =>{
+				delScenarioData(_id).then(res =>{
 					if(res === 'OK'){
 						this.$message({
 							message: '删除成功！',
@@ -211,7 +211,7 @@
 					// eslint-disable-next-line no-empty
 					if (valid) {
 						const data = this.ruleForm
-						setCouponsData(data).then(res =>{
+						setScenarioData(data).then(res =>{
 							if(res === 'OK'){
 								this.$message({
 									message: this.dialogTitle === '新增场景' ? '添加成功！' : '修改成功！',
@@ -242,7 +242,7 @@
 			},
 			getTableList() {
 				const _data = this.page
-				getCouponsData(_data).then(res =>{
+				getScenarioData(_data).then(res =>{
 					console.log("res",res)
 					this.page.page = res.page
 					this.page.size = res.size

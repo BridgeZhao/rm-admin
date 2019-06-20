@@ -14,14 +14,13 @@ service.interceptors.request.use(
       config.headers['Authorization'] ='Bearer '+getToken()
     }
     console.log('config.url',config.url)
-    if(config.url.indexOf('/dashboard')!==-1){
-      config.baseURL = process.env.VUE_APP_BASE_REPORT
-    }else if(config.url.indexOf('/auth')!==-1){
-      config.baseURL= process.env.VUE_APP_HTTP_AUTH
-    }else{
+		if(config.url.indexOf('/dashboard')!==-1){
+			config.baseURL = process.env.VUE_APP_BASE_REPORT
+		}else if(config.url.indexOf('/auth')!==-1||config.url.indexOf('/login')!==-1||config.url.indexOf('/role')!==-1||config.url.indexOf('/user')!==-1){
+			config.baseURL= process.env.VUE_APP_HTTP_AUTH
+		}else{
 			config.baseURL= process.env.VUE_APP_HTTP_MG
 		}
-
     return config
   },
   error => {
