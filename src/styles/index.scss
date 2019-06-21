@@ -4,6 +4,7 @@
 @import './element-ui.scss';
 @import './sidebar.scss';
 @import "./font/iconfont.css";
+//@import "./report.scss";
 body {
   height: 100%;
   background: $bgColor;
@@ -188,6 +189,9 @@ background: $menuBg;
     opacity: 1;
   }
 }
+.color-active{
+	color: $menuActiveText;
+}
 .el-date-table td.disabled div{
   background-color: #02050a;
     opacity: 1;
@@ -201,3 +205,4 @@ background: $menuBg;
   font-size: 14px;
   color: #0874e4;
 }
+

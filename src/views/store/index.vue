@@ -15,11 +15,11 @@
         <el-step title="区域绘制"></el-step>
       </el-steps>
       <!--基本信息-->
-      <el-form v-if="steps===0" v-loading="fromLoading" :model="fromInfo">
-        <el-form-item label="门店名称" :rules="[{ required: true, message: '名称不能为空'}]" :label-width="formLabelWidth">
+      <el-form v-if="steps===0" v-loading="fromLoading" :model="fromInfo"  :rules="rules"  ref="myform0">
+        <el-form-item label="门店名称" prop="name" :label-width="formLabelWidth">
           <el-input v-model="fromInfo.name" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="所属省市" :rules="[{ required: true, message: '所属省市不能为空'}]" :label-width="formLabelWidth">
+        <el-form-item label="所属省市"  prop="regionId" :label-width="formLabelWidth">
           <div class="flex">
             <div class="col">
               <el-select v-model="regionVal" @change="regionChange" placeholder="请选择">
@@ -75,11 +75,11 @@
               @close="handleClose(tag)">
               {{ tag.name +'(' + tag.num +'人)' }}
             </el-tag>
-            <el-form :inline="true" :model="areaData">
-              <el-form-item label="区域名称" prop="name" :rules="[{ required: true, message: '名称不能为空', trigger: 'blur'},{ min: 3, max: 10, message: '长度在 3 到 10 个字符', trigger: 'blur' }]">
+            <el-form :inline="true" :model="areaData"  :rules="rulesArea" ref="myform1">
+              <el-form-item label="区域名称" prop="name">
                 <el-input v-model="areaData.name" placeholder="请输入名称"></el-input>
               </el-form-item>
-              <el-form-item label="预警人数" prop="num" :rules="[{required: true, message: '人数不能为空'}]">
+              <el-form-item label="预警人数" prop="num">
                 <el-input v-model.number="areaData.num"  type="number" placeholder="请输入整数"></el-input>
               </el-form-item>
               <el-form-item>
@@ -125,16 +125,19 @@
             </el-button-group>
           </el-col>
         </el-row>
-        <div class="perview-warp">
+        <div v-if="fromInfo.imgBase64" class="perview-warp">
           <canvas id="canvasDom" />
           <img :src="fromInfo.imgBase64">
         </div>
+				<div v-else class="perview-warp">
+					 <p class="color-active">没有上传平面图</p>
+				</div>
       </el-form>
       <div slot="footer" class="dialog-footer text-center">
         <el-button v-if="dialogType==='add'&&steps===2" @click="stepUp">上一步</el-button>
-        <el-button v-if="dialogType==='add'&&steps!==2" type="primary" :disabled="disabledBtn" @click="stepNext">下一步</el-button>
-        <el-button  v-if="dialogType==='add'&&steps===2" type="primary" :disabled="disabledBtn" @click="stepNext('close')">完 成</el-button>
-        <el-button v-if="dialogType==='edit'&&(steps===0||steps===2)" type="primary" :disabled="disabledBtn" @click="stepNext('close')">确定修改</el-button>
+        <el-button v-if="dialogType==='add'&&steps!==2" type="primary" :disabled="disabledBtn" @click="checkForm">下一步</el-button>
+        <el-button  v-if="dialogType==='add'&&steps===2" type="primary" :disabled="disabledBtn" @click="checkForm('close')">完 成</el-button>
+        <el-button v-if="dialogType==='edit'&&(steps===0||steps===2)" type="primary" :disabled="disabledBtn" @click="checkForm('close')">确定修改</el-button>
       </div>
     </el-dialog>
     <!--数据列表-->
@@ -205,7 +208,7 @@
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="0">基本信息</el-dropdown-item>
               <el-dropdown-item command="1">区域管理</el-dropdown-item>
-              <el-dropdown-item command="2">区域绘制</el-dropdown-item>
+              <el-dropdown-item command="2" v-if="scope.row.floorGraph">区域绘制</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
           <el-button v-permission="'delete'" type="danger" size="small" @click.native.prevent="deleteRow(scope.row.id)">
@@ -245,13 +248,27 @@ export default {
       drawLayer:undefined,
       areaText:undefined,
       checkType:{},
-      areaData:{name:'',num:1},
+      areaData:{name:'',num:''},
       areaList:[],
       regionAry:[],
       cityAry:[],
       changeImgBase64:false,
       allRegion:undefined,
-      regionVal:undefined,
+      regionVal:'',
+			rules: {
+				name: [
+					{required: true, message: '请输入门店名称', trigger: 'blur'},
+					{min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'}
+				],
+				regionId:[{ required: true, message: '所属省市不能为空', trigger: 'change'}]
+			},
+			rulesArea: {
+				name: [
+					{required: true, message: '请输入区域名称', trigger: 'blur'},
+					{min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'}
+				],
+				num:[{ required: true,type: 'number', message: '请输入预警人数', trigger: 'blur'}]
+			},
       fromInfo: {
         name: '',
         regionId:undefined,
@@ -333,7 +350,7 @@ export default {
     regionChange(val){
       this.cityAry=this.allRegion[val]
       this.fromInfo.regionId=this.cityAry[0].id
-      console.log(this.cityAry,this.fromInfo.regionId)
+      console.log(this.regionVal)
     },
     pageChange(val){
       this.pagination.page = val
@@ -427,6 +444,17 @@ export default {
         return cityObj.province+' — '+cityObj.city.cityName
       }
     },
+		checkForm(type) {
+    	if(!this.steps){
+				this.$refs['myform'+this.steps].validate((valid) => {
+					if (valid) {
+						this.stepNext(type)
+					}
+				})
+			}else{
+				this.stepNext(type)
+			}
+		},
     stepNext(type='normal'){
       if(this.steps>2){
         return
@@ -448,7 +476,7 @@ export default {
             this.$message.success('操作成功')
             this.clearClose('reload')
           }else{
-            this.fromInfo.storeId=res.id
+						this.fromInfo.id=this.fromInfo.storeId=res.id
             this.fromInfo.imgBase64=res.floorGraph
             this.fromInfo.pointData=res.pointData
             this.steps++
@@ -490,20 +518,24 @@ export default {
         this.$message.error('只能上传jpg或png格式')
       }
     },
-    btnAddUpdateArea(){
-      this.fromLoading=true
-      this.areaData.storeId=this.fromInfo.storeId
-      addUpdateArea(this.areaData).then(()=>{
-        this.fromLoading=false
-        delete this.areaData.id
-        this.areaData.name=''
-        this.areaData.num=1
-        this.getAreasData()
-        this.$message.success('操作成功')
-      }).finally(()=>{
-        this.fromLoading=false
-      })
-    },
+    btnAddUpdateArea() {
+			this.$refs['myform1'].validate((valid) => {
+				if (valid) {
+					this.fromLoading = true
+					this.areaData.storeId = this.fromInfo.storeId
+					addUpdateArea(this.areaData).then(() => {
+						this.fromLoading = false
+						delete this.areaData.id
+						this.areaData.name = ''
+						this.areaData.num = ''
+						this.getAreasData()
+						this.$message.success('操作成功')
+					}).finally(() => {
+						this.fromLoading = false
+					})
+				}
+			})
+		},
     getAreasData() {
       return new Promise(resolve => {
         getAreas(this.fromInfo.storeId).then(res => {
@@ -622,6 +654,13 @@ export default {
   .el-upload{
     width: 100%;
   }
+	.perview-warp{
+		min-height: 200px;
+		p{
+			text-align: center;
+		  padding-top: 100px;
+		}
+	}
   .upload-imgshow{
     color: #418aaa;
     width: 100%;

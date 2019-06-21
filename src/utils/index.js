@@ -4,6 +4,7 @@
 export function menuTransTree(data,type='menus') {
   const menuFristList = []
   const menusTree = []
+	console.log(data)
   data.forEach(item => {
     const tmp_obj = {id: item.id,parentId:0, label: item.title, data: item}
     if(type==='buttons'){
@@ -13,26 +14,29 @@ export function menuTransTree(data,type='menus') {
       }
     }
     if (item.parentId === 0) {
-      menuFristList.push(item)
-      const has_child=data.find(_itm=>{
-        return _itm.parentId===item.id
-      })
-      if(has_child){
-        delete tmp_obj.children
-      }
-      menusTree.push(tmp_obj)
+
+				menuFristList.push(item)
+				const has_child=data.find(_itm=>{
+					return _itm.parentId===item.id
+				})
+				if(has_child){
+					delete tmp_obj.children
+				}
+				menusTree.push(tmp_obj)
     } else {
-      for (let i = 0; i < menusTree.length; i++) {
-        if (item.parentId === menusTree[i].id) {
-          if (menusTree[i].hasOwnProperty('children')) {
-            tmp_obj.parentId=item.parentId
-            menusTree[i].children.push(tmp_obj)
-          } else {
-            menusTree[i].children = [tmp_obj]
-          }
-          break
-        }
-      }
+			if(item.name!=='system-menus') {
+				for (let i = 0; i < menusTree.length; i++) {
+					if (item.parentId === menusTree[i].id) {
+						tmp_obj.parentId = menusTree[i].id
+						if (menusTree[i].hasOwnProperty('children')) {
+							menusTree[i].children.push(tmp_obj)
+						} else {
+							menusTree[i].children = [tmp_obj]
+						}
+						break
+					}
+				}
+			}
     }
   })
   return {menusTree, menuFristList}

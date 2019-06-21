@@ -183,6 +183,27 @@ export const constantRoutes = [
 			component: () => import('@/views/coupons/config'),
 			meta: {title: '优惠券管理'}
 		}]
+	},
+	// 游戏管理
+	{
+	  path: '/game',
+	  name: 'game',
+	  component: Layout,
+	  meta: {
+	    title: '游戏管理',
+	    icon: 'game'
+	  },
+	  children: [{
+	    path: 'storeContent',
+	    name: 'store-content',
+	    component: () => import('@/views/game/storeContent'),
+	    meta: { title: '门店内容维护'}
+	  },{
+	    path: 'miniGame',
+	    name: 'mini-game',
+	    component: () => import('@/views/game/miniGame'),
+	    meta: { title: '小游戏'}
+	  }]
 	}
 ]
 

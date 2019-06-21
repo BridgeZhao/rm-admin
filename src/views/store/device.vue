@@ -9,11 +9,11 @@
     <!--弹框-->
     <el-dialog :title="dialogType==='add'?'添 加':'编 辑'" :width="'720px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="()=>{clearClose()}">
       <!--基本信息-->
-      <el-form v-if="drawType==='info'" v-loading="dgLoading" :model="fromInfo">
-        <el-form-item label="设备名称" :label-width="formLabelWidth">
+      <el-form v-if="drawType==='info'" v-loading="dgLoading" :model="fromInfo" :rules="rules"  ref="myform">
+        <el-form-item label="设备名称" :label-width="formLabelWidth" prop="name" >
           <el-input v-model="fromInfo.name" autocomplete="off" placeholder="请输入设备名称"></el-input>
         </el-form-item>
-        <el-form-item label="所属区域" :label-width="formLabelWidth">
+        <el-form-item label="所属区域" :label-width="formLabelWidth" prop="areaId">
           <el-select v-model="fromInfo.areaId" placeholder="请选择">
             <el-option
               v-for="item in areaList"
@@ -23,7 +23,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="设备类型" :label-width="formLabelWidth">
+        <el-form-item label="设备类型" :label-width="formLabelWidth" prop="deviceType">
           <el-row :gutter="24">
             <el-col :span="8" class="no-padding">
               <el-select v-model="fromInfo.deviceType" placeholder="请选择">
@@ -35,13 +35,13 @@
                 </el-option>
               </el-select>
             </el-col>
-            <el-col v-if="fromInfo.deviceType==='camera'" :span="12">
+            <el-col v-if="fromInfo.deviceType==='camera'" :span="12" prop="usage">
               <el-radio v-model="fromInfo.usage" :label="0">人头摄像头</el-radio>
               <el-radio v-model="fromInfo.usage" :label="1">人脸摄像头</el-radio>
             </el-col>
           </el-row>
         </el-form-item>
-        <el-form-item v-if="fromInfo.deviceType==='camera'" label="RTSP" :label-width="formLabelWidth">
+        <el-form-item v-if="fromInfo.deviceType==='camera'" label="RTSP" :label-width="formLabelWidth" prop="rtsp">
           <el-input v-model="fromInfo.rtsp" autocomplete="off" placeholder="请输入设备rtsp流地址"></el-input>
         </el-form-item>
       </el-form>
@@ -86,7 +86,7 @@
         </div>
       </el-form>
       <div slot="footer" class="dialog-footer text-center">
-        <el-button type="primary" :disabled="disabledBtn" @click="btnSubmit">确 定</el-button></div>
+        <el-button type="primary" :disabled="disabledBtn" @click="btnSubmit">{{dialogType==='add'?'确定添加':'确定修改'}}</el-button></div>
     </el-dialog>
     <!--数据列表-->
     <el-table
@@ -139,8 +139,8 @@
           <el-button v-permission="'edit'" size="small" @click.native.prevent="edtiData(scope.row.id,'info')">
             编辑
           </el-button>
-          <el-button v-if="scope.row.deviceType==='camera'" v-permission="'edit'" :disabled="!scope.row.snapshot" type="primary" size="small" @click.native.prevent="edtiData(scope.row.id,'draw')">
-            {{scope.row.snapshot?'区域绘制':'图片生成中...'}}
+          <el-button v-if="scope.row.deviceType==='camera'&&scope.row.snapshot" v-permission="'edit'" type="primary" size="small" @click.native.prevent="edtiData(scope.row.id,'draw')">
+						区域绘制
           </el-button>
           <el-button v-permission="'delete'" type="danger" size="small" @click.native.prevent="deleteRow(scope.row.id)">
             删除
@@ -153,6 +153,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { addUser } from '@/api/user'
 import { getDevices,addUpdateDevice,delDevice,getDeviceInfo } from '@/api/device'
 import { getAreas } from '@/api/area'
 import { AutoImage,DrawImage } from '@/utils/drawImage'
@@ -183,6 +184,14 @@ export default {
         value:'pospad',
         label:'收银Pad'
       }],
+			rules: {
+				name: [
+					{required: true, message: '请输入门店名称', trigger: 'blur'},
+					{min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'}
+				],
+				areaId:[{ required: true, message: '请先添加门店区域', trigger: 'change'}],
+				rtsp:[{ required: true, message: '所属省市不能为空', trigger: 'blur'}]
+			},
       fromInfo: {
         name:'',
         areaId:0,
@@ -224,19 +233,36 @@ export default {
       this.dialogVisible=true
       this.dialogType=type
     },
-    btnSubmit(){
-      this.dgLoading=true
-      if(this.drawType==='draw'){
-        this.fromInfo.pointData =Object.assign(this.size||{},this.drawLayer.getPoint())
-      }
-      addUpdateDevice(this.fromInfo).then(res=>{
-        this.clearClose('reload')
-        this.$message.success('操作成功')
-        console.log(res)
-      }).finally(()=>{
-        this.dgLoading=false
-      })
-    },
+    btnSubmit() {
+			if (this.drawType === 'draw') {
+				this.fromInfo.pointData = Object.assign(this.size || {}, this.drawLayer.getPoint())
+			}
+			const { deviceType }=this.fromInfo
+			this.$refs['myform'].validate((valid) => {
+				if (valid) {
+					this.dgLoading = true
+					addUpdateDevice(this.fromInfo).then(res => {
+						if(this.dialogType==='add'&&(deviceType==='screen'||deviceType==='pospad')){
+							// 添加设备账号
+							addUser({
+								username: res.authName,
+								storeIds: [this.storeId],
+								enabled: true,
+								userType: 'device'
+							}).then(() => {
+								this.dgLoading = false
+								this.clearClose('reload')
+								this.$message.success('操作成功')
+							})
+						}else{
+							this.dgLoading = false
+							this.clearClose('reload')
+							this.$message.success('操作成功')
+						}
+					})
+				}
+			})
+		},
     deleteRow(id) {
       console.log(this)
       this.$confirm('确定要删除这条数据吗？', '确认操作', {

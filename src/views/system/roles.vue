@@ -10,6 +10,7 @@
           <el-tree
             class="filter-tree"
             :data="menusData"
+						@check="checkTree"
             ref="tree"
             node-key="id"
             :props="defaultProps"
@@ -105,6 +106,7 @@ export default {
           {required: true, message: '必填项', trigger: 'blur'}
         ]
       },
+			authMenusFilter:[],
       menusData: [],
       tableData: [],
       defaultProps: {
@@ -133,39 +135,49 @@ export default {
       getMenus().then(res => {
         const newMenusObj = menuTransTree(res, 'buttons')
         this.menusData = newMenusObj.menusTree
-        console.log(this.menusData)
+        console.log(newMenusObj)
       }).finally(() => {
         this.loading = false
       })
     },
+		checkTree(val,data) {
+			console.log(val)
+			console.log(data)
+			const sendMenus = []
+			const checkeKeys= data.checkedKeys
+			const _permission={}
+			for (let i = 0; i < checkeKeys.length; i++) {
+				const key_id = checkeKeys[i]
+				let _id = key_id
+				let _keyname = ''
+				if (typeof(key_id) === 'string') {
+					const _ary = key_id.split('-')
+					_id = ~~_ary[1]
+					_keyname = _ary[0]
+					if(_permission.hasOwnProperty(_id)){
+						_permission[_id].push(_keyname)
+					}else{
+						_permission[_id]=[_keyname]
+					}
+				} else {
+					sendMenus.push({menuId: _id, permission: {'add': true, 'edit': true, 'delete': true, 'view': true}})
+				}
+			}
+			console.log(sendMenus)
+			console.log(_permission)
+			const halfCheckedKeys=data.halfCheckedKeys||[]
+			halfCheckedKeys.forEach(item_id => {
+				const buttons={}
+				const itemAry=_permission[item_id]||[]
+				itemAry.forEach(item_btn=>{
+					buttons[item_btn]=true
+				})
+				sendMenus.push({menuId: item_id, permission:buttons})
+			})
+			this.form.menuPerms=sendMenus
+			console.warn(this.form.menuPerms)
+		},
     btnSubmit(formName) {
-      const menusChecked=this.$refs.tree.getCheckedNodes()
-      const authMenus=[]
-      const obj={}
-      console.log(menusChecked)
-
-      for(let i=0;i<menusChecked.length;i++) {
-        const id=menusChecked[i].id
-        if(menusChecked[i].parentId===0||typeof(id)==='number'){
-          continue
-        }
-        const split_id=id.split('-')
-        const _id=~~split_id[1]
-        const btns_key=split_id[0]
-        const tmp = {menuId: _id, permission: {}}
-        if (obj.hasOwnProperty(_id)) {
-          const idx = authMenus.findIndex(_itm => {
-            return _itm.menuId === _id
-          })
-          authMenus[idx].permission[btns_key] = true
-        } else {
-          tmp.permission[btns_key] = true
-          obj[_id] = menusChecked[i]
-          authMenus.push(tmp)
-        }
-        this.form.menuPerms=authMenus
-      }
-      console.log(authMenus)
       this.$refs[formName].validate((valid) => {
         if (valid) {
           let fnName=addRoles
@@ -214,7 +226,7 @@ export default {
       })
     },
     clearClose(reload){
-      this.$refs.tree.setCheckedKeys([])
+      // this.$refs.tree.setCheckedKeys([])
       this.dialogVisible = false
       if(reload==='reload'){
         this.getAllRoles()

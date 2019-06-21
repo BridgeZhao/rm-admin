@@ -26,7 +26,7 @@
                 class="icon iconfont" :class="'icon-'+summaryClass(summary.entryFlowChange)"
                 style="font-size:18px;"
               ></i>
-              <span>{{summary.entrtFlowChange}}%</span>
+              <span>{{summary.entryFlowChange}}%</span>
             </div>
           </div>
         </el-col>
@@ -40,9 +40,9 @@
             <div class="report-small">
               <span>昨日同比</span>
               <i
-                class="icon iconfont" :class="'icon-'+summaryClass(summary.entryRateChange)"
-                style="font-size:18px;"
-              ></i>
+                class="icon iconfont"
+								:class="'icon-'+summaryClass(summary.entryRateChange)"
+                style='font-size:18px;'></i>
               <span>{{summary.entryRateChange}}%</span>
             </div>
           </div>
@@ -121,7 +121,7 @@ export default {
         entryFlow: 0,
         entryRate: 0,
         frontFlowChange: 0,
-        entrtFlowChange: 0,
+				entryFlowChange: 0,
         entryRateChange: 0
       },
       optionPieData: {
@@ -138,36 +138,37 @@ export default {
       genderData: {
         data: [],
         legendData: [],
-        name: "性别"
+        name: '性别'
       },
-      // vipData: {
-      //   data: [],
-      //   legendData: [],
-      //   name: "是否会员"
-      // },
       vipData:{},
       ageData: {},
       hourData: [],
-
       hourPeopleData: {}
-    };
+    }
   },
+	computed: {
+		listenstage() {
+			return this.$store.state.app.storeId
+		}
+	},
+	watch: {
+		listenstage(newVal) {
+			this.loadData(newVal)
+		}
+	},
   mounted() {
-    this.loadData();
+    this.loadData()
   },
   methods: {
-    init() {
-      this.loadData();
-    },
-    loadData() {
-      let start_time = moment(new Date()).format("YYYY-MM-DD");
-      let _storeId = 1;
-      let _params = {
+    loadData(storeId) {
+			const start_time = moment(new Date()).format("YYYY-MM-DD")
+      const _storeId = storeId || this.$store.state.app.storeId
+			const _params = {
         store_id: _storeId,
         starttime: start_time,
         endtime: start_time,
-        hh: "00,23"
-      };
+        hh: "08,22"
+      }
       getRealTimeData(_params).then(res => {
         console.log("!!!!!---", res)
         let res_data = res.data
@@ -175,13 +176,13 @@ export default {
         this.optionPieData.gender = res_data.gender
         this.optionPieData.vip = res_data.vip
         this.hourData = res_data.hour
-        let arr = []
+        const arr = []
         for (let i in res_data.age) {
           arr.push(res_data.age[i])
         }
         console.log("-----",arr)
         this.$set(this.ageData,'data',arr)
-        let _age = ["0-18", "19-29", "30-39", "40-64", ">65"];
+				const _age = ["0-18", "19-29", "30-39", "40-64", ">65"];
         this.$set(this.ageData,'xAxisData',_age)
         this.$set(this.ageData,'xAxisName','年龄')
         this.loadGender()
@@ -191,15 +192,15 @@ export default {
       console.log("!!!!!", _params)
     },
     saveImage(name) {
-      let _name = name
+			const _name = name
       this.$refs[name].saveImage(_name)
     },
     loadGender() {
-      let gender = this.optionPieData.gender;
+			const gender = this.optionPieData.gender;
       for (const key in gender) {
         if (gender.hasOwnProperty(key)) {
           const element = gender[key];
-          let name = key == "maleFlow" ? "男" : "女";
+					const name = key == "maleFlow" ? "男" : "女";
           this.genderData.legendData = ["男", "女"];
           this.genderData.data.push({
             value: element,
@@ -209,54 +210,44 @@ export default {
       }
     },
     loadVip() {
-      let vip = this.optionPieData.vip;
-      let arr = [];
+			const vip = this.optionPieData.vip
+			const arr = []
       for (const key in vip) {
         if (vip.hasOwnProperty(key)) {
-          const element = vip[key];
-          let name = key == "vipFlow" ? "会员" : "非会员";
+          const element = vip[key]
+					const name = key == "vipFlow" ? "会员" : "非会员";
           arr.push({
             value: element,
             name: name
           })
         }
       }
-      let vipTip = ["会员", "非会员"];
+			const vipTip = ["会员", "非会员"];
       this.$set(this.vipData, 'legendData', vipTip)
       this.$set(this.vipData, 'data', arr)
       this.$set(this.vipData, 'name', '是否会员')
     },
     loadHourPeople() {
-      let xData = [],
+			const xData = [],
         s_male = [],
         s_female = [],
         s_all = [];
       this.hourData.map(item => {
-        xData.push(item.hh + ":00");
-        s_male.push(item.maleFlow);
-        s_female.push(item.femaleFlow);
-        s_all.push(item.totalFlow);
-      });
-
-      this.$set(this.hourPeopleData, "xData", xData);
-      this.$set(this.hourPeopleData, "s_male", s_male);
-      this.$set(this.hourPeopleData, "s_female", s_female);
-      this.$set(this.hourPeopleData, "s_all", s_all);
-
-      console.log(
-        "555555",
-        xData,
-        s_male,
-        s_female,
-        s_all,
-        this.hourPeopleData
-      );
+        xData.push(item.hh + ":00")
+        s_male.push(item.maleFlow)
+        s_female.push(item.femaleFlow)
+        s_all.push(item.totalFlow)
+      })
+      this.$set(this.hourPeopleData, "xData", xData)
+      this.$set(this.hourPeopleData, "s_male", s_male)
+      this.$set(this.hourPeopleData, "s_female", s_female)
+      this.$set(this.hourPeopleData, "s_all", s_all)
     },
     summaryClass(num) {
       return num === 0 ? "null" : /^[0-9]+.?[0-9]*$/.test(num) ? "up" : "down";
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

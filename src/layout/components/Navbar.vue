@@ -6,7 +6,7 @@
       <div class="head-store">
         <svg-icon icon-class="store" />
       </div>
-      <div class="head-store">
+      <div class="head-store" v-if="storeList.length">
         <el-select class="active" v-model="defaultStoreId" placeholder="请选择">
           <el-option
             v-for="item in storeList"
@@ -30,17 +30,12 @@
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <svg-icon icon-class="user" />
-          <span>admin</span>
+          <span>{{name}}</span>
         </div>
         <el-dropdown-menu class="user-dropdown">
-          <router-link to="/dashboard">
-            <el-dropdown-item>
-              {{ $t("menus.dashboard") }}
-            </el-dropdown-item>
-          </router-link>
           <el-dropdown-item>
             <span style="display:block;" @click="logout">
-               {{ $t("menus.logout") }}</span>
+							{{ $t("menus.logout") }}</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -75,6 +70,7 @@ export default {
   computed: {
     ...mapGetters([
     	'lang',
+    	'name',
       'storeList',
       'storeId',
       'sidebar',
@@ -89,6 +85,7 @@ export default {
     }
   },
 	created(){
+  	console.log(this.name)
   	this.defaultStoreId=this.storeId
 	},
   methods: {
@@ -150,6 +147,7 @@ export default {
   .right-menu {
     float: right;
     height: 100%;
+		margin-right: 10px;
     line-height: 50px;
     &:focus {
       outline: none;

@@ -20,7 +20,6 @@
             <scene-setting  @nextComponet="next" v-if="isStep == 1"></scene-setting>
             <sceneLoad  @nextComponet="next" v-else-if="isStep == 2"></sceneLoad>
             <sceneConnect  @nextComponet="next" v-else></sceneConnect>
-
         </div>
     </div>
 </template>

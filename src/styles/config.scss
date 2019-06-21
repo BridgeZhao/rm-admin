@@ -10,9 +10,10 @@
       margin: 0px 15px;
     }
     .item {
-      height: 35px;
+			width: 200px;
+      height: 56px;
       border-radius: 3px;
-      line-height: 35px;
+      line-height: 56px;
       padding: 0px 10px;
       background-color: #062f48;
       color: #418aaa;
@@ -50,7 +51,7 @@
     border-color: transparent!important;
   }
   .el-form-item{
-    margin-bottom: 0px;
+    //margin-bottom: 0px;
   }
   .pagination{
     width: 100%;
