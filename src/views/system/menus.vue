@@ -20,6 +20,9 @@
           <el-form-item label="路由名称" prop="menuName" :label-width="formLabelWidth">
             <el-input v-model="form.menuName" autocomplete="off"></el-input>
           </el-form-item>
+					<el-form-item v-if="isOrderNo" label="排序" prop="orderNo" :label-width="formLabelWidth">
+						<el-input v-model.number="form.orderNo" type="number" autocomplete="off"></el-input>
+					</el-form-item>
         </el-form>
       </el-col>
       <el-col :span="2" class="rel">
@@ -66,12 +69,14 @@ export default {
   data() {
     return {
       loading:false,
+			isOrderNo:true,
       menusData:[],
       menuList:[],
       formLabelWidth:'100px',
       form:{
         menuName:'',
         parentId:0,
+				orderNo:1,
         title:'',
         level:1
       },
@@ -80,6 +85,9 @@ export default {
         title: [
           {required: true, message: '必填项', trigger: 'blur'}
         ],
+				orderNo:[
+					{required: true, message: '必填项', trigger: 'blur'}
+				],
         menuName: [
           {required: true, message: '必填项', trigger: 'blur'}
         ]
@@ -128,6 +136,7 @@ export default {
     editMenu(obj){
       this.form=obj.data
       this.form.menuName=obj.data.name
+			this.isOrderNo=!!obj.data.orderNo
       this.form=Object.assign({},this.form)
       console.log(this.form,obj)
     },
@@ -138,7 +147,9 @@ export default {
           console.log(this.form)
           this.loading = true
           addUpdateMenu([this.form]).then(() => {
+						this.isOrderNo=true
             this.form.menuName = ''
+            this.form.orderNo = 1
             this.form.parentId = 0
             this.form.title = ''
             delete this.form.id
