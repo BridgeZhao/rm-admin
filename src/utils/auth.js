@@ -30,6 +30,7 @@ export function checkPermissionButton(pathname,btnType){
   return hasRole.buttons[btnType]
 }
 export function checkPermission() {
+	const name = store.getters && store.getters.name
   const roles = store.getters && store.getters.menus
 	roles.push({name:'welcome',parentId:0,title:''})
   const routes = router.options.routes
@@ -52,6 +53,9 @@ export function checkPermission() {
       route_obj.children = []
       for (let f = 0; f < routes[i].children.length; f++) {
         for (let n = 0; n < roles.length; n++) {
+        	if(routes[i].children[f].name==='store-list'&&name!=='admin'){
+            continue
+					}
           if (roles[n].name === routes[i].children[f].name && roles[n].parentId !== 0) {
             routes[i].children[f].meta.title = roles[n].title
             route_obj.children.push(routes[i].children[f])

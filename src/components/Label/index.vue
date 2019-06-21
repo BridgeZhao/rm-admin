@@ -41,10 +41,9 @@ export default {
 			   top:0;
         left:0;
         /*top: 15%;*/
-        width: 5px;
+        width: 3px;
         height:26px;
         background: #71dcff;
-        border-radius: 10px;
     }
 
 }

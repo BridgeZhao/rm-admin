@@ -88,7 +88,6 @@ export default {
       }
   },
   created() {
-    const { xAxisData, seriesData } = this.data
     this.options.xAxis.data = this.data.xAxisData
     const series_data = []
     this.data.seriesData.map(item => {
@@ -96,7 +95,7 @@ export default {
         name: item.name,
         type: 'bar',
         stack: 'vistors',
-        barWidth: '60%',
+        barWidth: '80%',
         data: item.data,
         animationDuration
       })

@@ -230,11 +230,19 @@
 </template>
 
 <script>
-import {getStores,delStore, addUpdateStore, getRegions } from '@/api/store'
+import {getAllStores,delStore, addUpdateStore, getRegions } from '@/api/store'
 import { addUpdateArea,getAreas,deleteArea} from '@/api/area'
 import { AutoImage,DrawImage } from '@/utils/drawImage'
 export default {
   data() {
+		const validatePass = (rule, value, callback) => {
+			console.log(value)
+			if (value>99||value<1) {
+				callback(new Error('请输入1~99的值'))
+			} else {
+				callback()
+			}
+		}
     return {
       steps:0,
       disabledBtn:false,
@@ -268,7 +276,8 @@ export default {
 					{min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'}
 				],
 				num:[{ required: true,type: 'number', message: '请输入预警人数', trigger: 'blur'},
-					{min: 1, max: 2, message: '监控值在 1 到 99 之间', trigger: 'blur'}]
+					{ validator: validatePass}
+					]
 			},
       fromInfo: {
         name: '',
@@ -325,7 +334,7 @@ export default {
       const _pagination=Object.assign({},this.pagination)
       delete _pagination.total
       delete _pagination.name
-      getStores(_pagination).then(res => {
+			getAllStores(_pagination).then(res => {
         const {size, total, page, data} = res
         this.tableData = data
         this.pagination.total = total

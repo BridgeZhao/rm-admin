@@ -1,3 +1,4 @@
+@import './variables.scss';
 .layoutTitle{
 	display: flex;
 	justify-content: space-between;
@@ -20,9 +21,10 @@
     -ms-flex-align: center;
     align-items: center;
     border-radius: 4px;
-    border: 1px solid rgba(113,220,255,.3);
+    border: 1px solid $borderColor;
     position: relative;
-    background: #082849;
+    background:$menuBg;
+	  box-shadow: 0 1px 1px 1px #000;
 }
 .box-chart{}
 .echarts{ padding-bottom: 20px}
@@ -55,12 +57,17 @@
     width: 100%;
 	  font-size: 15px;
     height: 40px;
-    border-bottom: 1px solid rgba(113,220,255,.3);
+    border-bottom: 1px solid $borderColor;
     box-sizing: border-box;
     display: flex;
     align-items: center;
     padding:0 10px;
     justify-content: space-between;
+	.el-button--default{
+		span{
+			color: $borderColor!important;
+		}
+	}
 }
 .report-tip{
     position: absolute;
