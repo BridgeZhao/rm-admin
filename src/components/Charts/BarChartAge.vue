@@ -10,6 +10,7 @@
 
 <script>
 import echarts from "echarts";
+const animationDuration = 3000
 export default {
   props: {
     className: {
@@ -25,8 +26,9 @@ export default {
       default: "300px"
     },
     data: {
-      type: Object,
-      default: {}
+			type: Object,
+			default() {
+			}
     }
   },
   data() {
@@ -90,18 +92,48 @@ export default {
   watch:{
     data(val){
       let _val = JSON.parse(JSON.stringify(val))
-      console.log("传过来的数据是",_val)
-      this.options.xAxis.data = _val.xAxisData
-      this.options.xAxis.name = _val.xAxisName
-      this.options.series[0].data = _val.data
+      console.log("barCHartAge-watch",_val.data)
+			this.loadData(_val)
     }
   },
-  created() {
-    this.options.xAxis.data = this.data.xAxisData;
-    this.options.xAxis.name = this.data.xAxisName;
-    this.options.series[0].data = this.data.data;
+  mounted() {
+		console.log("barCHartAge-mounted",this.data)
+		const datas = this.data
+		if (datas.data) {
+			this.loadData(datas)
+		}
   },
   methods: {
+  	loadData(_data){
+  		const {xAxisData, xAxisName, data} = _data
+			this.options.xAxis.data = xAxisData
+			this.options.xAxis.name = xAxisName
+			this.options.series[0].data = data
+
+			// data.map((index)=> {
+			// 	this.options.series.push({
+			// 		name: "人数",
+			// 		type: "bar",
+			// 		barWidth:12,
+			// 		itemStyle: {
+			// 			normal: {
+			// 				barBorderRadius: [10, 10, 0, 0],
+			// 				color:'#71DCFF',
+			// 				opacity: 0.85
+			// 			}
+			// 		},
+			// 		label: {
+			// 			normal: {
+			// 				show: true,
+			// 				color:"#fff",
+			// 				position: "top"
+			// 			},
+			// 		},
+			// 		data: data[index],
+			// 		animationDuration
+			// 	})
+			// })
+		},
     base64ToBlob(code) {
       let parts = code.split(";base64,")
       let contentType = parts[0].split(":")[1]

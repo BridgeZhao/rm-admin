@@ -9,7 +9,7 @@
                     <el-button type="primary" @click="onSubmit" size="mini">查询</el-button>
                 </el-form-item>
             </el-form>
-            <el-button type="primary" size="mini" @click="addSence">新增场景</el-button>
+            <el-button type="primary" size="mini" @click="addSence">新增场景关联</el-button>
         </div>
         <el-table
                 :data="tableData"
@@ -60,16 +60,12 @@
         </div>
         <el-dialog title="新增场景" :visible.sync="dialogTableVisible">
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="140px">
-                <el-form-item label="id" prop="name">
-                    <el-input v-model="ruleForm.name" size="mini"></el-input>
-                </el-form-item>
                 <el-form-item label="发放场景" prop="scene">
                     <el-input v-model="ruleForm.scene" size="mini"></el-input>
                 </el-form-item>
-                <el-form-item label="优惠卷" prop="max">
+                <el-form-item label="卡券" prop="max">
                     <el-input v-model="ruleForm.max" size="mini"></el-input>
                 </el-form-item>
-
             </el-form>
             <div slot="footer">
                 <el-button @click="cancle" size="mini">取 消</el-button>

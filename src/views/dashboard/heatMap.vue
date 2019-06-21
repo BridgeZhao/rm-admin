@@ -144,7 +144,7 @@
               <div class="grid-content bg-purple report-line">
                 <div class="report-gang">
                   <span>区域客流分布</span>
-                  <i class="el-icon-picture" @click="openFull('v-chart',areaFlowOptions,'区域客流分布')"></i>
+<!--                  <i class="el-icon-picture" @click="openFull('v-chart',areaFlowOptions,'区域客流分布')"></i>-->
                 </div>
                 <div style="width:100%;height:100%;">
                   <v-chart class="source-chart" :options="areaFlowOptions" style="width:100%;height:180px;" ref="v-chart"></v-chart>
@@ -155,7 +155,7 @@
               <div class="grid-content bg-purple report-line">
                 <div class="report-gang">
                   <span>区域驻足客流分布</span>
-                  <i class="el-icon-picture" @click="openFull('v-chart',areaStayOptions,'区域驻足客流分布')"></i>
+<!--                  <i class="el-icon-picture" @click="openFull('v-chart',areaStayOptions,'区域驻足客流分布')"></i>-->
                 </div>
                 <div style="width:100%;height:100%;">
                   <v-chart class="source-chart" :options="areaStayOptions" style="width:100%;height:180px;" ref="v-chart"></v-chart>
@@ -166,7 +166,7 @@
               <div class="grid-content bg-purple report-line">
                 <div class="report-gang">
                   <span>区域平均停留时间</span>
-                  <i class="el-icon-picture" @click="openFull('v-chart',areaStayAverageOptions,'区域平均停留时间')"></i>
+<!--                  <i class="el-icon-picture" @click="openFull('v-chart',areaStayAverageOptions,'区域平均停留时间')"></i>-->
                 </div>
                 <div style="width:100%;height:100%;">
                   <v-chart
@@ -347,7 +347,7 @@ export default {
     },
     init(storeId) {
 			const _storeId = storeId || this.$store.state.app.storeId
-			const startTime = moment(new Date()).add(-1,'days').format('YYYY-MM-DD')
+			const startTime = moment(new Date()).format('YYYY-MM-DD')
 			const endTime = moment(new Date()).format('YYYY-MM-DD')
 			const _params = {
         filter: this.radio2,
