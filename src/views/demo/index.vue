@@ -25,7 +25,6 @@
     <dialog-chart :show="showFullChart" :data="dialogChartData" :type="typeFullchart" @close="showFullChart=false" />
   </div>
 </template>
-
 <script>
 import LineChart from '@/components/Charts/LineChart'
 import BarChart from '@/components/Charts/BarChart'

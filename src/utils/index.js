@@ -24,7 +24,6 @@ export function menuTransTree(data,type='menus') {
 				}
 				menusTree.push(tmp_obj)
     } else {
-    	console.log(item.name)
 			if(item.name!=='system-menus'&&item.name!=='system-roles'&&item.name!=='store-list') {
 				for (let i = 0; i < menusTree.length; i++) {
 					if (item.parentId === menusTree[i].id) {
