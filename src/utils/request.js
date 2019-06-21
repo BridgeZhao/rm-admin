@@ -13,7 +13,6 @@ service.interceptors.request.use(
     if (store.getters.token) {
       config.headers['Authorization'] ='Bearer '+getToken()
     }
-    console.log('config.url',config.url)
 		if(config.url.indexOf('/dashboard')!==-1){
 			config.baseURL = process.env.VUE_APP_BASE_REPORT
 		}else if(config.url.indexOf('/auth')!==-1){
@@ -47,18 +46,25 @@ service.interceptors.response.use(
   error => {
   	console.log(error.response)
 		if(error.response.status===401){
-			MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
-				confirmButtonText: 'Re-Login',
-				cancelButtonText: 'Cancel',
-				type: 'warning'
-			}).then(() => {
-				store.dispatch('user/resetToken').then(() => {
-					location.reload()
+  		const {errorCode}=error.response.data
+  		if(errorCode===12||errorCode===11) {
+				MessageBox.confirm('登陆超时,请重新登录!', '重新登录', {
+					type: 'warning'
+				}).then(() => {
+					store.dispatch('user/resetToken').then(() => {
+						location.reload()
+					})
 				})
-			})
+			}else{
+				Message({
+					message: '用户名或密码错误!',
+					type: 'error',
+					duration: 2 * 1000
+				})
+			}
 		}else{
 			Message({
-				message: '服务器错误',
+				message: '服务器错误!',
 				type: 'error',
 				duration: 5 * 1000
 			})
