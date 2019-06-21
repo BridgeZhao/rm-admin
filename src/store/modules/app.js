@@ -5,7 +5,7 @@ const _storeList=()=>{
   try{
     s=JSON.parse(sessionStorage.getItem('storeList'))
   }catch (e) {
-    sessionStorage.setItem('storeList','')
+    sessionStorage.setItem('storeList','[]')
   }
   return s
 }
