@@ -87,7 +87,6 @@
         label="角色"
         prop="rolesIds"
         :formatter="roleTransName"
-        width="300"
       />
       <el-table-column
         label="类型"

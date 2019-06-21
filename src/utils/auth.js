@@ -32,42 +32,44 @@ export function checkPermissionButton(pathname,btnType){
 export function checkPermission() {
 	const name = store.getters && store.getters.name
   const roles = store.getters && store.getters.menus
-	roles.push({name:'welcome',parentId:0,title:''})
-  const routes = router.options.routes
-  let route_obj = {}
-  const route_filter = []
-  for (let i = 0; i < routes.length; i++) {
-    if (routes[i].hasOwnProperty('hidden')) {
-      continue
-    }
-    if (routes[i].hasOwnProperty('redirect')) {
-      const obj = roles.find(item => {
-        return item.name === routes[i].name
-      })
-      if (obj) {
-        routes[i].children[0].meta.title = obj.title
-        route_filter.push(Object.assign({}, routes[i]))
-      }
-    } else {
-      route_obj = Object.assign({}, routes[i])
-      route_obj.children = []
-      for (let f = 0; f < routes[i].children.length; f++) {
-        for (let n = 0; n < roles.length; n++) {
-        	if(routes[i].children[f].name==='store-list'&&name!=='admin'){
-            continue
-					}
-          if (roles[n].name === routes[i].children[f].name && roles[n].parentId !== 0) {
-            routes[i].children[f].meta.title = roles[n].title
-            route_obj.children.push(routes[i].children[f])
-          }
-        }
-      }
-      if(route_obj.children.length){
-				route_filter.push(route_obj)
+	const route_filter = []
+	if(roles instanceof Array&&name) {
+		roles.push({name: 'welcome', parentId: 0, title: ''})
+		const routes = router.options.routes
+		let route_obj = {}
+
+		for (let i = 0; i < routes.length; i++) {
+			if (routes[i].hasOwnProperty('hidden')) {
+				continue
 			}
-    }
-  }
-  console.log('page_role', roles)
-  console.log('route_filter', route_filter)
+			if (routes[i].hasOwnProperty('redirect')) {
+				const obj = roles.find(item => {
+					return item.name === routes[i].name
+				})
+				if (obj) {
+					routes[i].children[0].meta.title = obj.title
+					route_filter.push(Object.assign({}, routes[i]))
+				}
+			} else {
+				route_obj = Object.assign({}, routes[i])
+				route_obj.children = []
+				for (let f = 0; f < routes[i].children.length; f++) {
+					for (let n = 0; n < roles.length; n++) {
+						const routeName=routes[i].children[f].name
+						// if (routeName === 'store-list'||routeName === 'system-list' && name !== 'admin') {
+						// 	continue
+						// }
+						if (roles[n].name === routeName && roles[n].parentId !== 0) {
+							routes[i].children[f].meta.title = roles[n].title
+							route_obj.children.push(routes[i].children[f])
+						}
+					}
+				}
+				if (route_obj.children.length) {
+					route_filter.push(route_obj)
+				}
+			}
+		}
+	}
   return route_filter
 }

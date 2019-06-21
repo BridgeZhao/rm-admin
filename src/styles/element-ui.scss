@@ -287,6 +287,13 @@ input,select,textarea,.el-input__inner,.el-message--error,textarea{
     }
   }
 }
+.el-popup-parent--hidden .fixed-header{
+	padding-right: 0;
+}
+table .cell{
+	text-overflow: ellipsis;
+	overflow:auto;
+}
 .el-checkbox__input,.el-radio{
   .el-checkbox__inner,.el-radio__inner{
     background-color: $subMenuBg !important;

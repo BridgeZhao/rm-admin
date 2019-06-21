@@ -529,7 +529,7 @@ export default {
       }
     },
     btnAddUpdateArea() {
-			this.$refs['myform1'].validate((valid) => {
+			this.$refs['myform'+this.steps].validate((valid) => {
 				if (valid) {
 					this.fromLoading = true
 					this.areaData.storeId = this.fromInfo.storeId
@@ -563,6 +563,7 @@ export default {
       const canvas=document.getElementById('canvasDom')
       const {point,width,height,scale}=this.fromInfo.pointData
       if(width&&height){
+				this.size={width,height}
         canvas.width = width
         canvas.height = height
       }else{
@@ -604,6 +605,10 @@ export default {
       this.steps=0
     },
     clearClose(reload){
+    	const fm0=this.$refs['myform0']
+    	if(fm0){
+				fm0.resetFields()
+			}
       this.changeImgBase64=false
       this.dialogVisible = false
       this.checkType={}

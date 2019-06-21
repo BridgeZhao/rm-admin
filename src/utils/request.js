@@ -13,10 +13,7 @@ service.interceptors.request.use(
     if (store.getters.token) {
       config.headers['Authorization'] ='Bearer '+getToken()
     }
-    console.log('config.url',config.url)
-		if(config.url.indexOf('/dashboard')!==-1){
-			config.baseURL = process.env.VUE_APP_BASE_REPORT
-		}else if(config.url.indexOf('/auth')!==-1){
+	  if(config.url.indexOf('/auth')!==-1){
 			config.baseURL= process.env.VUE_APP_HTTP_AUTH
 		}else{
 			config.baseURL= process.env.VUE_APP_HTTP_AUTH_AGENT
@@ -45,26 +42,27 @@ service.interceptors.response.use(
 		return res
 	},
   error => {
-  	console.log(error.response)
-		if(error.response.status===401){
-			MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
-				confirmButtonText: 'Re-Login',
-				cancelButtonText: 'Cancel',
-				type: 'warning'
-			}).then(() => {
-				store.dispatch('user/resetToken').then(() => {
-					location.reload()
+		console.log(error.response)
+		const {msg} = error.response.data
+		switch (error.response.status) {
+			case 401:
+				MessageBox.confirm('登陆超时,请重新登录!', '重新登录', {
+					type: 'warning'
+				}).then(() => {
+					store.dispatch('user/resetToken').then(() => {
+						location.reload()
+					})
 				})
-			})
-		}else{
-			Message({
-				message: '服务器错误',
-				type: 'error',
-				duration: 5 * 1000
-			})
+				break
+			default:
+				Message({
+					message: msg,
+					type: 'error',
+					duration: 5 * 1000
+				})
+				break
 		}
-    return Promise.reject(error)
-  }
-)
+		return Promise.reject(error)
+	})
 
 export default service
