@@ -184,8 +184,8 @@
         label="区域绘制"
         width="120">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.pointData.point?'success':'danger'">
-            {{ scope.row.pointData.point?'已绘制':'未绘制' }}
+          <el-tag :type="scope.row.pointData.point&&JSON.stringify(scope.row.pointData.point).length>5?'success':'danger'">
+            {{ scope.row.pointData.point&&JSON.stringify(scope.row.pointData.point).length>5?'已绘制':'未绘制' }}
           </el-tag>
         </template>
       </el-table-column>
@@ -267,7 +267,8 @@ export default {
 					{required: true, message: '请输入区域名称', trigger: 'blur'},
 					{min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'}
 				],
-				num:[{ required: true,type: 'number', message: '请输入预警人数', trigger: 'blur'}]
+				num:[{ required: true,type: 'number', message: '请输入预警人数', trigger: 'blur'},
+					{min: 1, max: 2, message: '监控值在 1 到 99 之间', trigger: 'blur'}]
 			},
       fromInfo: {
         name: '',
@@ -440,7 +441,7 @@ export default {
         const cityObj = this.regionIdTransName(id)
         cityObj.city = this.allRegion[cityObj.province].find(item => {
           return item.id === id
-        })||{cityName:''}
+        })||{cityName:'-'}
         return cityObj.province+' — '+cityObj.city.cityName
       }
     },

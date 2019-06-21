@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function getStores(params) {
   return request({
-    url: '/mg/stores',
+    url: '/auth/user-store',
     method: 'get',
     params
   })
