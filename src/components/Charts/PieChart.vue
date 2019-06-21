@@ -55,8 +55,8 @@ export default {
           {
             name: "",
             type: "pie",
-            radius: "40%",
-            center: ["40%", "50%"],
+            radius: "80%",
+            center: ["50%", "50%"],
             data: [],
             itemStyle: {
               emphasis: {
