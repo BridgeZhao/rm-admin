@@ -189,6 +189,7 @@ export default {
                 startTime: '',
                 endTime: ''
             },
+					vipData:{},
             downTime:'',
             downTimeLine:'',
             optionBarData: {
@@ -203,7 +204,6 @@ export default {
                     nonVipFlow: 70
                 }
             },
-            vipData:{},
             ageData: {},
             hourData:[],
             hourPeopleData:{},
@@ -264,8 +264,9 @@ export default {
 					  const start_time=moment(this.formInline.date).format('YYYY-MM-DD')
             this.downTime = start_time
             this.downTimeLine = this.formInline.startTime +' - '+ this.formInline.endTime
-					  const _hh = this.formInline.startTime.substr(0,this.formInline.startTime.indexOf(':'))+','+this.formInline.endTime.substr(0,this.formInline.endTime.indexOf(':'))
+					  const _hh = this.formInline.startTime === '' ? '08,22' : this.formInline.startTime.substr(0,this.formInline.startTime.indexOf(':'))+','+this.formInline.endTime.substr(0,this.formInline.endTime.indexOf(':'))
 					  const _storeId = this.$store.state.app.storeId
+					  console.log("hhh",_hh)
 					  const _params = {store_id:_storeId,starttime:start_time,endtime:start_time,hh:_hh}
             this.loadData(_params)
         },
@@ -280,10 +281,17 @@ export default {
             for (const i in res_data.age) {
               arr.push(res_data.age[i])
             }
+            const ageData ={
+							data: [],
+							xAxisName:'',
+							xAxisData:[]
+						}
+            const obj = Object.assign({}, ageData)
             const xData = ["0-18", "19-29", "30-39", "40-64", ">65"]
-              this.$set(this.ageData,'xAxisData',xData)
-              this.$set(this.ageData,'xAxisName','年龄')
-              this.$set(this.ageData,'data',arr)
+							obj.xAxisData =xData
+							obj.xAxisName = '年龄'
+							obj.data = arr
+							this.ageData = obj
             this.loadVip()
             this.loadHourPeople()
          })
@@ -303,9 +311,16 @@ export default {
                 }
             }
             let vipTip = ["会员", "非会员"];
-            this.$set(this.vipData, 'legendData', vipTip)
-            this.$set(this.vipData, 'data', arr)
-            this.$set(this.vipData, 'name', '是否会员')
+						const vipDatas ={
+							data: [],
+							name:'',
+							legendData:[]
+						}
+						const obj = Object.assign({}, vipDatas)
+					  obj.name = '是否会员'
+					  obj.data = arr
+					  obj.legendData = vipTip
+					  this.vipData = obj
         },
         loadHourPeople() {
             let xData = [],
@@ -318,11 +333,19 @@ export default {
                 s_female.push(item.femaleFlow);
                 s_all.push(item.totalFlow);
             })
-            this.$set(this.hourPeopleData, "xData", xData);
-            this.$set(this.hourPeopleData, "s_male", s_male);
-            this.$set(this.hourPeopleData, "s_female", s_female);
-            this.$set(this.hourPeopleData, "s_all", s_all);
-            console.log("this.hourPeopleData",this.hourPeopleData)
+						const Data ={
+							xData: [],
+							s_male:[],
+							s_female:[],
+							s_all:[]
+						}
+					const obj = Object.assign({}, Data)
+					obj.xData = xData
+					obj.s_male = s_male
+					obj.s_female = s_female
+					obj.s_all = s_all
+					this.hourPeopleData = obj
+					console.log("this.hourPeopleData",this.hourPeopleData)
         },
         changeStatus: function(callback){
           this.$nextTick(()=>{

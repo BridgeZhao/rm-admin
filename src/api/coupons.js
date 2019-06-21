@@ -12,6 +12,7 @@ export function searchScenarioData(id) {
 	return request({
 		url: `/mg/scenario/${id}`,
 		method: 'get'
+
 	})
 }
 // 编辑列表内容
@@ -34,6 +35,33 @@ export function getCouponsList(params) {
 	return request({
 		url: '/mg/coupons',
 		method: 'get',
+		params
+	})
+}
+// 导入优惠券
+export function postCouponsData(data) {
+	return request({
+		url: '/mg/coupons',
+		method: 'post',
+		headers: {
+			'Content-Type': 'multipart/form-data'
+		},
+		data
+	})
+}
+// 更新优惠券状态
+export function changeCouponsStatus(params) {
+	return request({
+		url: '/mg/coupons/status',
+		method: 'put',
+		params
+	})
+}
+// 删除优惠券
+export function deleteCouponsList(params) {
+	return request({
+		url: '/mg/coupons',
+		method: 'delete',
 		params
 	})
 }

@@ -3,7 +3,7 @@
 		<div class="header">
 			<el-form :inline="true" :model="formInline" class="demo-form-inline">
 				<el-form-item label="名称">
-					<el-input v-model="formInline.name" placeholder="场景" ></el-input>
+					<el-input v-model="formInline.name" placeholder="场景"></el-input>
 				</el-form-item>
 				<el-form-item label="关联场景">
 					<el-select v-model="formInline.scene" clearable filterable placeholder="请选择">
@@ -28,7 +28,7 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="onSubmit">查询</el-button>
+					<el-button type="primary" @click="searchCouponsList">查询</el-button>
 				</el-form-item>
 			</el-form>
 		</div>
@@ -103,8 +103,8 @@
 				<template slot-scope="scope">
 					<el-button type="text" size="mini">发放记录</el-button>
 					<el-button type="text" size="mini" style="margin-right: 10px;" @click="edit(scope.row)">详情</el-button>
-					<el-button type="text" size="mini">禁用</el-button>
-					<el-button type="text" size="mini">删除</el-button>
+					<el-button type="text" size="mini" @click="changeStatus(scope.row)">禁用</el-button>
+					<el-button type="text" size="mini" @click="deleteCoupon(scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -112,7 +112,7 @@
 			@size-change="handleSizeChange"
 			@current-change="handleCurrentChange"
 			:current-page="page.current"
-			:page-sizes="[100, 200, 300, 400]"
+			:page-sizes="[20, 30, 40, 50]"
 			:page-size="page.size"
 			class="pagination"
 			layout="total, sizes, prev, pager, next, jumper"
@@ -122,8 +122,8 @@
 			<el-button size="mini" style="width: 100px;margin-right: 10px;" @click="next(1)">上一步</el-button>
 			<el-button type="primary" size="mini" style="width: 100px;" @click="next(3)">下一步</el-button>
 		</div>
-		<el-dialog title="导入优惠券" :visible.sync="dialogTableVisible">
-			<el-form :model="couponsFlag" :rules="rules" ref="couponsFlag" label-width="140px">
+		<el-dialog :title="importCoupons" :visible.sync="dialogTableVisible">
+			<el-form :model="couponsFlag" :rules="couponsFlagRules" ref="couponsFlag" label-width="80px">
 				<el-row :gutter="20">
 					<el-col :span="12"><div class="grid-content bg-purple">
 						<el-form-item label="名称" prop="name">
@@ -135,19 +135,35 @@
 						<el-form-item label="发放权重" prop="weight">
 							<el-input v-model="couponsFlag.weight"></el-input>
 						</el-form-item>
-						<el-form-item label="有效期" prop="dayMax">
-							<el-input v-model="couponsFlag.dayMax"></el-input>
+						<el-form-item label="有效期" prop="time">
+							<el-date-picker
+								style="width: 250px;"
+								v-model="couponsFlag.time"
+								type="datetimerange"
+								range-separator="至"
+								start-placeholder="开始"
+								end-placeholder="结束">
+							</el-date-picker>
 						</el-form-item>
-						<el-form-item label="选择门店">
-							<el-select v-model="couponsFlag.storeId" clearable placeholder="请选择">
-								<el-option label="优惠券" value="1"></el-option>
-								<el-option label="积分券" value="2"></el-option>
+						<el-form-item label="选择门店" prop="storeId">
+							<el-select
+								v-model="couponsFlag.storeId"
+								multiple
+								clearable
+								placeholder="请选择">
+								<el-option
+									v-for="item in storeList"
+									:key="item.id"
+									:label="item.name"
+									:value="~~item.id"
+								>
+								</el-option>
 							</el-select>
 						</el-form-item>
 					</div></el-col>
 					<el-col :span="12"><div class="grid-content bg-purple">
-						<el-form-item label="优惠券说明">
-							<textarea class="input" v-model="couponsFlag.description" />
+						<el-form-item label="优惠券说明" prop="description">
+							<textarea class="input" v-model="couponsFlag.description" style="width: 13.5rem;height: 100px;overflow-y: auto;"/>
 						</el-form-item>
 						<el-form-item label="优惠券等级" prop="level">
 							<el-input v-model="couponsFlag.level"></el-input>
@@ -165,23 +181,28 @@
 								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
 							</el-upload>
 						</el-form-item>
-						<el-form-item>
+						<el-form-item v-if="!commandNumber" label="积分" prop="credit">
+							<el-input v-model="couponsFlag.credit"></el-input>
+						</el-form-item>
+						<el-form-item v-if="!commandNumber" label="积分数量" prop="creditNum">
+							<el-input-number v-model="couponsFlag.creditNum" :min="0" :max="100000000"></el-input-number>
+						</el-form-item>
+						<el-form-item v-if="commandNumber" label="导入优惠券">
 							<el-upload
 								class="upload-demo"
 								action="https://jsonplaceholder.typicode.com/posts/"
 								:on-change="handleChange"
 								:file-list="fileList">
 								<el-button size="small" type="primary">点击上传</el-button>
-								<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
 							</el-upload>
 						</el-form-item>
 					</div></el-col>
 				</el-row>
 
 			</el-form>
-			<div slot="footer">
-				<el-button @click="cancle" size="mini">取 消</el-button>
-				<el-button type="primary" @click="submit" size="mini">保存</el-button>
+			<div slot="footer" style="display: flex;justify-content: center">
+				<el-button @click="cancle">取 消</el-button>
+				<el-button type="primary" @click="saveOne">保存</el-button>
 			</div>
 			<el-dialog :visible.sync="dialogImg">
 				<img width="100%" :src="dialogImageUrl" alt="">
@@ -192,7 +213,8 @@
 </template>
 <script>
 	import axios from 'axios'
-	import {getScenarioData, getCouponsList} from '@/api/coupons'
+	import { mapGetters } from 'vuex'
+	import {getScenarioData, getCouponsList, postCouponsData, changeCouponsStatus,deleteCouponsList } from '@/api/coupons'
 	export default {
 		name: 'sceneLoad',
 		data() {
@@ -207,23 +229,38 @@
 					status:null,
 					type:null
 				},
+				commandNumber:true,
 				dialogVisible: false,
 				dialogImg:false,
 				couponsFlag:{
 					id:'',
-					storeId:'',
+					storeId:[],
 					couponType:'1',
 					name:'',
 					limit:'',
 					weight:'',
-					begin:'',
-					end:'',
+					time:'',
 					description:'',
 					level:'',
 					iconBase64:'',
 					credit:'',
 					creditNum:''
 				},
+				couponsFlag2:{
+					id:'',
+					storeId:[],
+					couponType:'1',
+					name:'',
+					limit:'',
+					weight:'',
+					time:'',
+					description:'',
+					level:'',
+					iconBase64:'',
+					credit:'',
+					creditNum:''
+				},
+				fileList:[],
 				sceneList:[],
 				page: {
 					total: 20,
@@ -249,6 +286,24 @@
 					dayMax: [
 						{required: true, message: '每日总领取上线', trigger: 'blur'}
 					]
+				},
+				couponsFlagRules:{
+					name: [
+						{required: true, message: '请输入优惠券名称', trigger: 'blur'}
+					],
+					couponType:[
+						{required: true, message: '请选择场景名称', trigger: 'change'}
+					],
+					limit:[
+						{required: true, message: '请输入每日发放量限制', trigger: 'blur'}
+					],
+					weight:[
+						{required: true, message: '请输入权重', trigger: 'blur'}
+					],
+					time:[
+						{required: true, message: '请输入开始时间', trigger: 'blur'}
+					]
+
 				},
 				tableData: [
 					{
@@ -289,44 +344,14 @@
 					}
 				})
 			},
+			handleChange(file, fileList) {
+				this.fileList = fileList.slice(-3);
+			},
 			getFile(file, fileList) {
 				this.getBase64(file.raw).then(res => {
 					this.couponsFlag.iconBase64 = res
 					console.log(this.couponsFlag)
 				})
-			},
-				httpRequest (options) {
-				let file = options.file
-				let filename = file.name
-				if (file) {
-					this.fileReader.readAsDataURL(file)
-				}
-				this.fileReader.onload = () => {
-					let base64Str = this.fileReader.result
-					this.couponsFlag.iconBase64 = base64Str.split(',')[1]
-					let config = {
-						url: this.actionUrl,
-						headers: {
-							'Content-Type': 'multipart/form-data'
-						},
-						method: 'post',
-						file: file,
-						data: this.couponsFlag,
-						timeout: 10000,
-						onUploadProgress: function (progressEvent) {
-							// console.log(progressEvent)
-							progressEvent.percent = progressEvent.loaded / progressEvent.total * 100
-							options.onProgress(progressEvent, file)
-						},
-					}
-					axios(config)
-						.then(res => {
-							options.onSuccess(res, file)
-						})
-						.catch(err => {
-							options.onError(err)
-						})
-				}
 			},
 			handleRemove(file, fileList) {
 				console.log(file, fileList)
@@ -340,9 +365,15 @@
 			},
 			handleCommand(command) {
 				if(command === '1'){
+					this.couponsFlag = this.couponsFlag2
+					this.commandNumber = true
+					this.importCoupons = '导入优惠券'
 					this.dialogTableVisible = true
 				}else{
-					//......
+					this.couponsFlag = this.couponsFlag2
+					this.commandNumber = false
+					this.importCoupons = '导入积分券'
+					this.dialogTableVisible = true
 				}
 			},
 			onSubmit() {
@@ -356,8 +387,73 @@
 			},
 			edit(row) {
 				this.dialogTableVisible = true
-				this.ruleForm = row
+				this.couponsFlag = row
 			},
+			// 修改状态
+			changeStatus(row){
+				const _status = row.status === 0 ? 1 : 0
+				const _data = {
+					id : row.id,
+					status: _status
+				}
+				changeCouponsStatus(_data).then(res =>{
+					this.$message({
+						message: '已修改成功',
+						type: 'success'
+					})
+					this.searchCouponsList()
+				})
+			},
+			// 删除优惠券
+      deleteCoupon(row){
+				const data = {
+					id :row.id
+				}
+				deleteCouponsList(data).then(res =>{
+					this.$message({
+						message: '已删除',
+						type: 'success'
+					})
+					this.searchCouponsList()
+				})
+			},
+			saveOne(){
+				// this.dialogTableVisible = false
+				this.$refs['couponsFlag'].validate((valid) => {
+					if (valid) {
+						const times = this.couponsFlag.time
+						const startTime = times[0]
+						const endTime = times[1]
+						this.couponsFlag.begin = startTime
+						this.couponsFlag.end = endTime
+						delete this.couponsFlag.time
+						console.log('保存的东西2',this.couponsFlag,this.fileList)
+						const data = {
+							json :this.couponsFlag,
+							cardNo: this.fileList
+						}
+						// this.importCouponByUser(data)
+
+						postCouponsData(data).then(res =>{
+							console.log(res)
+						})
+					} else {
+						return false
+					}
+				})
+			},
+			// async importCouponByUser(data) {
+			// 	const rsp = await this.$http.post(
+			// 		'/mg/coupons',
+			// 		data,
+			// 		{
+			// 			headers: {
+			// 				'Content-Type': 'multipart/form-data'
+			// 			}
+			// 		}
+			// 	)
+			// 	console.log(rsp.data)
+			// },
 			submit() {
 				this.dialogTableVisible = false
 				this.$refs['ruleForm'].validate((valid) => {
@@ -370,20 +466,22 @@
 			},
 			handleSizeChange(val) {
 				this.page.size = val
+				this.searchCouponsList()
 			},
 			handleCurrentChange(val) {
 				this.page.current = val
+				this.searchCouponsList()
 			},
 			next(val) {
 				this.$emit('nextComponet', val)
 			},
 			init(storeId){
 				const _storeId = storeId || this.$store.state.app.storeId
-				const _params = {
-					storeId: _storeId
-				}
+				// const _params = {
+				// 	storeId: _storeId
+				// }
 				this.getSceneList()
-				this.searchCouponsList(_params)
+				this.searchCouponsList(_storeId)
 			},
 			// 获取场景列表 先用size方法查，后期优化
 			getSceneList() {
@@ -392,10 +490,29 @@
 					this.sceneList = res.data
 				})
 			},
+			// | 名称 | 描述  | 是否必填 |默认值|
+			// | --- | --- | --- | --- |
+			// |name | 优惠券名称 | 否 | |
+			// |storeId | 门店Id | 否 | |
+			// |scenarioId | 场景id | 否 | |
+			// |couponType | 优惠券类型 | 否 | |
+			// |status | 优惠券状态 | 否 | |
+			// |page | 分页参数 | 否 |1 |
+			// |size | 分页参数 | 否 |10|
+
 			// 优惠券列表查询
-			searchCouponsList(params){
+			searchCouponsList(_storeId){
+				const _data = {
+					storeId:_storeId || this.$store.state.app.storeId,
+					name: this.formInline.name,
+					scenarioId: this.formInline.scene,
+					couponType: this.formInline.type,
+					status: this.formInline.status,
+					page: this.page.page,
+					size: this.page.size
+				}
 				console.log('调用方法')
-				getCouponsList(params).then(res =>{
+				getCouponsList(_data).then(res =>{
 					this.page.page = res.page
 					this.page.size = res.size
 					this.page.total = res.total
@@ -404,13 +521,16 @@
 			}
 		},
 		computed: {
+			...mapGetters([
+				'storeList'
+			]),
 			listenstage() {
 				return this.$store.state.app.storeId
 			}
 		},
 		watch: {
 			listenstage(newVal) {
-				this.init(newVal)
+				this.searchCouponsList(newVal)
 			}
 		},
 		mounted() {
@@ -423,7 +543,6 @@
 			// for (let i = 0; i < 9; i++) {
 			// 	this.tableData.push(this.tableData[0])
 			// }
-
 		}
 	}
 </script>

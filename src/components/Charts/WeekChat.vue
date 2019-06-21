@@ -43,8 +43,10 @@ export default {
         },
         animation: false,
         grid: {
-            height: '50%',
-            y: '10%'
+					top: '10%',
+					bottom:'10%',
+					left: '8%',
+					right:'5%'
         },
         xAxis: {
             type: 'category',
@@ -63,11 +65,17 @@ export default {
         },
         visualMap: {
             min: 0,
-            max: 1000,
+            max: 100,
+					  itemHeight:300,
+					  textColor:'#fff',
             calculable: true,
             orient: 'horizontal',
             left: 'center',
-            // bottom: '10%'
+					  inRange: {
+							color: ['#3398DB','yellow'],
+
+						},
+					bottom: '0%'
         },
         series: [{
             name: '周分时段客流',
@@ -75,13 +83,17 @@ export default {
             data: [],
             label: {
                 normal: {
-                    show: true
+                    show: true,
+									color:'#fff'
                 }
             },
             itemStyle: {
                 emphasis: {
                     shadowBlur: 10,
-                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    shadowColor: 'rgba(1, 1, 1, 0.8)',
+									  textStyle:{
+											color:"#fff",
+										}
                 }
             }
         }]
@@ -99,7 +111,7 @@ export default {
     this.options.series[0].data = this.weekData;
     // this.options = option;
     console.log("^^^^",this.data)
-  
+
   },
   methods: {
     base64ToBlob(code) {
