@@ -222,8 +222,9 @@ export default {
 	},
   created() {
   	this.fromInfo.storeId=this.storeId
-    this.getAreasData()
-    this.getTableData()
+    this.getAreasData().then(()=>{
+			this.getTableData()
+		})
   },
   methods: {
     getTableData() {
