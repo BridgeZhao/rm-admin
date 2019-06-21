@@ -3,10 +3,10 @@
     <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
     <breadcrumb class="breadcrumb-container" />
     <div class="right-menu">
-      <div class="head-store">
+      <div class="head-storelist">
         <svg-icon icon-class="store" />
       </div>
-      <div class="head-store" v-if="storeList.length">
+      <div class="head-storelist" v-if="storeList&&storeList.length">
         <el-select class="active" v-model="defaultStoreId" placeholder="请选择">
           <el-option
             v-for="item in storeList"
@@ -105,70 +105,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.navbar {
-  height: 50px;
-  overflow: hidden;
-  position: relative;
-  background: #0a2949;
-  color: #71dcff;
-  fill: #71dcff;
-  .head-store{
-    float: left;
-    margin-right: 10px;
-    vertical-align: middle;
-  }
-  .h-store-text{
 
-  }
-  .avatar-wrapper{
-    span{
-      padding-left: 3px;
-    }
-  }
-  .hamburger-container {
-    line-height: 46px;
-    height: 100%;
-    float: left;
-    cursor: pointer;
-    transition: background .3s;
-    -webkit-tap-highlight-color:transparent;
-
-    &:hover {
-      background: rgba(0, 0, 0, .025)
-    }
-  }
-  i{
-    color:  #71dcff;
-  }
-  .breadcrumb-container {
-    float: left;
-  }
-
-  .right-menu {
-    float: right;
-    height: 100%;
-		margin-right: 10px;
-    line-height: 50px;
-    &:focus {
-      outline: none;
-    }
-
-    .right-menu-item {
-      display: inline-block;
-      padding: 0 8px;
-      height: 100%;
-      font-size: 18px;
-      vertical-align: text-bottom;
-
-      &.hover-effect {
-        cursor: pointer;
-        transition: background .3s;
-
-        &:hover {
-          background: rgba(0, 0, 0, .025)
-        }
-      }
-    }
-  }
-}
 </style>

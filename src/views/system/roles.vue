@@ -185,8 +185,8 @@ export default {
             fnName=updateRole
           }
           fnName(this.form).then(()=>{
-            this.clearClose('reload')
-            this.$message.success('操作成功')
+						this.clearClose('reload')
+						this.$message.success('操作成功')
           })
         }
       })
@@ -207,7 +207,6 @@ export default {
           }
         }
       })
-      console.log('setNodeObj',setNodeObj)
       this.$nextTick(()=>{
         this.$refs.tree.setCheckedKeys(setNodeObj)
       })
