@@ -55,10 +55,10 @@
           <div class="grid-content bg-purple report-line">
             <div class="report-gang">
               <span>客流性别对比</span>
-              <el-button size="mini" @click="saveImage('pieChartGender')">保存图片</el-button>
+              <el-button size="mini" @click="saveImage('客流性别对比')">保存图片</el-button>
             </div>
             <div style="width:100%;height:100%;">
-              <pie-chart :data="genderData" ref="pieChartGender"/>
+              <pie-chart :data="genderData" ref="客流性别对比"/>
             </div>
           </div>
         </el-col>
@@ -66,10 +66,10 @@
           <div class="grid-content bg-purple report-line">
             <div class="report-gang">
               <span>客流类型分布</span>
-              <el-button size="mini" @click="saveImage('pieChart2')">保存图片</el-button>
+              <el-button size="mini" @click="saveImage('客流类型分布')">保存图片</el-button>
             </div>
             <div style="width:100%;height:100%;">
-              <pie-chart :data="vipData" ref="pieChart2"/>
+              <pie-chart :data="vipData" ref="客流类型分布"/>
             </div>
           </div>
         </el-col>
@@ -77,10 +77,10 @@
           <div class="grid-content bg-purple report-line">
             <div class="report-gang">
               <span>客流年龄分布</span>
-              <el-button size="mini" @click="saveImage('barChartAge')">保存图片</el-button>
+							<el-button size="mini" @click="saveImage('客流年龄分布')">保存图片</el-button>
             </div>
             <div style="width:100%;height:100%;">
-              <bar-chart-age :data="ageData" ref="barChartAge"/>
+              <bar-chart-age :data="ageData" ref="客流年龄分布"/>
             </div>
           </div>
         </el-col>
@@ -135,11 +135,7 @@ export default {
         }
       },
       loadDataList: [],
-      genderData: {
-        data: [],
-        legendData: [],
-        name: '性别'
-      },
+      genderData: {},
       vipData:{},
       ageData: {},
       hourData: [],
@@ -175,17 +171,24 @@ export default {
         this.summary = res_data.summary
         this.optionPieData.gender = res_data.gender
         this.optionPieData.vip = res_data.vip
-        this.hourData = res_data.hour
+        this.hourData = res_data.hourPlot
         const arr = []
         for (let i in res_data.age) {
           arr.push(res_data.age[i])
         }
         console.log("-----",arr)
-        this.$set(this.ageData,'data',arr)
-				const _age = ["0-18", "19-29", "30-39", "40-64", ">65"];
-        this.$set(this.ageData,'xAxisData',_age)
-        this.$set(this.ageData,'xAxisName','年龄')
-        this.loadGender()
+				const ageData ={
+					data: [],
+					xAxisName:'',
+					xAxisData:[]
+				}
+				const obj = Object.assign({}, ageData)
+				const xData = ["0-18", "19-29", "30-39", "40-64", ">65"]
+				obj.xAxisData =xData
+				obj.xAxisName = '年龄'
+				obj.data = arr
+				this.ageData = obj
+        this.loadGender(res_data.gender)
         this.loadVip()
         this.loadHourPeople()
       })
@@ -195,27 +198,43 @@ export default {
 			const _name = name
       this.$refs[name].saveImage(_name)
     },
-    loadGender() {
-			const gender = this.optionPieData.gender;
-      for (const key in gender) {
-        if (gender.hasOwnProperty(key)) {
-          const element = gender[key];
-					const name = key == "maleFlow" ? "男" : "女";
-          this.genderData.legendData = ["男", "女"];
-          this.genderData.data.push({
-            value: element,
-            name: name
-          })
-        }
-      }
-    },
+		loadGender(data) {
+			const gender = data
+			const arr = []
+			for (const key in gender) {
+				if (gender.hasOwnProperty(key)) {
+					const element = gender[key]
+					const name = key === 'maleFlow' ? '男' : '女'
+					arr.push({
+						value: element,
+						name: name
+					})
+				}
+			}
+			const _genderData ={
+				data: [],
+				name:'',
+				legendData:[]
+			}
+			const obj = Object.assign({}, _genderData)
+			obj.name = '性别'
+			arr.forEach(element =>{
+				obj.data.push({
+					name:element.name,
+					value:element.value
+				})
+				obj.legendData.push(element.name)
+			})
+			this.genderData = obj
+			console.log("男女性别数据",this.genderData)
+		},
     loadVip() {
 			const vip = this.optionPieData.vip
 			const arr = []
       for (const key in vip) {
         if (vip.hasOwnProperty(key)) {
           const element = vip[key]
-					const name = key == "vipFlow" ? "会员" : "非会员";
+					const name = key === "vipFlow" ? "会员" : "非会员";
           arr.push({
             value: element,
             name: name
@@ -238,10 +257,18 @@ export default {
         s_female.push(item.femaleFlow)
         s_all.push(item.totalFlow)
       })
-      this.$set(this.hourPeopleData, "xData", xData)
-      this.$set(this.hourPeopleData, "s_male", s_male)
-      this.$set(this.hourPeopleData, "s_female", s_female)
-      this.$set(this.hourPeopleData, "s_all", s_all)
+			const Data ={
+				xData: [],
+				s_male:[],
+				s_female:[],
+				s_all:[]
+			}
+			const obj = Object.assign({}, Data)
+			obj.xData = xData
+			obj.s_male = s_male
+			obj.s_female = s_female
+			obj.s_all = s_all
+			this.hourPeopleData = obj
     },
     summaryClass(num) {
       return num === 0 ? "null" : /^[0-9]+.?[0-9]*$/.test(num) ? "up" : "down";

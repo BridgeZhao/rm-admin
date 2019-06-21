@@ -77,23 +77,25 @@
       this.options = null
     },
     watch: {
-      data(data) {
-        this.loadData(data);
+      data(val) {
+				console.log('LineTimeChart中的watch',val)
+        this.loadData(val);
       }
     },
     mounted() {
       const datas = this.data
       if (datas.seriesData) {
+      	console.log('LineTimeChart中的mouted')
         this.loadData(datas)
       }
     },
     methods: {
       loadData(data) {
+				console.log('LineTimeChart', data)
         const {xAxisData, legendData, seriesData} = data;
         this.options.legend.data = legendData
         this.options.xAxis.data = xAxisData
         seriesData.map((item, idx) => {
-          console.log('this.-----data', item)
           this.options.series.push({
             name: item.name,
             type: 'line',
@@ -106,7 +108,6 @@
                 width: 1
               }
             },
-
             itemStyle: {
               normal: {
                 color: this.initColor(),
