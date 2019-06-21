@@ -2,10 +2,11 @@ import { login, logout } from '@/api/user'
 import { getToken, setToken, removeToken, setMenus } from '@/utils/auth'
 import { getMenus } from '@/api/system'
 import { resetRouter } from '@/router'
+import Cookies from 'js-cookie'
 
 const state = {
   token: getToken(),
-  name: '',
+  name: Cookies.get('name') ? Cookies.get('name') : '',
   menus: setMenus()
 }
 
@@ -15,6 +16,7 @@ const mutations = {
   },
   SET_NAME: (state, name) => {
     state.name = name
+		Cookies.set('name', name)
   },
   SET_MENUS: (state, meuns) => {
     state.menus = meuns

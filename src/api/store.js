@@ -7,6 +7,13 @@ export function getStores(params) {
     params
   })
 }
+export function getAllStores(params) {
+	return request({
+		url: '/mg/stores',
+		method: 'get',
+		params
+	})
+}
 export function delStore(id) {
   return request({
     url: `/mg/stores/${id}`,
