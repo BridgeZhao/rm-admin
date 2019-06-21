@@ -6,6 +6,7 @@ import '@/styles/element-variables.scss'
 import '@/styles/index.scss' // global css
 import './permission' // permission control
 import permission from '@/directive/permission/permission.js' // 权限判断指令
+import waves from '@/directive/waves/index.js' // 权限判断指令
 import App from './App'
 import store from './store'
 import router from './router'
@@ -44,6 +45,7 @@ Vue.filter('dateformat', function(dataStr, pattern = 'YYYY-MM-DD HH:mm:ss') {
 Vue.config.productionTip = false
 Vue.component('v-chart', ECharts)
 Vue.directive('permission', permission)
+Vue.directive('waves', waves)
 
 new Vue({
   el: '#app',

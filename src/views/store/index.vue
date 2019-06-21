@@ -184,8 +184,8 @@
         label="区域绘制"
         width="120">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.pointData.point?'success':'danger'">
-            {{ scope.row.pointData.point?'已绘制':'未绘制' }}
+          <el-tag :type="scope.row.pointData.point&&JSON.stringify(scope.row.pointData.point).length>5?'success':'danger'">
+            {{ scope.row.pointData.point&&JSON.stringify(scope.row.pointData.point).length>5?'已绘制':'未绘制' }}
           </el-tag>
         </template>
       </el-table-column>
@@ -230,11 +230,19 @@
 </template>
 
 <script>
-import {getStores,delStore, addUpdateStore, getRegions } from '@/api/store'
+import {getAllStores,delStore, addUpdateStore, getRegions } from '@/api/store'
 import { addUpdateArea,getAreas,deleteArea} from '@/api/area'
 import { AutoImage,DrawImage } from '@/utils/drawImage'
 export default {
   data() {
+		const validatePass = (rule, value, callback) => {
+			console.log(value)
+			if (value>99||value<1) {
+				callback(new Error('请输入1~99的值'))
+			} else {
+				callback()
+			}
+		}
     return {
       steps:0,
       disabledBtn:false,
@@ -267,7 +275,9 @@ export default {
 					{required: true, message: '请输入区域名称', trigger: 'blur'},
 					{min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'}
 				],
-				num:[{ required: true,type: 'number', message: '请输入预警人数', trigger: 'blur'}]
+				num:[{ required: true,type: 'number', message: '请输入预警人数', trigger: 'blur'},
+					{ validator: validatePass}
+					]
 			},
       fromInfo: {
         name: '',
@@ -324,7 +334,7 @@ export default {
       const _pagination=Object.assign({},this.pagination)
       delete _pagination.total
       delete _pagination.name
-      getStores(_pagination).then(res => {
+			getAllStores(_pagination).then(res => {
         const {size, total, page, data} = res
         this.tableData = data
         this.pagination.total = total
@@ -440,7 +450,7 @@ export default {
         const cityObj = this.regionIdTransName(id)
         cityObj.city = this.allRegion[cityObj.province].find(item => {
           return item.id === id
-        })||{cityName:''}
+        })||{cityName:'-'}
         return cityObj.province+' — '+cityObj.city.cityName
       }
     },
@@ -519,7 +529,7 @@ export default {
       }
     },
     btnAddUpdateArea() {
-			this.$refs['myform1'].validate((valid) => {
+			this.$refs['myform'+this.steps].validate((valid) => {
 				if (valid) {
 					this.fromLoading = true
 					this.areaData.storeId = this.fromInfo.storeId
@@ -553,6 +563,7 @@ export default {
       const canvas=document.getElementById('canvasDom')
       const {point,width,height,scale}=this.fromInfo.pointData
       if(width&&height){
+				this.size={width,height}
         canvas.width = width
         canvas.height = height
       }else{
@@ -594,6 +605,10 @@ export default {
       this.steps=0
     },
     clearClose(reload){
+    	const fm0=this.$refs['myform0']
+    	if(fm0){
+				fm0.resetFields()
+			}
       this.changeImgBase64=false
       this.dialogVisible = false
       this.checkType={}

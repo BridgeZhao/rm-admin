@@ -29,7 +29,7 @@ module.exports = {
 		'dashboard-storeFlow':'门店客流',
 		'dashboard-weekFlow':'周客流统计',
 		'dashboard-inStoreFlow':'进店客流',
-		'dashboard-tvShow':'4K展示',
+		'tvShow':'4K屏展示',
 		'coupons':'优惠券管理',
     'game':'游戏管理',
     'store-content':'门店内容维护',

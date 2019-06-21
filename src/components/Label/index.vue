@@ -17,8 +17,8 @@ export default {
 
 <style lang="scss" scoped>
 .labelView{
-    font-size: 1.2rem;
-	margin-left: 1.2%;
+    font-size: 14px;
+	  padding-left: 20px;
     /*line-height: 1.6rem;*/
     /*height: 1.6rem;*/
     color: #71dcff;
@@ -27,19 +27,23 @@ export default {
     display: flex;
     -ms-flex-align: center;
     align-items: center;
+	 .label-title{
+		 line-height: 27px;
+		 margin: 0;
+		 font-size: 18px;
+		 font-weight: normal;
+		 color: #71dcff;
+	 }
     .label-title::before{
         content: "";
         display: block;
         position: absolute;
-        left: -1rem;
+			   top:0;
+        left:0;
         /*top: 15%;*/
-        width: .3rem;
-        height: 1.2rem;
+        width: 3px;
+        height:26px;
         background: #71dcff;
-        border-radius: .15rem;
-    }
-    .label-title{
-        font-size: 1.3rem;
     }
 
 }

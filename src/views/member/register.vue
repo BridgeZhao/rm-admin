@@ -5,9 +5,9 @@
       <el-form-item label="注册时间">
         <el-date-picker
           v-model="dateTimes"
-					style="width: 370px"
+					style="width: 270px"
           type="daterange"
-          format="yyyy 年 MM 月 dd 日"
+					format="yyyy-MM-dd"
           value-format="timestamp"
           range-separator="至"
           start-placeholder="开始日期"
@@ -132,8 +132,8 @@ export default {
     getTableData() {
       this.tableLoading = true
       if (this.dateTimes.length) {
-				this.form.begin =moment(this.dateTimes[0]).format('X')
-				this.form.end = moment(this.dateTimes[1]).format('X')
+				this.form.begin =this.dateTimes[0]
+				this.form.end = this.dateTimes[1]
       }
       const _pagination = Object.assign(this.form, this.pagination)
       for (const k in _pagination) {

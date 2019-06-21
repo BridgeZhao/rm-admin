@@ -99,7 +99,7 @@
                 style="height:200px;width:100%"
                 :options="options1"
               />-->
-              <line-time-chart :data="options1" />
+              <line-time-chart :data="options1" ref="lineTimeChart"/>
             </div>
           </div>
         </el-col>
@@ -112,7 +112,7 @@
               <i class="el-icon-picture" @click="openFull('lineChart',options3,'小时客流汇总')"></i>
             </div>
             <div style="width:100%;height:100%;">
-              <line-chart :data="options3" />
+              <line-chart :data="options3" ref="lineChart"/>
             </div>
           </div>
         </el-col>
@@ -125,7 +125,7 @@
               <i class="el-icon-picture" @click="openFull('lineTimeChart',options2,'小时客流')"></i>
             </div>
             <div style="width:100%;height:100%;">
-              <line-time-chart :data="options2"/>
+              <line-time-chart :data="options2" ref="lineTimeChart"/>
             </div>
           </div>
         </el-col>
@@ -139,7 +139,7 @@
               <i class="el-icon-picture" @click="openFull('barChartAge',frequencyData,'到店频率')"></i>
             </div>
             <div style="width:100%;height:100%;">
-              <bar-chart-age :data="frequencyData" :height="chartHeight" ref="barChartAge"/>
+              <bar-chart-age :data="frequencyDatas" :height="chartHeight" ref="barChartAge"/>
             </div>
           </div>
         </el-col>
@@ -305,7 +305,7 @@
             }
           ]
         },
-        frequencyData: {},
+				frequencyDatas:{},
         areaTopData: {},
         ageData: {},
         genderData: {}
@@ -358,7 +358,7 @@
           console.log('loadData->', res)
 					const _data = res.data
           this.SummaryData = _data.summaryData[0]
-          this.$nextTick(() => {
+          // this.$nextTick(() => {
             this.loadData1(_data.flowData)
             this.loadData2(_data.totalHourData)
             this.loadData2Sum(_data.totalHourData)
@@ -366,7 +366,7 @@
             this.laodAreaTopData(_data.areaData)
             this.laodAreaAge(_data.ageData)
             this.loadGender(_data.genderData)
-          })
+          // })
         })
       },
       // 客流类型分布
@@ -392,7 +392,12 @@
       },
       // 小时客流汇总
       loadData2Sum(data) {
-        console.log('))))))---', data)
+				const sumData ={
+					seriesData: [],
+					xAxisData:[],
+					legendData:''
+				}
+				const obj = Object.assign({}, sumData)
 				const arry = []
         const _seriesData = []
         const hh = []
@@ -405,10 +410,11 @@
           _hh.push(data[i].hh)
         }
         hh.push(_hh)
-        this.$set(this.options3, 'seriesData', _seriesData)
-        this.$set(this.options3, 'legendData', ['小时客流总数'])
-        this.$set(this.options3, 'xAxisData', hh)
-        console.log('this.options3', this.options3)
+				obj.xAxisData = hh
+				obj.legendData = ['小时客流总数']
+				obj.seriesData = _seriesData
+				this.options3 = obj
+        // console.log('this.options3', this.options3)
       },
       // 小时客流
       loadData2(data) {
@@ -452,46 +458,55 @@
       },
       // 到店频次
       laodFrequencyData(data) {
-				const arry = []
-        for (const i in data) {
-          arry.push(data[i].customerNum)
-        }
-        this.$set(this.frequencyData, 'data', arry)
-        const _ci = ['1-2次', '3-5次', '6-7次', '8-10次', '11-15次', '16次以上']
-        this.$set(this.frequencyData, 'xAxisData', _ci)
-        this.$set(this.frequencyData, 'xAxisName', '频次')
+				console.log("laodFrequencyData----",data)
+				const frequencyData ={
+					data: [],
+					xAxisData:[],
+					xAxisName:''
+				}
+				const obj = Object.assign({}, frequencyData)
+				obj.xAxisName = '频次'
+				data.forEach(element =>{
+					obj.data.push(element.customerNum)
+					obj.xAxisData.push(element.frequencyName)
+				})
+				this.frequencyDatas = obj
+				console.log("laodFrequencyData",this.frequencyDatas)
       },
       // 区域客流Top10
       laodAreaTopData(data) {
-				const _blockName = []
-        for (const i in data) {
-          _blockName.push(data[i].areaName)
-        }
-				const arry = []
-        for (const i in data) {
-          arry.push(data[i].customerTotal)
-        }
-        this.$set(this.areaTopData, 'data', arry)
-        this.$set(this.areaTopData, 'xAxisData', _blockName)
-        this.$set(this.areaTopData, 'xAxisName', '区域')
+				const areaData ={
+					data: [],
+					xAxisData:[],
+					xAxisName:''
+				}
+				const obj = Object.assign({}, areaData)
+				obj.xAxisName = '区域'
+				data.forEach(element =>{
+					obj.data.push(element.customerTotal)
+					obj.xAxisData.push(element.areaName)
+				})
+				this.areaTopData = obj
+				console.log("laodAreaTopData",this.areaTopData)
       },
       // 区域客流年龄
       laodAreaAge(data) {
-				const _data = data[0]
-				const arr = []
-        for (const i in _data) {
-          arr.push(_data[i])
-        }
-        this.$set(this.ageData, 'data', arr)
-				const _age = ['0-18', '18-24', '25-34', '35-44', '45-54', '54-64', '>65']
-        this.$set(this.ageData, 'xAxisData', _age)
-        this.$set(this.ageData, 'xAxisName', '年龄')
+				const ageData ={
+					data: [],
+					xAxisData:[],
+					xAxisName:''
+				}
+				const obj = Object.assign({}, ageData)
+				obj.xAxisName = '年龄'
+				data.forEach(element =>{
+					obj.data.push(element.customerNum)
+					obj.xAxisData.push(element.age)
+				})
+				this.ageData = obj
       },
       // 区域客流性别
       loadGender(data) {
-        console.log('$$$$', data)
 				const gender = data[0]
-
 				const arr = []
         for (const key in gender) {
           if (gender.hasOwnProperty(key)) {
@@ -503,9 +518,22 @@
             })
           }
         }
-        this.$set(this.genderData, 'legendData', ['男', '女'])
-        this.$set(this.genderData, 'data', arr)
-        this.$set(this.genderData, 'name', '性别')
+				const genderData ={
+					data: [],
+					name:'',
+					legendData:[]
+				}
+				const obj = Object.assign({}, genderData)
+				obj.name = '性别'
+				arr.forEach(element =>{
+					obj.data.push({
+						name:element.name,
+						value:element.value
+					})
+					obj.legendData.push(element.name)
+				})
+				this.genderData = obj
+        console.log("男女性别数据",this.genderData)
       }
     }
   }

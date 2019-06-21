@@ -24,7 +24,7 @@ export default {
     },
     height: {
       type: String,
-      default: "300px"
+      default: "250px"
     },
     data: {
       type: Object,
@@ -55,8 +55,8 @@ export default {
           {
             name: "",
             type: "pie",
-            radius: "40%",
-            center: ["40%", "50%"],
+            radius: "65%",
+            center: ["50%", "50%"],
             data: [],
             itemStyle: {
               emphasis: {

@@ -97,23 +97,82 @@ background: $menuBg;
 .abs-center{left:0;right:0;bottom:0;top:0;margin: auto}
 .no-padding{padding: 0!important;}
 .nav-page{text-align: center; margin-top: 20px;}
-.head-store{
-  float: left;
-  margin-right: 10px;
-  vertical-align: middle;
-  .el-input__inner{
-    font-size: .9rem;
-    background-color: #0b2a49!important;
-    border-color: #0b2a49!important;
-    border-bottom-color:#257a96!important;
-    height: 30px;
-    line-height: 30px;
-  }
-}
 .menu-wrapper.nest-menu{
   li>span{
     padding-left: 10px;
   }
+}
+.navbar {
+	height: 50px;
+	overflow: hidden;
+	position: relative;
+	background: #0a2949;
+	color: #71dcff;
+	fill: #71dcff;
+	.head-storelist {
+		float: left;
+		margin-right: 10px;
+		vertical-align: middle;
+		.el-input__inner {
+			font-size: 14px;
+			background-color: $menuBg !important;
+		  border: none;
+			border-radius: 0;
+			border-bottom:1px solid $menuText !important;
+			height: 30px;
+			line-height: 30px;
+		}
+	}
+	.avatar-wrapper {
+		span {
+			padding-left: 3px;
+		}
+	}
+	.hamburger-container {
+		line-height: 46px;
+		height: 100%;
+		float: left;
+		cursor: pointer;
+		transition: background .3s;
+		-webkit-tap-highlight-color: transparent;
+
+		&:hover {
+			background: rgba(0, 0, 0, .025)
+		}
+	}
+	i {
+		color: #71dcff;
+	}
+	.breadcrumb-container {
+		float: left;
+	}
+
+	.right-menu {
+		float: right;
+		height: 100%;
+		margin-right: 10px;
+		line-height: 50px;
+		&:focus {
+			outline: none;
+		}
+
+		.right-menu-item {
+			display: inline-block;
+			padding: 0 8px;
+			height: 100%;
+			font-size: 18px;
+			vertical-align: text-bottom;
+
+			&.hover-effect {
+				cursor: pointer;
+				transition: background .3s;
+
+				&:hover {
+					background: rgba(0, 0, 0, .025)
+				}
+			}
+		}
+	}
 }
 .el-tree-node__children {
   .el-tree-node__children {
@@ -123,6 +182,12 @@ background: $menuBg;
       }
     }
   }
+}
+.echarts{
+	padding: 10px;
+}
+.app-container{
+	margin-top: 20px;
 }
 .perview-warp{
   position: relative;

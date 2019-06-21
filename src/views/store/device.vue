@@ -41,6 +41,12 @@
             </el-col>
           </el-row>
         </el-form-item>
+				<el-form-item v-if="dialogType!=='add'&&fromInfo.deviceType!=='camera'" label="登录名" :label-width="formLabelWidth">
+					<el-input v-model="fromInfo.authName" :disabled="true"></el-input>
+				</el-form-item>
+				<el-form-item v-if="fromInfo.deviceType!=='camera'" label="登陆密码" :label-width="formLabelWidth">
+					<el-input v-model="fromInfo.password" type="password" autocomplete="off" placeholder="123456"></el-input>
+				</el-form-item>
         <el-form-item v-if="fromInfo.deviceType==='camera'" label="RTSP" :label-width="formLabelWidth" prop="rtsp">
           <el-input v-model="fromInfo.rtsp" autocomplete="off" placeholder="请输入设备rtsp流地址"></el-input>
         </el-form-item>
@@ -86,7 +92,7 @@
         </div>
       </el-form>
       <div slot="footer" class="dialog-footer text-center">
-        <el-button type="primary" :disabled="disabledBtn" @click="btnSubmit">{{dialogType==='add'?'确定添加':'确定修改'}}</el-button></div>
+        <el-button type="primary" :disabled="disabledBtn||!areaList.length" @click="btnSubmit">{{dialogType==='add'?'确定添加':'确定修改'}}</el-button></div>
     </el-dialog>
     <!--数据列表-->
     <el-table
@@ -105,11 +111,17 @@
       </el-table-column>
       <el-table-column
         prop="name"
-        label="设备名">
-      </el-table-column>
+        label="设备名" />
+			<el-table-column
+				label="登录名" >
+				<template slot-scope="scope">
+					<el-tag type="danger">
+						{{ scope.row.authName }}
+					</el-tag>
+				</template>
+			</el-table-column>
       <el-table-column
         label="设备类型"
-        width="130"
       >
         <template slot-scope="scope">
           <el-tag :type="scope.row.deviceType==='camera'?'success':scope.row.deviceType==='pad'?'':'warning'">
@@ -118,15 +130,13 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="所属区域"
-        width="130">
+        label="所属区域">
         <template slot-scope="scope">
           <el-tag type="info">{{ areaIdTransText(scope.row.areaId) }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column
-        label="更新时间"
-        width="180">
+        label="更新时间">
         <template slot-scope="scope">
           <i class="el-icon-time"></i>
           <span>{{ scope.row.updateTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span>
@@ -153,7 +163,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { addUser } from '@/api/user'
+import { addUser ,updateUser } from '@/api/user'
 import { getDevices,addUpdateDevice,delDevice,getDeviceInfo } from '@/api/device'
 import { getAreas } from '@/api/area'
 import { AutoImage,DrawImage } from '@/utils/drawImage'
@@ -194,6 +204,8 @@ export default {
 			},
       fromInfo: {
         name:'',
+				authName:'',
+				password:'',
         areaId:0,
         pointData:{},
         rtsp:'',
@@ -210,8 +222,9 @@ export default {
 	},
   created() {
   	this.fromInfo.storeId=this.storeId
-    this.getAreasData()
-    this.getTableData()
+    this.getAreasData().then(()=>{
+			this.getTableData()
+		})
   },
   methods: {
     getTableData() {
@@ -226,9 +239,12 @@ export default {
       getAreas(this.fromInfo.storeId).then(res => {
         this.areaList = res
         if (res.length) {
+					this.fromInfo.areaId=res[0].id
           this.selectedArea = res[0].id
           this.areaText = res[0].name
-        }
+        }else{
+					this.fromInfo.areaId=null
+				}
       })
       this.dialogVisible=true
       this.dialogType=type
@@ -242,10 +258,12 @@ export default {
 				if (valid) {
 					this.dgLoading = true
 					addUpdateDevice(this.fromInfo).then(res => {
-						if(this.dialogType==='add'&&(deviceType==='screen'||deviceType==='pospad')){
+						const fn_user=this.dialogType==='add'?addUser:updateUser
+						if(deviceType!=='camera'){
 							// 添加设备账号
-							addUser({
+							fn_user({
 								username: res.authName,
+								password:this.fromInfo.password,
 								storeIds: [this.storeId],
 								enabled: true,
 								userType: 'device'
@@ -327,6 +345,7 @@ export default {
       if(reload){
         this.getTableData()
       }
+			this.$refs['myform'].resetFields()
       this.fromInfo.name=''
       this.fromInfo.rtsp=''
       delete this.fromInfo.id

@@ -5,7 +5,7 @@ const _storeList=()=>{
   try{
     s=JSON.parse(sessionStorage.getItem('storeList'))
   }catch (e) {
-    sessionStorage.setItem('storeList','')
+    sessionStorage.setItem('storeList','[]')
   }
   return s
 }
@@ -66,8 +66,7 @@ const actions = {
   },
 	getStoreId({ commit }) {
 		return new Promise((resolve, reject) => {
-			getStores().then(res => {
-				const {data} = res
+			getStores().then(data => {
 				if (data.length) {
 					commit('SET_STOREID',  data[0].id)
 					commit('STORELIST',  data)

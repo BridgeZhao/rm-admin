@@ -7,12 +7,12 @@
       :width="'620px'"
       :visible.sync="dialogVisible"
       :close-on-click-modal="false"
-      @click="clearClose">
+      @close="clearClose">
       <el-form v-loading="loading" :model="form" :rules="rules" ref="myform">
         <el-form-item label="登录名" prop="username" :label-width="formLabelWidth">
           <el-input v-model="form.username" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item v-if="dialogType==='edit'" label="登陆密码" :label-width="formLabelWidth">
+        <el-form-item  label="登陆密码" :label-width="formLabelWidth">
           <el-input v-model="form.password" type="password" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="所属门店" prop="storeIds"  :label-width="formLabelWidth">
@@ -76,22 +76,21 @@
       <el-table-column
         prop="username"
         label="登录名"
-        width="180"
+        width="150"
       />
       <el-table-column
         prop="storeIds"
         :formatter="storeTransName"
         label="门店"
-        width="400"
       />
       <el-table-column
         label="角色"
         prop="rolesIds"
         :formatter="roleTransName"
-        width="300"
       />
       <el-table-column
         label="类型"
+				width="100"
       >
         <template slot-scope="scope">
           <el-tag :type="scope.row.userType==='device'?'':'success'">{{ scope.row.userType==='device'?'设备账号':'普通账号' }}</el-tag>
@@ -99,6 +98,7 @@
       </el-table-column>
       <el-table-column
         label="状态"
+				width="100"
       >
         <template slot-scope="scope">
           <el-tag :type="scope.row.enabled?'':'danger'">{{ scope.row.enabled?'启用':'停用' }}</el-tag>
@@ -223,23 +223,27 @@ export default {
     },
     storeTransName(idAry) {
       const nameAry = []
-			for (let i = 0; i < idAry.storeIds.length; i++) {
-				const t=this.storeList.find(s_item => {
-					return s_item.id === idAry.storeIds[i]
-				})
-				if(t){
-					nameAry.push(t.name)
+			if(idAry&&idAry.storeIds) {
+				for (let i = 0; i < idAry.storeIds.length; i++) {
+					const t = this.storeList.find(s_item => {
+						return s_item.id === idAry.storeIds[i]
+					})
+					if (t) {
+						nameAry.push(t.name)
+					}
 				}
 			}
-      return nameAry.join('-')
+			return nameAry.join('-')
     },
     roleTransName(idAry) {
       const nameAry = []
-      for (let i = 0; i < idAry.roleIds.length; i++) {
-        nameAry.push(this.rolesList.find(s_item => {
-          return s_item.id === idAry.roleIds[i]
-        }).roleName || '')
-      }
+			if(idAry&&idAry.roleIds) {
+				for (let i = 0; i < idAry.roleIds.length; i++) {
+					nameAry.push(this.rolesList.find(s_item => {
+						return s_item.id === idAry.roleIds[i]
+					}).roleName || '')
+				}
+			}
       return nameAry.join('；')
     },
     btnSubmit(formName) {
@@ -295,6 +299,7 @@ export default {
       if (reload === 'reload') {
         this.getUsers()
       }
+			this.$refs['myform'].resetFields()
       this.form = {
         username: '',
         password: '',
@@ -304,6 +309,7 @@ export default {
         enabled: true,
         userType: 0
       }
+
       console.log(this.form)
     },
     openDialog(){

@@ -4,13 +4,16 @@
     <el-form :inline="true" class="demo-form-inline">
       <el-form-item label="注册时间">
         <el-date-picker
-					style="width: 370px"
+					style="width: 270px"
           v-model="dateTimes"
           type="daterange"
-          format="yyyy 年 MM 月 dd 日"
+          format="yyyy-MM-dd"
           range-separator="至"
           start-placeholder="开始日期"
-          end-placeholder="结束日期">
+          end-placeholder="结束日期"
+					value-format="timestamp"
+					:default-time="['00:00:00', '23:59:59']"
+				>
         </el-date-picker>
       </el-form-item>
       <el-form-item>
@@ -99,7 +102,6 @@
 </template>
 
 <script>
-import moment from 'moment'
 import { mapGetters } from 'vuex'
 import { getVirtualMember } from '@/api/member'
 export default {
@@ -136,8 +138,8 @@ export default {
     getTableData() {
       this.tableLoading = true
       if (this.dateTimes.length) {
-        this.form.begin =moment(this.dateTimes[0]).format('X')
-				this.form.end = moment(this.dateTimes[1]).format('X')
+        this.form.begin=this.dateTimes[0]
+				this.form.end = this.dateTimes[1]
       }
       const _pagination = Object.assign(this.form, this.pagination)
       for (const k in _pagination) {

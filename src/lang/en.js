@@ -29,7 +29,7 @@ module.exports = {
 		'dashboard-storeFlow':'StoreFlow',
 		'dashboard-weekFlow':'WeekFlow',
 		'dashboard-inStoreFlow':'InStoreFlow',
-		'dashboard-tvShow':'tvShow',
+		'tvShow':'tvShow',
 		'coupons':'Coupons',
     logout: 'Log Out',
     adi: 'Adidas',

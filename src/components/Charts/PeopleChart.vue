@@ -24,8 +24,9 @@ export default {
       default: "200px"
     },
     dataList: {
-      type: Object,
-      default: {}
+			type: Object,
+			default() {
+			}
     }
   },
   data() {
