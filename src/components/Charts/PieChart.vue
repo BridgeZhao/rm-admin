@@ -46,7 +46,7 @@ export default {
         },
         legend: {
           orient: "vertical",
-          right: 10,
+          right: '1%',
           top: "middle",
           data: []
         },
