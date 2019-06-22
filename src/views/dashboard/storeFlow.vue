@@ -136,7 +136,7 @@
           <div class="grid-content bg-purple report-line">
             <div class="report-gang">
               <span>到店频率</span>
-              <i class="el-icon-picture" @click="openFull('barChartAge',frequencyData,'到店频率')"></i>
+              <i class="el-icon-picture" @click="openFull('barChartAge',frequencyDatas,'到店频率')"></i>
             </div>
             <div style="width:100%;height:100%;">
               <bar-chart-age :data="frequencyDatas" :height="chartHeight" ref="barChartAge"/>
@@ -371,7 +371,12 @@
       },
       // 客流类型分布
       loadData1(data) {
-				const obj = Object.assign({}, this.mockdata)
+      	const mockdata ={
+					legendData: [],
+					xAxisData: [],
+					seriesData: []
+				}
+				const obj = Object.assign({}, mockdata)
         obj.legendData = ['新顾客', '老顾客']
         obj.seriesData = [
           {
@@ -388,7 +393,9 @@
           obj.seriesData[0].data.push(element.customerNewTotal)
           obj.seriesData[1].data.push(element.customerOldTotal)
         })
+
         this.options1 = obj
+				console.log('数据--->',this.options1)
       },
       // 小时客流汇总
       loadData2Sum(data) {
@@ -418,7 +425,12 @@
       },
       // 小时客流
       loadData2(data) {
-				const obj = Object.assign({}, this.mockdata)
+				const mockdata ={
+					legendData: [],
+					xAxisData: [],
+					seriesData: []
+				}
+				const obj = Object.assign({}, mockdata)
 				const xAxisData = new Set()
 				const legendData = new Set()
 				const mock = {}

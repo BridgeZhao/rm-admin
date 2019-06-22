@@ -63,10 +63,10 @@
                     <el-col :span="24"><div class="grid-content bg-purple report-line">
                         <div class="report-gang">
                             <span>客流性别对比</span>
-                            <el-button size="mini" @click="saveImage('weekChart')">保存图片</el-button>
+                            <el-button size="mini" @click="saveImage('客流性别对比')">保存图片</el-button>
                         </div>
                         <div style="width:100%;height:100%;">
-                            <week-chat :data='weekData' ref="weekChart"/>
+                            <week-chat :data='weekData' ref="客流性别对比"/>
                         </div>
                         </div></el-col>
 

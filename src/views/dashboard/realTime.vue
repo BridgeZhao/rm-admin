@@ -80,7 +80,7 @@
 							<el-button size="mini" @click="saveImage('客流年龄分布')">保存图片</el-button>
             </div>
             <div style="width:100%;height:100%;">
-							<bar-chart-age :data="ageData" ref="barChartAge" height="250px"/>
+							<bar-chart-age :data="ageData" ref="客流年龄分布" height="250px"/>
             </div>
           </div>
         </el-col>
@@ -92,10 +92,10 @@
           <div class="grid-content bg-purple report-line">
             <div class="report-gang">
               <span>小时客流趋势</span>
-              <!-- <el-button size="mini" >保存图片</el-button> -->
+							<el-button size="mini" @click="saveImage('小时客流趋势')">保存图片</el-button>
             </div>
             <div style="width:100%;height:100%;">
-              <people-chart :dataList="hourPeopleData" height="300px"/>
+              <people-chart :dataList="hourPeopleData" height="300px" ref="小时客流趋势"/>
             </div>
           </div>
         </el-col>

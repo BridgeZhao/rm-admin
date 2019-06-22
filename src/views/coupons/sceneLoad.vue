@@ -428,13 +428,41 @@
 						this.couponsFlag.end = endTime
 						delete this.couponsFlag.time
 						console.log('保存的东西2',this.couponsFlag,this.fileList)
-						const data = {
-							json :this.couponsFlag,
-							cardNo: this.fileList
-						}
+						// const data = {
+						// 	json :this.couponsFlag,
+						// 	cardNo: this.fileList
+						// }
+						// id:'',
+						// 	storeId:[],
+						// 	couponType:'1',
+						// 	name:'',
+						// 	limit:'',
+						// 	weight:'',
+						// 	time:'',
+						// 	description:'',
+						// 	level:'',
+						// 	iconBase64:'',
+						// 	credit:'',
+						// 	creditNum:''
+						const {id,storeId,couponType,name,limit,weight,begin,end,description,level,iconBase64,credit,creditNum} = this.couponsFlag
+						let form = new FormData();
+						form.append("cardNo", this.fileList);
+						// form.append("id", this.couponsFlag.id);
+						form.append("storeId", this.couponsFlag.storeId);
+						form.append("couponType", this.couponsFlag.couponType);
+						form.append("name", this.couponsFlag.name);
+						form.append("limit", this.couponsFlag.limit);
+						form.append("weight", this.couponsFlag.weight);
+						form.append("begin", this.couponsFlag.begin);
+						form.append("end", this.couponsFlag.end);
+						form.append("description", this.couponsFlag.description);
+						form.append("level", this.couponsFlag.level);
+						form.append("iconBase64", this.couponsFlag.iconBase64);
+						form.append("credit", this.couponsFlag.credit);
+						form.append("creditNum", this.couponsFlag.creditNum);
 						// this.importCouponByUser(data)
 
-						postCouponsData(data).then(res =>{
+						postCouponsData(form).then(res =>{
 							console.log(res)
 						})
 					} else {
