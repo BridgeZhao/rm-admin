@@ -220,7 +220,7 @@ export default {
       areaStayOptions: null,
       dataTime: [8, 22],
       list: [],
-      heatmapBackImage:'http://172.16.2.118:9000/mobile/7ac66c0f148de9519b…bf7db1afc12ce1eaef2b468f8e5f72878b72e53effc400b19',
+      heatmapBackImage:'',
       heatmap: null,
       dataList: {
         xAxisData: ["休闲食品", "饮料", "蔬果", "生鲜1", "生鲜2"],
@@ -357,17 +357,19 @@ export default {
         endtime: endTime,
         hh: '08,22'
       }
+			this.setStoreImg(storeId)
       this.laodData(_params)
     },
     laodData(data) { // 首次加载数据
-			this.setStoreImg(data)
       this.setHeampData(data)
       this.setDurationData(data)
     },
 		setStoreImg(storeId){
     	const _storeId = storeId || this.$store.state.app.storeId
 			getStoresImg(_storeId).then(res =>{
-				 console.log('热力图片～～',res)
+				const img = res.floorGraph
+				this.heatmapBackImage = img;
+				 console.log('热力图片～～',img)
 			})
 		},
     setHeampData(data){// 获取热力图数据

@@ -7,11 +7,10 @@ export function getStores(params) {
     params
   })
 }
-export function getStoresImg(params) {
+export function getStoresImg(id) {
 	return request({
-		url: '/auth/user-store',
+		url: `/auth/user-store/${id}`,
 		method: 'get',
-		params
 	})
 }
 export function getAllStores(params) {
