@@ -7,6 +7,12 @@ export function getStores(params) {
     params
   })
 }
+export function getStoresImg(id) {
+	return request({
+		url: `/auth/user-store/${id}`,
+		method: 'get',
+	})
+}
 export function getAllStores(params) {
 	return request({
 		url: '/mg/stores',

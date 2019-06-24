@@ -36,23 +36,23 @@
           <ul class="summary">
             <li class="summary-list">
               <h1 class="summary-title">新顾客数</h1>
-              <span class="summary-value">{{summary.customerNew}}</span>
+              <span class="summary-value">{{summary.customerNew || 0}}</span>
             </li>
             <li class="summary-list">
               <h1 class="summary-title">老顾客数</h1>
-              <span class="summary-value">{{summary.customerOld}}</span>
+              <span class="summary-value">{{summary.customerOld || 0}}</span>
             </li>
             <li class="summary-list">
               <h1 class="summary-title">总顾客数</h1>
-              <span class="summary-value">{{summary.customerNum}}</span>
+              <span class="summary-value">{{summary.customerNum || 0}}</span>
             </li>
             <li class="summary-list">
               <h1 class="summary-title">日累计互动数</h1>
-              <span class="summary-value">{{summary.realTimeDailyInteraction}}</span>
+              <span class="summary-value">{{summary.realTimeDailyInteraction || 0}}</span>
             </li>
             <li class="summary-list">
               <h1 class="summary-title">日累计发券数</h1>
-              <span class="summary-value">{{summary.couponDailyCount}}</span>
+              <span class="summary-value">{{summary.couponDailyCount || 0}}</span>
             </li>
           </ul>
         </div>

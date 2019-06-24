@@ -91,6 +91,7 @@
     },
     methods: {
       loadData(data) {
+				this.options.series = []
 				console.log('LineTimeChart', data)
         const {xAxisData, legendData, seriesData} = data;
         this.options.legend.data = legendData
