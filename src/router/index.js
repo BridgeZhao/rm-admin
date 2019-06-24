@@ -162,9 +162,8 @@ export const constantRoutes = [
 		]
 	},
 	{
-		path: '/',
+		path: '/tv-show',
 		redirect: '/tv-show',
-		name: 'tvShow',
 		component: () => import('@/views/dashboard/tvShow'),
 		meta: {
 			title: '4K屏演示',
@@ -179,8 +178,7 @@ export const constantRoutes = [
 	// 优惠券管理 chy
 	{
 		path: '/coupons',
-		redirect: '/coupons',
-		name: 'coupons',
+		redirect: '/coupons/manage',
 		component: Layout,
 		meta: {
 			title: '优惠券',
