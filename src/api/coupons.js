@@ -65,4 +65,19 @@ export function deleteCouponsList(params) {
 		params
 	})
 }
-
+// 查看记录
+export function searchRecord(params) {
+	return request({
+		url: '/mg/coupons_log',
+		method: 'get',
+		params
+	})
+}
+// 优惠券关联 -查询列表
+export function searchConnection(params) {
+	return request({
+		url: '/mg/scenario_coupons',
+		method: 'get',
+		params
+	})
+}

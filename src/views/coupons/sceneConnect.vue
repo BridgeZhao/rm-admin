@@ -3,41 +3,35 @@
         <div class="header">
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
                 <el-form-item label="场景">
-                    <el-input v-model="formInline.scene" placeholder="场景" size="mini"></el-input>
+                    <el-input v-model="formInline.scene" placeholder="场景"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="onSubmit" size="mini">查询</el-button>
+                    <el-button type="primary" @click="onSubmit">查询</el-button>
                 </el-form-item>
             </el-form>
-            <el-button type="primary" size="mini" @click="addSence">新增场景关联</el-button>
+            <el-button type="primary" @click="addSence">新增场景关联</el-button>
         </div>
         <el-table
                 :data="tableData"
                 border
-                size="mini"
                 style="width: 100%">
             <el-table-column
-                    prop="name"
+                    prop="id"
                     label="ID"
-                    min-width="120"
                     align="center">
             </el-table-column>
             <el-table-column
-                    prop="scene"
+                    prop="name"
                     label="发放场景"
-                    min-width="120"
                     align="center">
             </el-table-column>
             <el-table-column
-                    prop="max"
+                    prop="coupons"
                     label="优惠券"
-                    min-width="160"
                     align="center">
             </el-table-column>
-
             <el-table-column
                     label="操作"
-                    min-width="150"
                     align="center">
                 <template slot-scope="scope">
                     <el-button type="text" size="mini" style="margin-right: 10px;" @click="edit(scope.row)">编辑</el-button>
@@ -68,13 +62,14 @@
                 </el-form-item>
             </el-form>
             <div slot="footer">
-                <el-button @click="cancle" size="mini">取 消</el-button>
-                <el-button type="primary" @click="submit" size="mini">保存</el-button>
+                <el-button @click="cancle">取 消</el-button>
+                <el-button type="primary" @click="submit">保存</el-button>
             </div>
         </el-dialog>
     </div>
 </template>
 <script>
+	import {searchConnection} from '@/api/coupons'
   export default {
     name: 'sceneConnect',
     data() {
@@ -89,9 +84,9 @@
           current: 1
         },
         ruleForm:{
+        	id:'',
           name: '',
-          scene: '',
-          max: '',
+					coupons: '',
         },
         rules: {
           name: [
@@ -115,6 +110,12 @@
         ]
       }
     },
+		mounted() {
+			for (let i = 0; i < 9; i++) {
+				this.tableData.push(this.tableData[0])
+			}
+
+		},
     methods: {
       onSubmit() {
 
@@ -149,12 +150,14 @@
         this.$emit('nextComponet',2);
       }
     },
-    mounted() {
-      for (let i = 0; i < 9; i++) {
-        this.tableData.push(this.tableData[0])
-      }
+		loadData(){
+			let name = this.formInline.scene
+			searchConnection(name).then(res =>{
 
-    }
+			})
+
+		}
+
   }
 </script>
 <style lang="scss" scoped>
