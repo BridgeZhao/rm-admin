@@ -84,11 +84,20 @@
         </template>
       </el-table-column>
     </el-table>
+		<nav class="nav-page">
+			<el-pagination
+				:page-size="pagination.size"
+				layout="prev, pager, next, jumper"
+				:total="pagination.total"
+				@size-change="pageChange"
+				@current-change="pageChange"
+			/>
+		</nav>
   </div>
 </template>
 
 <script>
-import { getMenus,addRoles,getAllRoles,delRole,updateRole} from '@/api/system'
+import { getMenus,addRoles,getRoles,delRole,updateRole} from '@/api/system'
 import { menuTransTree } from '@/utils'
 export default {
   data() {
@@ -97,6 +106,12 @@ export default {
       formLabelWidth:'80px',
       dialogVisible:false,
       loading:false,
+			pagination: {
+				page: 1,
+				size: 15,
+				name: '',
+				total: 0
+			},
       form:{
         roleName: '',
         menuPerms:[]
@@ -119,13 +134,17 @@ export default {
   },
   created() {
     this.getMenus()
-    this.getAllRoles()
+    this.getRoles()
   },
   methods: {
-    getAllRoles(){
+		getRoles(){
       this.loading = true
-      getAllRoles().then(res => {
-        this.tableData=res
+			getRoles(this.pagination).then(res => {
+				const {size, total, page, data} = res
+				this.tableData = data
+				this.pagination.total = total
+				this.pagination.page = page
+				this.pagination.size = size
       }).finally(() => {
         this.loading = false
       })
@@ -163,8 +182,6 @@ export default {
 					sendMenus.push({menuId: _id, permission: {'add': true, 'edit': true, 'delete': true, 'view': true}})
 				}
 			}
-			console.log(sendMenus)
-			console.log(_permission)
 			const halfCheckedKeys=data.halfCheckedKeys||[]
 			halfCheckedKeys.forEach(item_id => {
 				const buttons={}
@@ -224,6 +241,10 @@ export default {
         })
       })
     },
+		pageChange(val){
+			this.pagination.page = val
+			this.getAllRoles()
+		},
     clearClose(reload){
       // this.$refs.tree.setCheckedKeys([])
       this.dialogVisible = false

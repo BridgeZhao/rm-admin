@@ -178,7 +178,7 @@ export const constantRoutes = [
 	},
 	// 优惠券管理 chy
 	{
-		path: '/',
+		path: '/coupons',
 		redirect: '/coupons',
 		name: 'coupons',
 		component: Layout,
@@ -187,10 +187,15 @@ export const constantRoutes = [
 			icon: 'cou'
 		},
 		children: [{
-			path: '/coupons',
+			path: 'manage',
 			name: 'coupons',
 			component: () => import('@/views/coupons/config'),
 			meta: {title: '优惠券管理'}
+		},{
+			path: 'record',
+			name: 'record',
+			hidden: true ,
+			component: () => import('@/views/coupons/record')
 		}]
 	},
 	// 游戏管理
@@ -213,18 +218,6 @@ export const constantRoutes = [
 	    component: () => import('@/views/game/miniGame'),
 	    meta: { title: '小游戏'}
 	  }]
-	},
-	{
-		path: '/',
-		component: Layout,
-		hidden: true,
-		children: [
-			{
-				path: '/record',
-				name: 'record',
-				component: () => import('@/views/coupons/record'),
-			}
-		]
 	}
 ]
 
