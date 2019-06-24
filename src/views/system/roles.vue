@@ -243,13 +243,13 @@ export default {
     },
 		pageChange(val){
 			this.pagination.page = val
-			this.getAllRoles()
+			this.getRoles()
 		},
     clearClose(reload){
       // this.$refs.tree.setCheckedKeys([])
       this.dialogVisible = false
       if(reload==='reload'){
-        this.getAllRoles()
+        this.getRoles()
       }
       delete this.form.id
       this.form.roleName=''
