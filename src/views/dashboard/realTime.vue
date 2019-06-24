@@ -241,10 +241,17 @@ export default {
           })
         }
       }
-			const vipTip = ["会员", "非会员"];
-      this.$set(this.vipData, 'legendData', vipTip)
-      this.$set(this.vipData, 'data', arr)
-      this.$set(this.vipData, 'name', '是否会员')
+			let vipTip = ["会员", "非会员"];
+			const vipDatas ={
+				data: [],
+				name:'',
+				legendData:[]
+			}
+			const obj = Object.assign({}, vipDatas)
+			obj.name = '是否会员'
+			obj.data = arr
+			obj.legendData = vipTip
+			this.vipData = obj
     },
     loadHourPeople() {
 			const xData = [],

@@ -213,6 +213,18 @@ export const constantRoutes = [
 	    component: () => import('@/views/game/miniGame'),
 	    meta: { title: '小游戏'}
 	  }]
+	},
+	{
+		path: '/',
+		component: Layout,
+		hidden: true,
+		children: [
+			{
+				path: '/record',
+				name: 'record',
+				component: () => import('@/views/coupons/record'),
+			}
+		]
 	}
 ]
 

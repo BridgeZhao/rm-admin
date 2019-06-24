@@ -78,6 +78,8 @@ export default {
           },
           {
             type: "value",
+						name: "总人数",
+						zlevel:2,
             show: true
           }
         ],
@@ -88,7 +90,7 @@ export default {
             stack: "0",
             barMaxWidth: 60,
             itemStyle: {
-              normal: { label: { show: true, position: "insideRight" },
+              normal: { label: { show: true, position: "left" },
               color:'#50E3C2'},
             },
             data: [],
@@ -96,7 +98,7 @@ export default {
               normal: {
                 show: true,
                 textStyle: {
-                  color: '#00152E'
+                  color: '#fff'
                 }
               }
             }:false
@@ -106,7 +108,7 @@ export default {
             type: "bar",
             stack: "0",
             itemStyle: {
-              normal: { label: { show: true, position: "insideRight" },
+              normal: { label: { show: true, position: "right" },
                 color:'#71DCFF'}
             },
             data: [],
@@ -114,7 +116,7 @@ export default {
               normal: {
                 show: true,
                 textStyle: {
-                  color: "#00152E "
+                  color: "#fff "
                 }
               }
             }
