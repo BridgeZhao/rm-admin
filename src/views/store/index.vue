@@ -53,7 +53,7 @@
             :on-change="handlePreview">
             <div v-if="!fromInfo.imgBase64" class="text-left">
               <el-button type="primary" size="small"><i class="el-icon-upload el-icon--right"/> 点击上传</el-button>
-              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过1MB</div>
+              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500KB</div>
             </div>
             <div v-else class="upload-imgshow">
               <img :src="fromInfo.imgBase64" alt="">
@@ -301,7 +301,7 @@ export default {
       console.log('watch', val)
       if (val === 1) {
         this.getAreasData()
-      } else if (val === 2) {
+      } else if (val === 2&&this.fromInfo.imgBase64) {
         this.$nextTick(async () => {
           await this.getAreasData()
           this.setAreasProintData()
@@ -511,7 +511,7 @@ export default {
     handlePreview(file) {
       this.changeImgBase64=true
       const fileName = file.name
-      const isLimt = file.size / 1024 / 1024 < 1
+      const isLimt = file.size / 1024 < 500
       const regex = /(.jpg|.jpeg|.png)$/
       if (regex.test(fileName.toLowerCase())) {
         if (isLimt) {
@@ -519,10 +519,9 @@ export default {
           this.fileReader.onload = (res) => {
             this.fromInfo.imgBase64 = res.currentTarget.result
             this.fromInfo = Object.assign({}, this.fromInfo)
-            console.log(res.currentTarget.result)
           }
         }else{
-          this.$message.error('上传图片不能超过1MB')
+          this.$message.error('上传图片不能超过500KB')
         }
       }else{
         this.$message.error('只能上传jpg或png格式')
@@ -541,6 +540,7 @@ export default {
 						this.getAreasData()
 						this.$message.success('操作成功')
 					}).finally(() => {
+						this.$refs['myform1'].resetFields()
 						this.fromLoading = false
 					})
 				}
