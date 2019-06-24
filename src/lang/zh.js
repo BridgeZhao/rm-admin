@@ -31,6 +31,7 @@ module.exports = {
 		'dashboard-inStoreFlow':'进店客流',
 		'tvShow':'4K屏展示',
 		'coupons':'优惠券管理',
+		'record':'发放记录',
     logout:'退出',
     adi: '阿迪达斯',
     nb: '新百伦',

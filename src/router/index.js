@@ -192,7 +192,19 @@ export const constantRoutes = [
 			component: () => import('@/views/coupons/config'),
 			meta: {title: '优惠券管理'}
 		}]
-	}
+	},
+	{
+		path: '/',
+		component: Layout,
+		hidden: true,
+		children: [
+			{
+				path: '/record',
+				name: 'record',
+				component: () => import('@/views/coupons/record'),
+			}
+		]
+	},
 ]
 
 const createRouter = () => new Router({

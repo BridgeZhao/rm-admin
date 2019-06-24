@@ -127,6 +127,7 @@
     },
     watch: {
       data(val) {
+      	console.log('line-chart',val)
         let _val = JSON.parse(JSON.stringify(val))
         console.log('valcalaall', _val)
         this.loadData(_val)
@@ -168,14 +169,14 @@
             },
             areaStyle: {
               normal: {
-                color: colorAry[idx].area,
-                shadowColor: 'rgba(0, 0, 0, 0.1)',
+                color: this.initColor(),
+                // shadowColor: 'rgba(0, 0, 0, 0.1)',
                 shadowBlur: 10
               }
             },
             itemStyle: {
               normal: {
-                color: colorAry[idx].item,
+                color: this.initColor(),
                 borderWidth: 12
               }
             },
@@ -183,7 +184,15 @@
             animationDuration
           })
         })
-      }
+      },
+			initColor() {
+				let r = Math.random() * 255
+				let g = Math.random() * 255
+				let b = Math.random() * 255
+				let a = 0.3
+				const colors = `rgba(${r},${g},${b},${a})`
+				return colors
+			}
     }
   }
 </script>
