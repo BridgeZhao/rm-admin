@@ -136,7 +136,7 @@ export default {
     editMenu(obj){
       this.form=obj.data
       this.form.menuName=obj.data.name
-			this.isOrderNo=!!obj.data.orderNo
+			this.isOrderNo=typeof(obj.data.orderNo)==='number'
       this.form=Object.assign({},this.form)
       console.log(this.form,obj)
     },

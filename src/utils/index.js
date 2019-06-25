@@ -4,7 +4,6 @@
 export function menuTransTree(data,type='menus') {
   const menuFristList = []
   const menusTree = []
-	console.log(data)
   data.forEach(item => {
     const tmp_obj = {id: item.id,parentId:0, label: item.title, data: item}
     if(type==='buttons'){

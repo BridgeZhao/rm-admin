@@ -57,6 +57,7 @@ export default {
   },
   created() {
     this.authRoutes = checkPermission('menus')
+		console.log('~~~this.authRoutes~~~',this.authRoutes)
     if(!this.authRoutes.length){
 			this.$store.dispatch('user/logout').then(()=>{
 				this.$router.push('/login')
