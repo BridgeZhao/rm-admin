@@ -10,8 +10,9 @@
       <div class="filter-warp">
         <div class="drop-down area-drop-down">
           <template>
-            <el-select v-model="value" placeholder="请选择"  v-on:change="indexSelect" >
-              <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+            <!-- <el-select v-model="defaultStoreId" placeholder="请选择"  v-on:change="indexSelect" > -->
+            <el-select v-model="defaultStoreId" placeholder="请选择" >
+              <el-option v-for="item in storeList" :key="item.id" :label="item.name" :value="item.id">
               </el-option>
             </el-select>
           </template>
@@ -50,11 +51,6 @@
               <div class="img">
                   <img :src="item.imgNavigation" alt="">
               </div>
-              <!-- <div  class="cs-upload-warpper file-upload">
-                <input  type="file" accept="*" class="file-input"> 
-                <input  type="text" readonly="readonly" class="input">
-                <svg-icon icon-class="upload" class="upload-icon svg-icon" />
-              </div> -->
               <el-upload
                 class="upload-img"
                 action=""
@@ -78,12 +74,14 @@
     <!-- 小游戏 -->
     <div v-show='!gameTab' class="second_item">
       <ul  class="data-list game-list">
-        <li  class="game-list-li" draggable="false">
+        <li class="game-list-li" draggable="false" v-for='(item, key) in gameData' :key='key'>
           <div  class="name-warp">
-            <span  class="name">贴纸游戏</span>
+            <span  class="name">{{item.name}}</span>
             <svg-icon icon-class="edit" class="svg-icon"></svg-icon>
           </div>
-          <div  class="img" style="background-image: url('http://172.16.2.118/media/5d0b47c4e7f8b535833263.jpg');"></div>
+          <div class="img">
+            <img :src="item.imgSrc" />
+          </div>
           <button class="btns handle-btn mr-top default">取消关联</button>
         </li>
       </ul>
@@ -92,6 +90,7 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
   export default {
     name: 'storeContent',
     data() {
@@ -112,12 +111,27 @@
           imgThumbnail:'http://172.16.2.118/media/5cf8bd48e042e128180005.png',
           imgNavigation:'http://172.16.2.118/media/5cf8bd4f920e8885753787.png'
         }],
+        gameData: [{
+          id:'',
+          name: '贴纸游戏',
+          imgSrc :'http://172.16.2.118/media/5d0b47c4e7f8b535833263.jpg'
+        }],
         fileReader: new FileReader(),
         changeImgBase64 : false,
         listdataImg : undefined,
         listdataIn : undefined,
-        nowId : ''
+        nowId : '',
+        defaultStoreId : undefined
       }
+    },
+    computed: {
+      ...mapGetters([
+        'storeList',
+        'storeId'
+      ])
+    },
+    created(){
+    	this.defaultStoreId=this.storeId
     },
     methods: {
       tabclick(tabClickVal) {
@@ -131,18 +145,18 @@
            imgThumbnail:'',
            imgNavigation:''
          };
-         _listdata.name = this.nowId.label
+         _listdata.id = this.defaultStoreId 
+         _listdata.name = this.storeList.find(item => {return item.id === this.defaultStoreId}).name
          let thisListdata = this.listdata
          let lastListdata = thisListdata[thisListdata.length - 1]
-          // if(lastListdata.id == '' || lastListdata.id == undefined){
-          if(lastListdata.id === undefined  || lastListdata.name === this.nowId.label){
+          if(this.defaultStoreId === lastListdata.id){
             this.$message({
               message: '该区域已存在，请勿重复添加',
               type: 'warning'
             });
             return false
           }
-         this.listdata.push(_listdata)
+          this.listdata.push(_listdata)
       },
       deleteRegion (key) {
         this.listdata.splice(key,1)
@@ -175,16 +189,19 @@
         this.listdataIn = key
         this.listdataImg = type
       },
-      indexSelect(){
-        let thisVal = this.value
-        this.nowId = this.options.find(function(item){
-          return item.value === thisVal
-        })
-        console.log(this.nowId)
-         
-      }
+      // indexSelect(){
+      //   let thisVal = this.value
+      //   this.nowId = this.defaultStoreId.find(function(item){
+      //     return item.value === thisVal
+      //   })
+      //   console.log(this.nowId)
+      // }
     },
     watch: {
+      defaultStoreId(val) {
+        this.$store.dispatch('app/setStoreId', val)
+        this.$emit('storeIdChange',val)
+      }
     }
   }
 </script>

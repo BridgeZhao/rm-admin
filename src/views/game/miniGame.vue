@@ -1,11 +1,13 @@
 <template>
   <div class="mini_game">
     <ul  class="data-list game-list">
-      <li >
-        <div  class="name-warp"><span  class="name">颜值打分</span>
+      <li v-for='(item, key) in miniGame' :key='key'>
+        <div  class="name-warp"><span  class="name">{{item.name}}</span>
          <svg-icon icon-class="trash" class="delete-icon" />
          </div>
-        <div  class="img" style="background-image: url('http://172.16.2.118/media/5d0b47c4e7f8b535833263.jpg');"></div>
+        <div class="img">
+          <img :src='item.imgSrc' />
+        </div>
       </li>
       <li  class="add">
         <svg-icon icon-class="plus" class="svg-plus"></svg-icon>
@@ -45,7 +47,16 @@
 
 <script>
   export default {
-    name: 'miniGame'
+    name: 'miniGame',
+    data () {
+      return {
+        miniGame: [{
+          id: '',
+          name: '颜值打分',
+          imgSrc :'http://172.16.2.118/media/5d0b47c4e7f8b535833263.jpg'
+        }]
+      }
+    }
   }
 </script>
 <style lang="scss">
