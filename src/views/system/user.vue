@@ -139,6 +139,15 @@
         </template>
       </el-table-column>
     </el-table>
+		<nav class="nav-page">
+			<el-pagination
+				:page-size="pagination.size"
+				layout="prev, pager, next, jumper"
+				:total="pagination.total"
+				@size-change="pageChange"
+				@current-change="pageChange"
+			/>
+		</nav>
   </div>
 </template>
 
@@ -159,6 +168,12 @@ export default {
       menuList: [],
       rolesList: [],
       tableData: [],
+			pagination: {
+				page: 1,
+				size: 15,
+				name: '',
+				total: 0
+			},
 			rules: {
 				username: [
 					{required: true, message: '请输入登陆名称', trigger: 'blur'},
@@ -189,13 +204,17 @@ export default {
   },
   async created() {
     this.getMenus()
-    await this.getRoles()
+    await this.getAllRoles()
     this.getUsers()
   },
   methods: {
     getUsers() {
-      userQuery().then(res => {
-        this.tableData = res
+      userQuery(this.pagination).then(res => {
+				const {size, total, page, data} = res
+				this.tableData = data
+				this.pagination.total = total
+				this.pagination.page = page
+				this.pagination.size = size
         this.$nextTick(() => {
           this.stopRefresh = false
         })
@@ -203,10 +222,10 @@ export default {
         this.loading = false
       })
     },
-    getRoles() {
+		getAllRoles() {
       return new Promise(resolve => {
         getAllRoles().then(res => {
-          this.rolesList = res
+          this.rolesList = res.data
           resolve(res)
         })
       })
@@ -309,9 +328,11 @@ export default {
         enabled: true,
         userType: 0
       }
-
-      console.log(this.form)
     },
+		pageChange(val){
+			this.pagination.page = val
+			this.getUsers()
+		},
     openDialog(){
       this.dialogType = 'add'
       this.dialogVisible=true

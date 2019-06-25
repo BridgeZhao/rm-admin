@@ -37,14 +37,13 @@ export function checkPermission() {
 		roles.push({name: 'welcome', parentId: 0, title: ''})
 		const routes = router.options.routes
 		let route_obj = {}
-
 		for (let i = 0; i < routes.length; i++) {
 			if (routes[i].hasOwnProperty('hidden')) {
 				continue
 			}
 			if (routes[i].hasOwnProperty('redirect')) {
 				const obj = roles.find(item => {
-					return item.name === routes[i].name
+					return item.name === routes[i].children[0].name
 				})
 				if (obj) {
 					routes[i].children[0].meta.title = obj.title

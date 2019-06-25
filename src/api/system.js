@@ -28,12 +28,21 @@ export function addRoles( data) {
     data
   })
 }
-export function getAllRoles() {
+export function getRoles(params) {
   return request({
     url: '/auth/role',
-    method: 'get'
+    method: 'get',
+		params
   })
 }
+export function getAllRoles() {
+	return request({
+		url: '/auth/role',
+		method: 'get',
+		params: {page: 1, size: 100}
+	})
+}
+
 export function delRole(id) {
   return request({
     url: `/auth/role/${id}`,

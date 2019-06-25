@@ -18,7 +18,9 @@ body {
 label {
   font-weight: 700;
 }
-
+img.error{
+	opacity: .3;
+}
 html {
   height: 100%;
   box-sizing: border-box;

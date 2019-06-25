@@ -3,16 +3,17 @@
     <!--头部按钮-->
     <el-form :inline="true" class="demo-form-inline">
       <el-form-item label="注册时间">
-        <el-date-picker
-          v-model="dateTimes"
+				<el-date-picker
 					style="width: 270px"
-          type="daterange"
+					v-model="dateTimes"
+					type="daterange"
 					format="yyyy-MM-dd"
-          value-format="timestamp"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期">
-        </el-date-picker>
+					range-separator="至"
+					start-placeholder="开始日期"
+					end-placeholder="结束日期"
+					value-format="timestamp"
+					:default-time="['00:00:00', '23:59:59']"
+				/>
       </el-form-item>
       <el-form-item>
 				<el-button-group>

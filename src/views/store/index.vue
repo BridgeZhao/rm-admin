@@ -127,7 +127,7 @@
         </el-row>
         <div v-if="fromInfo.imgBase64" class="perview-warp">
           <canvas id="canvasDom" />
-          <img :src="fromInfo.imgBase64">
+          <img :src="fromInfo.imgBase64" :onerror="_imgErrorDraw"/>
         </div>
 				<div v-else class="perview-warp">
 					 <p class="color-active">没有上传平面图</p>
@@ -177,7 +177,7 @@
           <el-tag v-if="!scope.row.floorGraph" type="danger">
             无
           </el-tag>
-          <div v-else><img :src="scope.row.floorGraph" class="store-img"></div>
+          <div v-else><img :src="scope.row.floorGraph" :onerror="_imgError" class="store-img"></div>
         </template>
       </el-table-column>
       <el-table-column
@@ -288,7 +288,7 @@ export default {
       },
       pagination: {
         page: 1,
-        size: 20,
+        size: 15,
         name: '',
         total: 0
       },
@@ -296,17 +296,26 @@ export default {
       canvas:undefined
     }
   },
+	computed:{
+		_imgError(){
+			return "this.src='/img/errimg.png'"
+		},
+		_imgErrorDraw(){
+			return "this.src='/img/zw.png'"
+		}
+	},
   watch:{
     steps(val) {
       console.log('watch', val)
       if (val === 1) {
         this.getAreasData()
-      } else if (val === 2&&this.fromInfo.imgBase64) {
+      } else if (val === 2) {
         this.$nextTick(async () => {
           await this.getAreasData()
           this.setAreasProintData()
           // 设置复选框
           this.setProintImg()
+					this.tableLoading=false
         })
       }
     }
@@ -480,6 +489,9 @@ export default {
         if(!this.changeImgBase64){
           delete this.fromInfo.imgBase64
         }
+				if(this.steps===2){
+					delete this.fromInfo.imgBase64
+				}
         addUpdateStore(data).then((res)=>{
           this.fromLoading=false
           if(type==='close'){
@@ -559,7 +571,6 @@ export default {
       })
     },
     async setAreasProintData() {
-      this.fromLoading=true
       const canvas=document.getElementById('canvasDom')
       const {point,width,height,scale}=this.fromInfo.pointData
       if(width&&height){
@@ -571,6 +582,7 @@ export default {
         this.size=await AutoImage(this.fromInfo.imgBase64,canvas.width)
         canvas.height = this.size.height
       }
+      document.querySelector('.perview-warp').style.height=canvas.height+'px'
       this.drawLayer = new DrawImage(canvas, {
         prointSize: 5,
         scale:scale,
@@ -578,7 +590,6 @@ export default {
         areaText: this.areaText
       })
       this.drawLayer.init(point||{})
-      this.fromLoading=false
     },
     handleEdti(tag){
       this.areaData =Object.assign({},tag)
@@ -670,7 +681,15 @@ export default {
     width: 100%;
   }
 	.perview-warp{
-		min-height: 200px;
+		position: relative;
+		text-align: center;
+		min-height: 100px;
+		img.error{
+			width: 200px;
+			position: absolute;
+			left:0;right:0;bottom:0;top:0;
+			margin: auto;
+		}
 		p{
 			text-align: center;
 		  padding-top: 100px;
