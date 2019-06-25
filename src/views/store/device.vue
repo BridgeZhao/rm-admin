@@ -3,7 +3,7 @@
     <!--头部按钮-->
     <el-row :gutter="20" class="table-head-btns">
       <el-col style="text-align: right">
-        <el-button v-permission="'add'" type="primary" round @click="()=>{btnDevice()}">+ 添加设备</el-button>
+        <el-button v-permission="'add'" type="primary" @click="()=>{btnDevice()}">+ 添加设备</el-button>
       </el-col>
     </el-row>
     <!--弹框-->
@@ -69,8 +69,8 @@
               </el-option>
                 </el-select>
               </el-col>
-            <el-col :span="8" style="text-align: left;padding-left: 20px">
-            <el-checkbox-group v-model="checkType[selectedArea]" @change="checkChange" class="ck-type">
+              <el-col :span="8" style="text-align: left;padding-left: 20px">
+								<el-checkbox-group v-model="checkType[selectedArea]" @change="checkChange" class="ck-type">
               <el-checkbox label="0">空岗监测</el-checkbox>
               <el-checkbox label="1">超员监测</el-checkbox>
             </el-checkbox-group>

@@ -2,13 +2,22 @@
   <div class="app-container">
     <!--头部按钮-->
     <el-row :gutter="20" class="table-head-btns">
-      <el-col style="text-align: right">
-        <el-button v-permission="'add'" type="primary" round @click="btnAddStore">+ 添加门店</el-button>
+			<el-col :span="12" class="flex">
+				<el-input
+					style="width: 300px;margin-right: 10px"
+					placeholder="请输入门店名称"
+					v-model="pagination.name">
+					<i slot="prefix" class="el-input__icon el-icon-search"></i>
+				</el-input>
+				<el-button type="primary" icon="el-icon-search" @click="getTableData">搜索</el-button>
+			</el-col>
+      <el-col :span="12" style="text-align: right">
+        <el-button v-permission="'add'" type="primary"  @click="btnAddStore">+ 添加门店</el-button>
       </el-col>
     </el-row>
     <!--弹框-->
     <!--添加用户-->
-    <el-dialog :title="dialogType==='add'?'门店添加':stepNameTransform()+'修改'" :width="'720px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="()=>{clearClose()}" @closed="steps=0">
+    <el-dialog v-if="dialogVisible"  :title="dialogType==='add'?'门店添加':stepNameTransform()+'修改'" :width="'720px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="()=>{clearClose()}" @closed="steps=0">
       <el-steps :active="steps" align-center finish-status="success" v-if="dialogType==='add'">
         <el-step title="基本信息"></el-step>
         <el-step title="区域管理"></el-step>
@@ -51,17 +60,13 @@
             :auto-upload="false"
             :show-file-list="false"
             :on-change="handlePreview">
-            <div v-if="!fromInfo.imgBase64" class="text-left">
-              <el-button type="primary" size="small"><i class="el-icon-upload el-icon--right"/> 点击上传</el-button>
-              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500KB</div>
-            </div>
-            <div v-else class="upload-imgshow rel">
-							<div class="has-upload abs abs-center">
-								<el-button type="primary" size="small"><i class="el-icon-upload el-icon--plus"/> 点击修改</el-button>
-								<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500KB</div>
-							</div>
+            <div v-if="fromInfo.imgBase64" class="upload-imgshow rel">
               <img :src="fromInfo.imgBase64" alt="">
             </div>
+						<div class="has-upload abs abs-center">
+							<el-button type="primary" size="small"><i class="el-icon-upload el-icon--plus"/> 点击修改</el-button>
+							<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500KB</div>
+						</div>
           </el-upload>
         </el-form-item>
       </el-form>
@@ -161,11 +166,9 @@
       </el-table-column>
       <el-table-column
         prop="name"
-        label="门店名">
-      </el-table-column>
+        label="门店名"/>
       <el-table-column
         label="地区"
-        width="150"
       >
         <template slot-scope="scope">
           <el-tag type="info">
@@ -338,7 +341,9 @@ export default {
 			this.tableLoading = true
 			const _pagination = Object.assign({}, this.pagination)
 			delete _pagination.total
-			delete _pagination.name
+			if(!_pagination.name){
+				delete _pagination.name
+			}
 			getAllStores(_pagination).then(res => {
 				const {size, total, page, data} = res
 				this.tableData = data
@@ -616,10 +621,6 @@ export default {
 			this.steps = 0
 		},
 		clearClose(reload) {
-			const fm0 = this.$refs['myform0']
-			if (fm0) {
-				fm0.resetFields()
-			}
 			this.changeImgBase64 = false
 			this.dialogVisible = false
 			this.checkType = {}
@@ -630,7 +631,7 @@ export default {
 				this.fromInfo[key] = undefined
 			}
 			this.regionVal = undefined
-			this.areaData = {name: '', num: 1}
+			this.areaData = {name: '', num: undefined}
 			this.cityAry = []
 			console.log(this.fromInfo)
 		},
@@ -700,23 +701,27 @@ export default {
 			font-size: 16px;
 		}
 	}
-  .upload-imgshow{
+	.el-upload__tip{
+		margin: 0;
+		text-shadow: 1px 1px 1px #000;
+	}
+  .upload-imgshow,.upload-img{
     color: #418aaa;
     width: 100%;
+		text-align: center;
     min-width: 550px;
     min-height: 100px;
     background: #00172f;
     display: block;
 		.has-upload{
 			z-index: 2;
-			background: #00172f;
 			height: 80px;
 		}
 		img{
       width: 100%;
-			opacity: .4;
+			opacity: .7;
+			/*filter: blur(3px);*/
 			z-index: 1;
-      /*max-height:200px;*/
       vertical-align: middle;
     }
   }

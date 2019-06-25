@@ -19,11 +19,14 @@ service.interceptors.request.use(
 			HTTP_AUTH = process.env.VUE_APP_HTTP_AUTH
 			HTTP_AUTH_AGENT = process.env.VUE_APP_HTTP_AUTH_AGENT
 		}
-		if(config.url.indexOf('/auth')!==-1){
-			config.baseURL=HTTP_AUTH
-		}else{
-			config.baseURL= HTTP_AUTH_AGENT
+		if(config.url.indexOf('http://')===-1){
+			if (config.url.indexOf('/auth') !== -1) {
+				config.baseURL = HTTP_AUTH
+			} else {
+				config.baseURL = HTTP_AUTH_AGENT
+			}
 		}
+		console.log(config)
     return config
   },
   error => {
