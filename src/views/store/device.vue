@@ -51,7 +51,7 @@
           <el-input v-model="fromInfo.rtsp" autocomplete="off" placeholder="请输入设备rtsp流地址"></el-input>
         </el-form-item>
       </el-form>
-      <el-form v-else v-loading="dgLoading" :model="fromInfo">
+      <el-form v-else v-loading="dgLoading" :model="fromInfo"  ref="myform">
         <el-row>
           <el-col :span="12">
             <el-row>

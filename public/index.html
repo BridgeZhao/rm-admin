@@ -14,4 +14,11 @@
     <div id="app"></div>
     <!-- built files will be auto injected -->
   </body>
+	<script type="text/javascript">
+		function notfound(el) {
+			console.log(el.src)
+			el.src = "/img/errimg.png";
+			el.className = "error";
+		}
+	</script>
 </html>

@@ -25,6 +25,7 @@ import 'echarts/lib/component/title'
 import 'echarts/lib/component/visualMap'
 import 'echarts/lib/component/legendScroll'
 import themeDark from '@/components/Charts/theme/dark.json'
+import ButtonAdd from '@/components/Buttons/add'
 import rem from '@/rem'
 const PC_DESIGN_SIZE = 2080
 rem(PC_DESIGN_SIZE)
@@ -43,6 +44,7 @@ Vue.filter('dateformat', function(dataStr, pattern = 'YYYY-MM-DD HH:mm:ss') {
  */
 Vue.config.productionTip = false
 Vue.component('v-chart', ECharts)
+Vue.component('button-add', ButtonAdd)
 Vue.directive('permission', permission)
 
 new Vue({
