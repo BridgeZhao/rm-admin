@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container" style="margin-top: 0px;">
     <div data-v-1f5afd21 class="top-bar">
       <h2 data-v-1f5afd21 class="sub-title">智能会员管理</h2>
       <h1 data-v-1f5afd21 class="main-title">KANKAN 智能客流分析</h1>
@@ -165,12 +165,13 @@
   </div>
 </template>
 <script>
-import moment from "moment";
-import h337 from "heatmap.js";
-import BarChartNew from "@/components/Charts/BarChartNew";
-const MAX_HEAT_VALUE = 10;
-import {getAreaHotData, getImageData, getPinData, getLeftImg} from "@/api/report";
-export default {
+	import moment from 'moment'
+	import h337 from 'heatmap.js'
+	import BarChartNew from '@/components/Charts/BarChartNew'
+	import {getImageData, getLeftImg, getPinData} from '@/api/report'
+
+	const MAX_HEAT_VALUE = 10;
+	export default {
   name: "aptitude-demonstration",
   components: { BarChartNew },
   data() {
@@ -179,14 +180,14 @@ export default {
       timeData:[moment(new Date()).add(-1,'days').format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')],
       maxHeight: 0,
       summary:{
-        couponDailyCount: 10,
-        customerNew: 100,
-        customerNum: 300,
-        customerOld: 200,
-        realTimeAdInteraction: 25,
-        realTimeCount: 125,
-        realTimeDailyInteraction: 30,
-        realTimeScenarioInteraction: 100
+        couponDailyCount: 0,
+        customerNew: 0,
+        customerNum: 0,
+        customerOld: 0,
+        realTimeAdInteraction: 0,
+        realTimeCount: 0,
+        realTimeDailyInteraction: 0,
+        realTimeScenarioInteraction: 0
       },
       list2: [],
       tableData: [],
@@ -252,8 +253,7 @@ export default {
       }
       getPinData(_store_id).then(res =>{
         // 设置summary
-        let _summary = res.data.summary[0]
-        this.summary = _summary
+				this.summary = res.data.summary === [] ? this.summary : res.data.summary[0]
         // 设置期间浏览人数
 				const _viewData = res.data.viewHourData
 				const xData = []
@@ -429,5 +429,8 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+	body{
+		overflow: hidden !important;
+	}
 @import "@/styles/apDemon.scss";
 </style>
