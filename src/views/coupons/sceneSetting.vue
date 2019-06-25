@@ -6,7 +6,7 @@
           <el-input v-model="formInline.scene" placeholder="场景" />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="search">
+          <el-button type="primary" @click="getTableList">
             查询
           </el-button>
         </el-form-item>
@@ -19,7 +19,7 @@
       :data="tableData"
       border
       size="mini"
-      style="width: 100%"
+      style="width: 100%;margin-bottom: 10px;"
     >
       <el-table-column
         prop="name"
@@ -103,8 +103,7 @@
 </template>
 <script>
 	import moment from "moment"
-	// eslint-disable-next-line no-unused-vars
-	import {setScenarioData, searchScenarioData, getScenarioData, delScenarioData } from '@/api/coupons'
+	import {setScenarioData, getScenarioData, delScenarioData } from '@/api/coupons'
 	export default {
 		name: 'SceneSetting',
 		data() {
@@ -153,22 +152,11 @@
 		},
 		mounted() {
 			this.getTableList()
-			// for (let i = 0; i < 9; i++) {
-			// 	this.tableData.push(this.tableData[0])
-			// }
 		},
 		methods: {
 			dispose(row, column, cellValue, index){
 				return moment(cellValue).format("YYYY-MM-DD")
 			},
-			search() {
-				const _id = this.formInline.scene
-				searchScenarioData(_id).then(res =>{
-						// this.da
-						console.log('resres',res)
-					})
-			},
-
 			addSence() {
 				this.dialogTableVisible = true
 				this.dialogTitle = '新增场景'
@@ -208,7 +196,6 @@
 			submit() {
 				this.dialogTableVisible = false
 				this.$refs['ruleForm'].validate((valid) => {
-					// eslint-disable-next-line no-empty
 					if (valid) {
 						const data = this.ruleForm
 						setScenarioData(data).then(res =>{
@@ -217,6 +204,8 @@
 									message: this.dialogTitle === '新增场景' ? '添加成功！' : '修改成功！',
 									type: 'success'
 								})
+								this.formInline.scene = ''
+								this.getTableList()
 							} else{
 								this.$message({
 									message: this.dialogTitle === '新增场景' ? '添加失败' :'修改失败',
@@ -241,6 +230,7 @@
 				this.$emit('nextComponet', 2)
 			},
 			getTableList() {
+				this.page.name = this.formInline.scene
 				const _data = this.page
 				getScenarioData(_data).then(res =>{
 					console.log("res",res)

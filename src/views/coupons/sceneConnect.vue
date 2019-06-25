@@ -28,9 +28,10 @@
             <el-table-column
                     label="优惠券"
                     align="center"
+										prop="coupons"
 										show-overflow-tooltip>
 							<template slot-scope="scope">
-								<div v-if='scope.row.coupons.length !== 0'>
+								<div v-if="scope.row.coupons.length !== 0">
 									<ul style="list-style: none;display: flex;justify-content: left;padding: 0;overflow: hidden;height: 20px;">
 										<li v-for="(item,index) in scope.row.coupons" :key="item.couponId">
 											<span>{{index+1}}、{{item.name}};</span>
@@ -82,6 +83,20 @@
 									<el-input v-model="ruleForm.index"></el-input>
 								</el-form-item>
             </el-form>
+					  <div id="box">
+							<el-table :data="newTableData"
+												border
+												row-key="id"
+												align="left"
+							class="box">
+								<el-table-column v-for="(item, index) in col"
+																 :key="`col_${index}`"
+																 :prop="dropCol[index].prop"
+																 :label="item.label">
+								</el-table-column>
+							</el-table>
+						</div>
+
             <div slot="footer">
                 <el-button @click="cancle">取 消</el-button>
                 <el-button type="primary" @click="submit">保存</el-button>
@@ -90,7 +105,8 @@
     </div>
 </template>
 <script>
-	import {searchConnection, getScenarioData,sceneBind} from '@/api/coupons'
+	import Sortable from 'sortablejs'
+	import {searchConnection, getScenarioData,sceneBind, getCouponsList} from '@/api/coupons'
   export default {
     name: 'sceneConnect',
     data() {
@@ -122,7 +138,27 @@
 
         },
         tableData: [],
-				sceneList:[]
+				sceneList:[],
+				col: [
+					{
+						label: '日期',
+						prop: 'name'
+					}
+				],
+				dropCol: [
+					{
+						label: '日期',
+						prop: 'name'
+					}
+
+				],
+				newTableData:[{
+        	name:'优惠券1',
+					id:'1'
+				},{
+					name:'优惠券2',
+					id:'2'
+				}]
 
       }
     },
@@ -130,6 +166,7 @@
 			for (let i = 0; i < 9; i++) {
 				this.tableData.push(this.tableData[0])
 			}
+			this.rowDrop()
 			this.loadData()
 
 		},
@@ -194,6 +231,17 @@
 					this.sceneList = res.data
 				})
 			},
+			//行拖拽
+			rowDrop() {
+				const tbody = document.querySelector('.el-table__body-wrapper tbody')
+				const _this = this
+				Sortable.create(tbody, {
+					onEnd({ newIndex, oldIndex }) {
+						const currRow = _this.newTableData.splice(oldIndex, 1)[0]
+						_this.tableData.splice(newIndex, 0, currRow)
+					}
+				})
+			}
     }
   }
 </script>
