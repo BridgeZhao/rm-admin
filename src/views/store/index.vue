@@ -4,7 +4,6 @@
     <el-row :gutter="20" class="table-head-btns">
       <el-col style="text-align: right">
         <el-button v-permission="'add'" type="primary" round @click="btnAddStore">+ 添加门店</el-button>
-        <!--<button-add v-permission="'add'" @click="btnAddStore">添加门店</button-add>-->
       </el-col>
     </el-row>
     <!--弹框-->

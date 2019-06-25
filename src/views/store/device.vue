@@ -88,7 +88,7 @@
         </el-row>
         <div class="perview-warp">
           <canvas id="canvasDevice" />
-          <img :src="fromInfo.snapshot">
+          <img :src="fromInfo.snapshot" onerror="notfound(this)">
         </div>
       </el-form>
       <div slot="footer" class="dialog-footer text-center">
@@ -449,6 +449,7 @@ export default {
   .perview-warp{
     position: relative;
     cursor:crosshair;
+		text-align: center;
     canvas{
       width: 100%;
       position: absolute;
@@ -456,7 +457,15 @@ export default {
       top:0;
       z-index: 2;
     }
-    img{ width: 100%;vertical-align: middle}
+		&.img-error{
+			canvas{display:none}
+		}
+    img{ width: 100%;vertical-align: middle;
+			&.error{
+				width: 100px;
+				margin: 30px auto;
+			}
+		}
   }
   .el-upload{
     width: 100%;

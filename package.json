@@ -19,20 +19,12 @@
     "echarts": "4.2.1",
     "element-ui": "2.7.2",
     "heatmap.js": "2.0.5",
-    "isexe": "2.0.0",
     "js-cookie": "2.2.0",
     "moment": "2.24.0",
     "normalize.css": "7.0.0",
     "nprogress": "0.2.0",
-    "path-to-regexp": "2.4.0",
-<<<<<<< HEAD
-    "save": "2.4.0",
-    "screenfull": "4.2.0",
-=======
-    "save": "^2.4.0",
-    "screenfull": "^4.2.0",
-    "sortablejs": "^1.10.0-rc2",
->>>>>>> 8b33987788393f3ae1fb64448024be28bdd0650b
+		"screenfull": "4.2.0",
+		"sortablejs": "1.10.0-rc2",
     "vue": "2.6.10",
     "vue-echarts": "4.0.3",
     "vue-i18n": "8.11.2",
