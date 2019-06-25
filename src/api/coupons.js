@@ -81,3 +81,11 @@ export function searchConnection(params) {
 		params
 	})
 }
+// 优惠券场景绑定
+export function sceneBind(params) {
+	return request({
+		url: '/mg/scenario_coupons',
+		method: 'post',
+		params
+	})
+}
