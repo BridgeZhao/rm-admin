@@ -39,7 +39,7 @@ export function delUser(id) {
 
 export function logout() {
   return request({
-		url: '/auth/login',
-		method: 'post'
+		url: '/auth/user',
+		method: 'get'
   })
 }
