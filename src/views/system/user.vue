@@ -2,6 +2,7 @@
   <div class="app-container">
     <!--添加用户-->
     <el-dialog
+			v-drag-dialog
       :title="dialogType==='add'?'管理员添加':'管理员修改'"
       append-to-body
       :width="'620px'"

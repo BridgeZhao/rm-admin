@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container store-device">
     <!--头部按钮-->
     <el-row :gutter="20" class="table-head-btns">
       <el-col style="text-align: right">
@@ -7,7 +7,7 @@
       </el-col>
     </el-row>
     <!--弹框-->
-    <el-dialog v-if="dialogVisible" :title="dialogType==='add'?'添 加':'编 辑'" :width="'720px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="()=>{clearClose()}">
+    <el-dialog v-drag-dialog :title="dialogType==='add'?'添 加':'编 辑'" :width="'720px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="()=>{clearClose()}">
       <!--基本信息-->
       <el-form v-if="drawType==='info'" v-loading="dgLoading" :model="fromInfo" :rules="rules"  ref="myform">
         <el-form-item label="设备名称" :label-width="formLabelWidth" prop="name" >

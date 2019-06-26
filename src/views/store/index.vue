@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container store-list">
     <!--头部按钮-->
     <el-row :gutter="20" class="table-head-btns">
 			<el-col :span="12" class="flex">
@@ -17,7 +17,7 @@
     </el-row>
     <!--弹框-->
     <!--添加用户-->
-    <el-dialog v-if="dialogVisible"  :title="dialogType==='add'?'门店添加':stepNameTransform()+'修改'" :width="'720px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="()=>{clearClose()}" @closed="steps=0">
+    <el-dialog v-drag-dialog  :title="dialogType==='add'?'门店添加':stepNameTransform()+'修改'" :width="'720px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="()=>{clearClose()}" @closed="steps=0">
       <el-steps :active="steps" align-center finish-status="success" v-if="dialogType==='add'">
         <el-step title="基本信息"></el-step>
         <el-step title="区域管理"></el-step>
@@ -134,7 +134,7 @@
             </el-button-group>
           </el-col>
         </el-row>
-        <div v-if="fromInfo.imgBase64" class="perview-warp">
+        <div  v-waves v-if="fromInfo.imgBase64" class="perview-warp">
           <canvas id="canvasDom" />
           <img :src="fromInfo.imgBase64" onerror="notfound(this)"/>
         </div>
@@ -430,6 +430,7 @@ export default {
 			this.fromInfo.name = data.name
 			this.fromInfo.imgBase64 = data.floorGraph
 			this.fromInfo.storeId = this.fromInfo.id = data.id
+			this.getAreasData()
 			this.fromInfo.regionId = data.regionId
 			this.fromInfo.pointData = data.pointData
 			this.steps = idx - 0

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <!--添加-->
-    <el-dialog :title="dialogType==='add'?'角色添加':'角色修改'" append-to-body :width="'620px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="clearClose">
+    <el-dialog v-drag-dialog :title="dialogType==='add'?'角色添加':'角色修改'" append-to-body :width="'620px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="clearClose">
       <el-form ref="myform" :model="form" :rules="rules">
         <el-form-item label="角色名称" prop="roleName" :label-width="formLabelWidth">
           <el-input v-model="form.roleName" autocomplete="off"></el-input>
