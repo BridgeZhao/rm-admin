@@ -170,7 +170,7 @@ export default {
       tableData: [],
 			pagination: {
 				page: 1,
-				size: 15,
+				size: 10,
 				name: '',
 				storeId:0,
 				total: 0

@@ -45,7 +45,6 @@
       <el-table-column
         prop="roleName"
         label="角色名称"
-        width="180"
       />
       <el-table-column
         label="更新时间">
@@ -54,15 +53,13 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="创建时间"
-        width="180">
+        label="创建时间">
         <template slot-scope="scope">
           <span>{{ scope.row.createTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span>
         </template>
       </el-table-column>
       <el-table-column
         label="操作"
-        width="180"
       >
         <template slot-scope="scope">
           <el-button
@@ -106,7 +103,7 @@ export default {
       loading:false,
 			pagination: {
 				page: 1,
-				size: 15,
+				size: 10,
 				name: '',
 				total: 0
 			},

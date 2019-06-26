@@ -60,6 +60,7 @@ export const constantRoutes = [
   {
     path: '/store',
     name: 'store',
+		redirect: '/store/list',
     component: Layout,
     meta: {
       title: '门店管理',
@@ -80,6 +81,7 @@ export const constantRoutes = [
   {
     path: '/system',
     name: 'system',
+		redirect: '/system/menus',
     component: Layout,
     meta: {
       title: '系统管理',
@@ -105,6 +107,7 @@ export const constantRoutes = [
   {
     path: '/member',
     name: 'member',
+		redirect: '/member/virtual',
     component: Layout,
     meta: {
       title: '会员管理',
@@ -126,6 +129,7 @@ export const constantRoutes = [
 	{
 		path: '/dashboard',
 		name: 'dashboard',
+		redirect: '/dashboard/real-time',
 		component: Layout,
 		meta: {title: '统计报表', icon: 'dashboard'},
 		children: [

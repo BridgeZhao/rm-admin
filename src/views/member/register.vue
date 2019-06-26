@@ -111,7 +111,7 @@ export default {
       },
       pagination: {
         page: 1,
-        size: 24,
+				size: 10,
         name: '',
         total: 0
       },
