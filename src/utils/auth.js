@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie'
 import store from '@/store'
 import router from '../router'
-const TokenKey = 'token'
+const TokenKey = 'access_token'
 
 export function getToken() {
   return Cookies.get(TokenKey)
