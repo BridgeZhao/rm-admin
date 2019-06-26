@@ -36,7 +36,7 @@
 							</el-select>
 						</el-form-item>
 						<el-form-item>
-							<el-button type="primary" @click="searchData('ruleForm')">筛选</el-button>
+							<el-button type="primary" @click="searchData()">筛选</el-button>
 							<el-button @click="resetForm('ruleForm')">重置</el-button>
 						</el-form-item>
 					</el-form>
@@ -107,6 +107,32 @@
 			   style="float: right">
 			</el-pagination>
 		</div>
+		<el-dialog :title="title" :visible.sync="dialogTableVisible" :close-on-click-modal="false" class="dialogBox">
+			<el-row :gutter="20">
+				<el-col :span="12"><div class="grid-content bg-purple">
+					<span class="tit">门店：</span><span class="content">{{rowsData.storeName}}</span>
+				</div></el-col>
+				<el-col :span="12"><div class="grid-content bg-purple">
+					<span class="tit">有效期：</span><span class="content">{{timeChange(rowsData.time)}}</span>
+				</div></el-col>
+			</el-row>
+			<el-row :gutter="20">
+				<el-col :span="12"><div class="grid-content bg-purple">
+					<span class="tit">名称：</span><span class="content">{{rowsData.id}}</span>
+				</div></el-col>
+				<el-col :span="12"><div class="grid-content bg-purple">
+					<span class="tit">发放日期：</span><span class="content">{{rowsData.time}}</span>
+				</div></el-col>
+			</el-row>
+			<el-row :gutter="20">
+				<el-col :span="12"><div class="grid-content bg-purple">
+					<span class="tit">类型：</span><span class="content">{{rowsData.couponType === 1 ? '优惠券' : '积分券'}}</span>
+				</div></el-col>
+				<el-col :span="12"><div class="grid-content bg-purple">
+					<span class="tit">发放场景：</span><span class="content">{{rowsData.scenarioName}}</span>
+				</div></el-col>
+			</el-row>
+		</el-dialog>>
 	</div>
 </template>
 <script>
@@ -116,6 +142,8 @@
 		name:'record',
 		data(){
 			return{
+				dialogTableVisible:false,
+				title:'券号：',
 				ID:null,
 				ruleForm:{
 					couponNo:null,
@@ -124,14 +152,26 @@
 					scenarioId:null,
 					couponType:null
 				},
-				tableData: [{
-					cardNo: '1210383974974',
-					couponName: '王小虎',
-					storeName: '普陀区',
-					couponType: '优惠券',
-					scenarioName:'贴纸相机',
-					time: '2016-05-03 15:33:00'
-				}],
+				tableData: [
+					{
+						"couponName": "积分券3",
+						"id": 4,
+						"scenarioName": "测试门店",
+						"cardNo": "201906241106251",
+						"couponType": 2,
+						"storeName": "测试门店",
+						"time": 1561345706000
+					}
+				],
+				rowsData:{
+					cardNo: "",
+					couponName: "",
+					couponType: null,
+					id: null,
+					scenarioName: "",
+					storeName: "",
+					time: 1561345706000
+				},
 				page:{
 					total: 20,
 					size: 10,
@@ -165,7 +205,9 @@
 				this.$router.go(-1)
 			},
 			lookDetail(row){
-				console.log(row)
+				this.dialogTableVisible = true
+        this.rowsData = row
+				console.log('11～～～',row)
 			},
 			handleCurrentChange(val) {
 				this.page.current = val
@@ -207,7 +249,7 @@
 					this.page.current = res.page
 					this.page.size = res.size
 					this.page.total = res.total
-					this.tableData = res.data
+					// this.tableData = res.data
 				})
 			},
 			timeChange(data){
@@ -232,6 +274,22 @@
 		overflow: auto;
 		.record-bottom .el-button--text{
 			border-color: transparent !important;
+		}
+		.dialogBox{
+			.el-row{
+				width: 80%;
+				margin-top: 4%;
+				padding-left: 6%;
+				.tit{
+					font-size: 1.5rem;
+					line-height: 1.5rem;
+				}
+				.content{
+					font-size: 1rem;
+					line-height: 1.5rem;
+				}
+			}
+
 		}
 	}
 </style>

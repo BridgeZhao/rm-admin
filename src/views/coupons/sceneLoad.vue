@@ -28,7 +28,7 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="searchCouponsList">查询</el-button>
+					<el-button type="primary" @click="searchCouponsList()">查询</el-button>
 				</el-form-item>
 			</el-form>
 		</div>
@@ -49,61 +49,72 @@
 			<el-table-column
 				prop="name"
 				label="名称"
-				fixed="left"
-				min-width="120"
 				align="center">
 			</el-table-column>
 			<el-table-column
 				prop="couponType"
 				label="类型"
-				min-width="120"
 				align="center">
+				<template slot-scope="scope">
+					<span>{{typeChange(scope.row.couponType)}}</span>
+				</template>
 			</el-table-column>
 			<el-table-column
 				prop="scenarios"
 				label="关联场景"
-				min-width="120"
-				align="center">
+				align="center"
+				show-overflow-tooltip>
 			</el-table-column>
 			<el-table-column
 				prop="limit"
 				label="发放上限"
-				min-width="160"
 				align="center">
 			</el-table-column>
 			<el-table-column
-				prop="level"
+				prop="weight"
 				label="权重"
-				min-width="160"
 				align="center">
 			</el-table-column>
 			<el-table-column
 				prop="stores"
 				label="门店"
-				min-width="160"
-				align="center">
+				align="center"
+				show-overflow-tooltip>
+				<template slot-scope="scope">
+					<div v-if="Array.isArray(scope.row.stores)">
+						<ul style="list-style: none;display: flex;justify-content: left;padding: 0;overflow: hidden;height: 20px;">
+							<li v-for="(item,index) in scope.row.stores" >
+								<span>{{index+1}}、{{item.name}};</span>
+							</li>
+						</ul>
+					</div>
+					<span v-else></span>
+				</template>
 			</el-table-column>
 			<el-table-column
 				prop="createTime"
 				label="创建时间"
-				min-width="160"
 				align="center">
+				<template slot-scope="scope">
+					<span>{{timeChange(scope.row.createTime)}}</span>
+				</template>
 			</el-table-column>
 			<el-table-column
 				prop="status"
 				label="状态"
-				min-width="160"
 				align="center">
+				<template slot-scope="scope">
+					<span>{{statusChange(scope.row.status)}}</span>
+				</template>
 			</el-table-column>
 			<el-table-column
 				label="操作"
-				fixed="right"
-				min-width="250"
-				align="center">
+				align="center"
+				width="250">
 				<template slot-scope="scope">
 					<el-button type="text" size="mini" @click="lookRecord(scope.row)">发放记录</el-button>
 					<el-button type="text" size="mini" style="margin-right: 10px;" @click="edit(scope.row)">详情</el-button>
-					<el-button type="text" size="mini" @click="changeStatus(scope.row)">禁用</el-button>
+					<el-button type="text" size="mini" @click="changeStatus(scope.row)">{{scope.row.status === 1 ? "禁用" : "启用"}} </el-button>
 					<el-button type="text" size="mini" @click="deleteCoupon(scope.row)">删除</el-button>
 				</template>
 			</el-table-column>
@@ -122,22 +133,22 @@
 			<el-button size="mini" style="width: 100px;margin-right: 10px;" @click="next(1)">上一步</el-button>
 			<el-button type="primary" size="mini" style="width: 100px;" @click="next(3)">下一步</el-button>
 		</div>
-		<el-dialog :title="importCoupons" :visible.sync="dialogTableVisible">
-			<el-form :model="couponsFlag" :rules="couponsFlagRules" ref="couponsFlag" label-width="80px">
+		<el-dialog :title="importCoupons" :visible.sync="dialogTableVisible" :close-on-click-modal="false">
+			<el-form :model="couponsFlag" :rules="couponsFlagRules" ref="couponsFlag" label-width="85px">
 				<el-row :gutter="20">
 					<el-col :span="12"><div class="grid-content bg-purple">
 						<el-form-item label="名称" prop="name">
 							<el-input v-model="couponsFlag.name"></el-input>
 						</el-form-item>
 						<el-form-item label="发放上限" prop="limit">
-							<el-input v-model="couponsFlag.limit"></el-input>
+							<el-input-number v-model="couponsFlag.limit" :controls="false" :min="0" :max="100000" style="width: 244px;"></el-input-number>
 						</el-form-item>
 						<el-form-item label="发放权重" prop="weight">
-							<el-input v-model="couponsFlag.weight"></el-input>
+							<el-input-number v-model="couponsFlag.weight" :controls="false" style="width: 244px;"></el-input-number>
 						</el-form-item>
 						<el-form-item label="有效期" prop="time">
 							<el-date-picker
-								style="width: 250px;"
+								style="width: 250px;font-size: 12px;"
 								v-model="couponsFlag.time"
 								type="datetimerange"
 								range-separator="至"
@@ -160,13 +171,13 @@
 								</el-option>
 							</el-select>
 						</el-form-item>
+						<el-form-item label="优惠券等级">
+							<el-input v-model="couponsFlag.level"></el-input>
+						</el-form-item>
 					</div></el-col>
 					<el-col :span="12"><div class="grid-content bg-purple">
-						<el-form-item label="优惠券说明" prop="description">
-							<textarea class="input" v-model="couponsFlag.description" style="width: 13.5rem;height: 100px;overflow-y: auto;"/>
-						</el-form-item>
-						<el-form-item label="优惠券等级" prop="level">
-							<el-input v-model="couponsFlag.level"></el-input>
+						<el-form-item label="优惠券说明">
+							<textarea class="input" v-model="couponsFlag.description" style="width: 17.5rem;height: 150px;overflow-y: auto;resize: none;"/>
 						</el-form-item>
 						<el-form-item label="奖券图标">
 							<el-upload
@@ -182,19 +193,24 @@
 							</el-upload>
 						</el-form-item>
 						<el-form-item v-if="!commandNumber" label="积分" prop="credit">
-							<el-input v-model="couponsFlag.credit"></el-input>
+							<el-input-number v-model="couponsFlag.credit" :controls="false" :min="0" :max="100000000" style="width: 244px;"></el-input-number>
 						</el-form-item>
 						<el-form-item v-if="!commandNumber" label="积分数量" prop="creditNum">
-							<el-input-number v-model="couponsFlag.creditNum" :min="0" :max="100000000"></el-input-number>
+							<el-input-number v-model="couponsFlag.creditNum" :controls="false" :min="0" :max="100000000" style="width: 244px;"></el-input-number>
 						</el-form-item>
 						<el-form-item v-if="commandNumber" label="导入优惠券">
 							<el-upload
 								class="upload-demo"
-								action="https://jsonplaceholder.typicode.com/posts/"
-								:on-change="handleChange"
-								:file-list="fileList">
+								action=""
+								:on-change="fileChange"
+								:on-remove="handleRemove"
+								:limit= 1
+								:file-list="fileList"
+								:auto-upload="false"
+								>
 								<el-button size="small" type="primary">点击上传</el-button>
 							</el-upload>
+<!--							<cs-file-upload accept="text/plain" @change="onCouponFileChange" style="width: 12.8rem"></cs-file-upload>-->
 						</el-form-item>
 					</div></el-col>
 				</el-row>
@@ -212,11 +228,16 @@
 	</div>
 </template>
 <script>
+	import csFileUpload from '@/components/couponsComponents/cs-file-upload';
+	import moment from "moment"
 	import axios from 'axios'
 	import { mapGetters } from 'vuex'
 	import {getScenarioData, getCouponsList, postCouponsData, changeCouponsStatus,deleteCouponsList } from '@/api/coupons'
 	export default {
 		name: 'sceneLoad',
+		components:{
+			csFileUpload
+		},
 		data() {
 			return {
 				actionUrl: `${process.env.VUE_APP_HTTP_MG}/mg/coupons`,
@@ -235,30 +256,16 @@
 				couponsFlag:{
 					id:'',
 					storeId:[],
-					couponType:'1',
+					couponType:1,
 					name:'',
-					limit:'',
-					weight:'',
+					limit:null,
+					weight:null,
 					time:'',
 					description:'',
-					level:'',
+					level:null,
 					iconBase64:'',
-					credit:'',
-					creditNum:''
-				},
-				couponsFlag2:{
-					id:'',
-					storeId:[],
-					couponType:'1',
-					name:'',
-					limit:'',
-					weight:'',
-					time:'',
-					description:'',
-					level:'',
-					iconBase64:'',
-					credit:'',
-					creditNum:''
+					credit:null,
+					creditNum:null
 				},
 				fileList:[],
 				sceneList:[],
@@ -302,28 +309,31 @@
 					],
 					time:[
 						{required: true, message: '请输入开始时间', trigger: 'blur'}
+					],
+					storeId:[
+						{required: true, message: '请选择门店', trigger: 'blur'}
 					]
 
 				},
 				tableData: [
-					{
-						"weight": 10,
-						"begin": 1560239639000,
-						"name": "优惠券1",
-						"scenarios": [],
-						"createTime": 1560239747000,
-						"description": "",
-						"icon": "",
-						"credit": 0,
-						"creditNum": 0,
-						"stores": [],
-						"id": 4,
-						"status": 1,
-						"couponType": 1,
-						"end": 1560239639000,
-						"limit": 2,
-						"level": ""
-					},
+					// {
+					// 	"weight": 10,
+					// 	"begin": 1560239639000,
+					// 	"name": "优惠券1",
+					// 	"scenarios": [],
+					// 	"createTime": 1560239747000,
+					// 	"description": "",
+					// 	"icon": "",
+					// 	"credit": 0,
+					// 	"creditNum": 0,
+					// 	"stores":[{id: 2, name: "测试门店完"}, {id: 3, name: "测试门店"}],
+					// 	"id": 4,
+					// 	"status": 1,
+					// 	"couponType": 1,
+					// 	"end": 1560239639000,
+					// 	"limit": 2,
+					// 	"level": "",
+					// },
 				]
 			}
 		},
@@ -344,10 +354,11 @@
 					}
 				})
 			},
-			handleChange(file, fileList) {
-				this.fileList = fileList.slice(-3);
+			fileChange(file){
+				console.log('~~~~~',file)
+				this.fileList.push(file.raw)
 			},
-			getFile(file, fileList) {
+			getFile(file) {
 				this.getBase64(file.raw).then(res => {
 					this.couponsFlag.iconBase64 = res
 					console.log(this.couponsFlag)
@@ -364,13 +375,29 @@
 				this.dialogImg = true
 			},
 			handleCommand(command) {
+				const couponsFlag2 = {
+					storeId:[],
+					couponType:1,
+					name:'',
+					limit:null,
+					weight:null,
+					time:'',
+					description:'',
+					level:null,
+					iconBase64:'',
+					credit:null,
+					creditNum:null
+					}
+				this.fileList = []
 				if(command === '1'){
-					this.couponsFlag = this.couponsFlag2
+					this.couponsFlag = couponsFlag2
+					this.couponsFlag.couponType = 1
 					this.commandNumber = true
 					this.importCoupons = '导入优惠券'
 					this.dialogTableVisible = true
 				}else{
-					this.couponsFlag = this.couponsFlag2
+					this.couponsFlag = couponsFlag2
+					this.couponsFlag.couponType = 2
 					this.commandNumber = false
 					this.importCoupons = '导入积分券'
 					this.dialogTableVisible = true
@@ -386,14 +413,74 @@
 				this.dialogTableVisible = false
 			},
 			edit(row) {
+				console.log('row',row)
+				const couponsFlag2 = {
+					id:'',
+					storeId:[],
+					couponType:1,
+					name:'',
+					limit:null,
+					weight:null,
+					time:'',
+					description:'',
+					level:null,
+					iconBase64:'',
+					credit:null,
+					creditNum:null
+				}
+				// begin: (...)
+				// couponType: 1
+				// createTime: 1561456955000
+				// credit: (...)
+				// creditNum: (...)
+				// description: (...)
+				// end: (...)
+				// icon: ""
+				// id: (...)
+				// level: ""
+				// limit: 2
+				// name: "优惠券1"
+				// scenarios: Array(0)
+				// status: 1
+				// stores: Array(2)
+				// weight: 10
+
 				this.dialogTableVisible = true
-				this.couponsFlag = row
+				this.fileList = JSON.parse(JSON.stringify(row.scenarios))
+				let data = JSON.parse(JSON.stringify(row));
+				let arr = []
+				if(data.hasOwnProperty('stores')){
+					arr = data.stores.map(item =>{
+						return item.id;
+					})
+				}
+				let _time = []
+				_time[0] = data.begin
+				_time[1] = data.end
+				let _iconBase64 = data.icon
+				delete data.begin
+				delete data.end
+				data.time = _time
+				data.iconBase64 = _iconBase64
+				delete data.icon
+				this.fileList = data.scenarios
+				delete data.scenarios
+				delete data.status
+				data.storeId = arr
+				delete data.stores
+				if(row.couponType === 1){
+					this.commandNumber = true
+				}else{
+					this.commandNumber = false
+				}
+				// console.log('row',data)
+				this.couponsFlag = JSON.parse(JSON.stringify(data));
 			},
 			// 查看记录
 			lookRecord(row){
 				const _id = row.id
 				this.$router.push({
-					path: "/record",
+					path: "/coupons/record",
 					query: {
 						id: _id
 					}
@@ -419,7 +506,7 @@
 				const data = {
 					id :row.id
 				}
-				deleteCouponsList(data).then(res =>{
+				deleteCouponsList(row.id).then(res =>{
 					this.$message({
 						message: '已删除',
 						type: 'success'
@@ -428,70 +515,41 @@
 				})
 			},
 			saveOne(){
-				// this.dialogTableVisible = false
+				console.log(this.couponsFlag)
 				this.$refs['couponsFlag'].validate((valid) => {
 					if (valid) {
+						alert(1)
 						const times = this.couponsFlag.time
 						const startTime = times[0]
 						const endTime = times[1]
-						this.couponsFlag.begin = startTime
-						this.couponsFlag.end = endTime
+						this.couponsFlag.begin = moment(startTime).valueOf()
+						this.couponsFlag.end = moment(endTime).valueOf()
 						delete this.couponsFlag.time
 						console.log('保存的东西2',this.couponsFlag,this.fileList)
-						// const data = {
-						// 	json :this.couponsFlag,
-						// 	cardNo: this.fileList
-						// }
-						// id:'',
-						// 	storeId:[],
-						// 	couponType:'1',
-						// 	name:'',
-						// 	limit:'',
-						// 	weight:'',
-						// 	time:'',
-						// 	description:'',
-						// 	level:'',
-						// 	iconBase64:'',
-						// 	credit:'',
-						// 	creditNum:''
-						const {id,storeId,couponType,name,limit,weight,begin,end,description,level,iconBase64,credit,creditNum} = this.couponsFlag
 						let form = new FormData();
-						form.append("cardNo", this.fileList);
-						// form.append("id", this.couponsFlag.id);
-						form.append("storeId", this.couponsFlag.storeId);
-						form.append("couponType", this.couponsFlag.couponType);
-						form.append("name", this.couponsFlag.name);
-						form.append("limit", this.couponsFlag.limit);
-						form.append("weight", this.couponsFlag.weight);
-						form.append("begin", this.couponsFlag.begin);
-						form.append("end", this.couponsFlag.end);
-						form.append("description", this.couponsFlag.description);
-						form.append("level", this.couponsFlag.level);
-						form.append("iconBase64", this.couponsFlag.iconBase64);
-						form.append("credit", this.couponsFlag.credit);
-						form.append("creditNum", this.couponsFlag.creditNum);
-						// this.importCouponByUser(data)
-
+						form.append("cardNo", JSON.stringify(this.fileList));
+						form.append("json", JSON.stringify(this.couponsFlag))
 						postCouponsData(form).then(res =>{
-							console.log(res)
+							this.dialogTableVisible = false
+							this.searchCouponsList()
 						})
 					} else {
 						return false
 					}
 				})
 			},
-			// async importCouponByUser(data) {
-			// 	const rsp = await this.$http.post(
-			// 		'/mg/coupons',
-			// 		data,
-			// 		{
-			// 			headers: {
-			// 				'Content-Type': 'multipart/form-data'
-			// 			}
-			// 		}
-			// 	)
-			// 	console.log(rsp.data)
-			// },
+			async importCouponByUser(data) {
+				const rsp = await this.$http.post(
+					'/mg/coupons',
+					data,
+					{
+						headers: {
+							'Content-Type': 'multipart/form-data'
+						}
+					}
+				)
+				console.log(rsp.data)
+			},
 			submit() {
 				this.dialogTableVisible = false
 				this.$refs['ruleForm'].validate((valid) => {
@@ -531,6 +589,7 @@
 
 			// 优惠券列表查询
 			searchCouponsList(_storeId){
+				console.log('ididididi~',this.$store.state.app.storeId)
 				const _data = {
 					storeId:_storeId || this.$store.state.app.storeId,
 					name: this.formInline.name,
@@ -540,13 +599,29 @@
 					page: this.page.page,
 					size: this.page.size
 				}
-				console.log('调用方法')
 				getCouponsList(_data).then(res =>{
 					this.page.page = res.page
 					this.page.size = res.size
 					this.page.total = res.total
-					// this.tableData = res.data
+					this.tableData = res.data
 				})
+			},
+			timeChange(data){
+				return  moment(data).format('YYYY-MM-DD HH:mm:ss')
+			},
+			typeChange(data){
+				if(data === 1){
+					return '优惠券'
+				}else{
+					return '积分券'
+				}
+			},
+			statusChange(data){
+				if(data === 1){
+					return '启用'
+				}else{
+					return '禁用'
+				}
 			}
 		},
 		computed: {
@@ -555,6 +630,7 @@
 			]),
 			listenstage() {
 				return this.$store.state.app.storeId
+
 			}
 		},
 		watch: {
@@ -563,6 +639,7 @@
 			}
 		},
 		mounted() {
+			console.log("!!!!!",this.storeList)
 			if (!window.FileReader) {
 				console.error('Your browser does not support FileReader API!')
 			}
