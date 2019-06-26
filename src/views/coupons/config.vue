@@ -5,12 +5,12 @@
                 <i class="el-icon-menu"></i>
                 优惠卷场景配置
             </div>
-            <img src="../../assets/img/go.jpg" alt="">
+					  <svg-icon icon-class="right-go" style="font-size: 2rem;margin: 0 1%;"></svg-icon>
             <div class="item" :class="{'active':isStep == 2}">
                 <i class="el-icon-circle-plus-outline"></i>
                 优惠卷导入
             </div>
-            <img src="../../assets/img/go.jpg" alt="">
+					<svg-icon icon-class="right-go" style="font-size: 2rem;margin: 0 1%;"></svg-icon>
             <div class="item" :class="{'active':isStep == 3}">
                 <i class="el-icon-sort"></i>
                 优惠卷场景关联

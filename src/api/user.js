@@ -8,10 +8,11 @@ export function login(data) {
   })
 }
 
-export function userQuery() {
+export function userQuery(params) {
   return request({
     url: '/auth/user',
-    method: 'get'
+    method: 'get',
+		params
   })
 }
 
@@ -38,7 +39,7 @@ export function delUser(id) {
 
 export function logout() {
   return request({
-    url: '/auth/user/logout',
-    method: 'post'
+		url: '/mg/regions',
+		method: 'get'
   })
 }

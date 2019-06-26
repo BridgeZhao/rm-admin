@@ -42,9 +42,9 @@
     <div class="container">
       <!-- <div class="left"></div> -->
       <div class="center">
-        <div class="box-card">
+        <div class="box-card mapBox" >
           <div
-            :style="{'background-image': heatmapBackImage && 'url(' + heatmapBackImage + ')'}"
+            :style="'background-image: url('+heatmapBackImage+')'"
             class="heat-map-container"
             ref="heatmapContainer"
           ></div>
@@ -78,7 +78,7 @@
             <el-radio :label="60">≥60S</el-radio>
           </el-radio-group>
         </div>
-        <div class="report-margin">
+        <div class="report-margin" style="line-height: 2.5;">
           <el-row :gutter="24">
             <el-col :span="6">
               <div class="grid-content bg-purple report-line">
@@ -189,6 +189,7 @@
 <script>
 import moment from "moment";
 import { getAreaHotData, getDurationData } from "@/api/report";
+import {getStoresImg} from "@/api/store"
 import h337 from "heatmap.js";
 const MAX_HEAT_VALUE = 10
 import BarChartNew from "@/components/Charts/BarChartNew";
@@ -219,7 +220,7 @@ export default {
       areaStayOptions: null,
       dataTime: [8, 22],
       list: [],
-      heatmapBackImage: require("./map.png"),
+      heatmapBackImage:'',
       heatmap: null,
       dataList: {
         xAxisData: ["休闲食品", "饮料", "蔬果", "生鲜1", "生鲜2"],
@@ -288,7 +289,7 @@ export default {
     transformData(xdata, s_data, name) {
       return optionConfig({
         grid: {
-          top: "15%",
+          top: "20%",
           left: "10%",
           right: "5%",
           bottom: "15%"
@@ -356,12 +357,21 @@ export default {
         endtime: endTime,
         hh: '08,22'
       }
+			this.setStoreImg(storeId)
       this.laodData(_params)
     },
     laodData(data) { // 首次加载数据
       this.setHeampData(data)
       this.setDurationData(data)
     },
+		setStoreImg(storeId){
+    	const _storeId = storeId || this.$store.state.app.storeId
+			getStoresImg(_storeId).then(res =>{
+				const img = res.floorGraph
+				this.heatmapBackImage = img;
+				 console.log('热力图片～～',img)
+			})
+		},
     setHeampData(data){// 获取热力图数据
        getAreaHotData(data).then(res => {
         console.log("热点", res)
@@ -479,4 +489,5 @@ export default {
 <style lang="scss" scoped>
 @import "@/styles/areaHeat.scss";
 @import "@/styles/report.scss";
+
 </style>

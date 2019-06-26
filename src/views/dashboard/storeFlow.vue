@@ -125,7 +125,8 @@
               <i class="el-icon-picture" @click="openFull('lineTimeChart',options2,'小时客流')"></i>
             </div>
             <div style="width:100%;height:100%;">
-              <line-time-chart :data="options2" ref="lineTimeChart"/>
+<!--              <line-time-chart :data="options2" ref="lineTimeChart"/>-->
+							<line-chart :data="options2" ref="lineChart"/>
             </div>
           </div>
         </el-col>
@@ -136,7 +137,7 @@
           <div class="grid-content bg-purple report-line">
             <div class="report-gang">
               <span>到店频率</span>
-              <i class="el-icon-picture" @click="openFull('barChartAge',frequencyData,'到店频率')"></i>
+              <i class="el-icon-picture" @click="openFull('barChartAge',frequencyDatas,'到店频率')"></i>
             </div>
             <div style="width:100%;height:100%;">
               <bar-chart-age :data="frequencyDatas" :height="chartHeight" ref="barChartAge"/>
@@ -360,7 +361,7 @@
           this.SummaryData = _data.summaryData[0]
           // this.$nextTick(() => {
             this.loadData1(_data.flowData)
-            this.loadData2(_data.totalHourData)
+            this.loadData2(_data.areaHourData)
             this.loadData2Sum(_data.totalHourData)
             this.laodFrequencyData(_data.frequencyData)
             this.laodAreaTopData(_data.areaData)
@@ -371,7 +372,12 @@
       },
       // 客流类型分布
       loadData1(data) {
-				const obj = Object.assign({}, this.mockdata)
+      	const mockdata ={
+					legendData: [],
+					xAxisData: [],
+					seriesData: []
+				}
+				const obj = Object.assign({}, mockdata)
         obj.legendData = ['新顾客', '老顾客']
         obj.seriesData = [
           {
@@ -388,7 +394,9 @@
           obj.seriesData[0].data.push(element.customerNewTotal)
           obj.seriesData[1].data.push(element.customerOldTotal)
         })
+
         this.options1 = obj
+				console.log('数据--->',this.options1)
       },
       // 小时客流汇总
       loadData2Sum(data) {
@@ -418,43 +426,28 @@
       },
       // 小时客流
       loadData2(data) {
-				const obj = Object.assign({}, this.mockdata)
-				const xAxisData = new Set()
-				const legendData = new Set()
-				const mock = {}
-        data.forEach(element => {
-					const has = xAxisData.has(element.hh)
-          legendData.add(element.blockName)
-          if (!has) {
-            mock[element.hh] = {}
-          }
-          mock[element.hh][element.blockName] = element.customerNum
-
-          mock[element.hh]
-          xAxisData.add(element.hh)
-        })
-				const seriesData = [];
-        [...legendData].forEach(it => {
-					const dataList = [];
-          [...xAxisData].forEach(item => {
-            if (mock[item].hasOwnProperty(it)) {
-              dataList.push(mock[item][it])
-            } else {
-              dataList.push(0)
-            }
-          })
-          seriesData.push({
-            name: it,
-            data: dataList
-          })
-        })
-				const op = {
-          xAxisData: [...xAxisData],
-          legendData: [...legendData],
-          seriesData: [...seriesData]
-        }
-
-        this.options2 = op
+				const sumData ={
+					seriesData: [],
+					xAxisData:[],
+					legendData:''
+				}
+				const obj = Object.assign({}, sumData)
+				const arry = []
+				const _seriesData = []
+				const hh = []
+				for (const i in data) {
+					arry.push(data[i].customerNum)
+				}
+				_seriesData.push(arry)
+				const _hh = []
+				for (const i in data) {
+					_hh.push(data[i].hh)
+				}
+				hh.push(_hh)
+				obj.xAxisData = hh
+				obj.legendData = ['小时客流']
+				obj.seriesData = _seriesData
+				this.options2 = obj
       },
       // 到店频次
       laodFrequencyData(data) {

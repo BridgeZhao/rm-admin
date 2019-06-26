@@ -55,7 +55,16 @@
       </div>
     </el-dialog>
     <el-row :gutter="20" class="table-head-btns">
-      <el-col style="text-align: right">
+			<el-col :span="12" class="flex">
+				<el-input
+					style="width: 300px;margin-right: 10px"
+					placeholder="请输入用户名"
+					v-model="pagination.name">
+					<i slot="prefix" class="el-input__icon el-icon-search"></i>
+				</el-input>
+				<el-button type="primary" icon="el-icon-search" @click="getUsers">搜索</el-button>
+			</el-col>
+			<el-col :span="12" style="text-align: right">
         <el-button v-permission="'add'" type="primary" @click="openDialog">+ 添加管理员</el-button>
       </el-col>
     </el-row>
@@ -88,14 +97,6 @@
         prop="rolesIds"
         :formatter="roleTransName"
       />
-      <el-table-column
-        label="类型"
-				width="100"
-      >
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.userType==='device'?'':'success'">{{ scope.row.userType==='device'?'设备账号':'普通账号' }}</el-tag>
-        </template>
-      </el-table-column>
       <el-table-column
         label="状态"
 				width="100"
@@ -139,6 +140,15 @@
         </template>
       </el-table-column>
     </el-table>
+		<nav class="nav-page">
+			<el-pagination
+				:page-size="pagination.size"
+				layout="prev, pager, next, jumper"
+				:total="pagination.total"
+				@size-change="pageChange"
+				@current-change="pageChange"
+			/>
+		</nav>
   </div>
 </template>
 
@@ -159,6 +169,13 @@ export default {
       menuList: [],
       rolesList: [],
       tableData: [],
+			pagination: {
+				page: 1,
+				size: 15,
+				name: '',
+				storeId:0,
+				total: 0
+			},
 			rules: {
 				username: [
 					{required: true, message: '请输入登陆名称', trigger: 'blur'},
@@ -184,18 +201,24 @@ export default {
   },
   computed: {
 		...mapGetters([
-			'storeList'
+			'storeList',
+			'storeId'
 		])
   },
   async created() {
+  	this.pagination.storeId=this.storeId
     this.getMenus()
-    await this.getRoles()
+    await this.getAllRoles()
     this.getUsers()
   },
   methods: {
     getUsers() {
-      userQuery().then(res => {
-        this.tableData = res
+      userQuery(this.pagination).then(res => {
+				const {size, total, page, data} = res
+				this.tableData = data
+				this.pagination.total = total
+				this.pagination.page = page
+				this.pagination.size = size
         this.$nextTick(() => {
           this.stopRefresh = false
         })
@@ -203,10 +226,10 @@ export default {
         this.loading = false
       })
     },
-    getRoles() {
+		getAllRoles() {
       return new Promise(resolve => {
         getAllRoles().then(res => {
-          this.rolesList = res
+          this.rolesList = res.data
           resolve(res)
         })
       })
@@ -267,19 +290,6 @@ export default {
       this.dialogType = 'edit'
       this.form = Object.assign({}, data)
       this.dialogVisible = true
-      // console.log(this.menusData,this.form.menuPerms)
-      const setNodeObj = []
-      const perms = this.form.menuPerms
-      const meuns = this.menusData
-      console.log(perms, meuns)
-      perms.forEach(item => {
-        for (const p in item.permission) {
-          if (item.permission[p]) {
-            setNodeObj.push(p + '-' + item.menuId)
-          }
-        }
-      })
-      console.log('setNodeObj', setNodeObj)
     },
     deleteRow(id) {
       console.log(this)
@@ -309,9 +319,11 @@ export default {
         enabled: true,
         userType: 0
       }
-
-      console.log(this.form)
     },
+		pageChange(val){
+			this.pagination.page = val
+			this.getUsers()
+		},
     openDialog(){
       this.dialogType = 'add'
       this.dialogVisible=true

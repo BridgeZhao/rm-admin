@@ -1,5 +1,11 @@
 <template>
-  <v-chart theme="dark" :class="className" :style="{height:height,width:width}" :options="options" :showNum="showNum"/>
+  <v-chart
+		theme="dark"
+		:class="className"
+		:style="{height:height,width:width}"
+		:options="options"
+		:showNum="showNum"
+	  ref="chart"/>
 </template>
 
 <script>
@@ -39,7 +45,7 @@ export default {
         toolbox: {
           right: "2%",
           feature: {
-            saveAsImage: { show: true }
+            saveAsImage: { show: false }
           }
         },
         legend: {
@@ -72,6 +78,8 @@ export default {
           },
           {
             type: "value",
+						name: "总人数",
+						zlevel:2,
             show: true
           }
         ],
@@ -82,7 +90,7 @@ export default {
             stack: "0",
             barMaxWidth: 60,
             itemStyle: {
-              normal: { label: { show: true, position: "insideRight" },
+              normal: { label: { show: true, position: "left" },
               color:'#50E3C2'},
             },
             data: [],
@@ -90,7 +98,7 @@ export default {
               normal: {
                 show: true,
                 textStyle: {
-                  color: '#00152E'
+                  color: '#fff'
                 }
               }
             }:false
@@ -100,7 +108,7 @@ export default {
             type: "bar",
             stack: "0",
             itemStyle: {
-              normal: { label: { show: true, position: "insideRight" },
+              normal: { label: { show: true, position: "right" },
                 color:'#71DCFF'}
             },
             data: [],
@@ -108,7 +116,7 @@ export default {
               normal: {
                 show: true,
                 textStyle: {
-                  color: "#00152E "
+                  color: "#fff "
                 }
               }
             }
@@ -156,7 +164,30 @@ export default {
       let a = 0.8;
       const colors = `rgba(${r},${g},${b},${a})`;
       return colors;
-    }
+    },
+		base64ToBlob(code) {
+			let parts = code.split(";base64,")
+			let contentType = parts[0].split(":")[1]
+			let raw = window.atob(parts[1])
+			let rawLength = raw.length;
+			let uInt8Array = new Uint8Array(rawLength)
+			for (let i = 0; i < rawLength; ++i) {
+				uInt8Array[i] = raw.charCodeAt(i)
+			}
+			return new Blob([uInt8Array], {
+				type: contentType
+			});
+		},
+		saveImage(fileName) {
+			let aLink = document.createElement("a");
+			let base64 = this.$refs.chart.getDataURL();
+			let blob = this.base64ToBlob(base64); //new Blob([content]);
+			let evt = document.createEvent("HTMLEvents");
+			evt.initEvent("click", true, true); //initEvent 不加后两个参数在FF下会报错  事件类型，是否冒泡，是否阻止浏览器的默认行为
+			aLink.download = fileName;
+			aLink.href = URL.createObjectURL(blob);
+			aLink.click();
+		}
   }
 };
 </script>

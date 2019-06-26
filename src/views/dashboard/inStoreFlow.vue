@@ -55,48 +55,33 @@
                     <el-col :span="12"><div class="grid-content bg-purple report-line">
                         <div class="report-gang">
                             <span>客流类型分布</span>
-                            <el-button size="mini" @click="saveImage('pieChart')">保存图片</el-button>
+                            <el-button size="mini" @click="saveImage('客流类型分布')">保存图片</el-button>
                         </div>
                         <div style="width:100%;height:100%;">
-                            <pie-chart :data="vipData" ref="pieChart" :height="chartHeight"/>
+                            <pie-chart :data="vipData" ref="客流类型分布" :height="chartHeight"/>
                         </div>
 
                     </div></el-col>
                     <el-col :span="12"><div class="grid-content bg-purple report-line">
                         <div class="report-gang">
                             <span>客流年龄分布</span>
-                            <el-button size="mini" @click="saveImage('barChartAge')">保存图片</el-button>
+                            <el-button size="mini" @click="saveImage('客流年龄分布')">保存图片</el-button>
                         </div>
                         <div style="width:100%;height:100%;">
-                            <bar-chart-age :data="ageData" ref="barChartAge" :height="chartHeight"/>
+                            <bar-chart-age :data="ageData" ref="客流年龄分布" :height="chartHeight"/>
                         </div>
                     </div></el-col>
                 </el-row>
                  <el-row :gutter="24" class="report-margin">
                     <el-col :span="24"><div class="grid-content bg-purple report-line">
-                        <el-card class="chart-card" shadow="always">
-                            <div slot="header" class="clearfix">
-                                <span>小时客流趋势</span>
-<!--                                <div style="float: right; padding: 3px 0">-->
-<!--                                    <el-switch-->
-<!--                                    v-model="showNum"-->
-<!--                                    active-text="开"-->
-<!--                                    inactive-text="数显"-->
-<!--                                    active-color="#0df4ff"-->
-<!--                                    inactive-color="#909399"-->
-<!--                                    style="margin-right:10px;"-->
-<!--                                    @change='changeStatus'-->
-<!--                                    >-->
-<!--                                    </el-switch>-->
-<!--                                 <svg-icon icon-class="link" />-->
-<!--                                </div>-->
-                            </div>
-                            <div class="chart-card-item">
-                                 <people-chart :dataList="hourPeopleData" :height="chartHeight" :showNum="isShow"/>
-                            </div>
-                            </el-card>
-
-                        </div></el-col>
+											<div class="report-gang">
+												<span>小时客流趋势</span>
+												<el-button size="mini" @click="saveImage('小时客流趋势')">保存图片</el-button>
+											</div>
+											<div style="width:100%;height:100%;">
+												<people-chart :dataList="hourPeopleData" :height="chartHeight" :showNum="isShow" ref="小时客流趋势"/>
+											</div>
+										</div></el-col>
 
                 </el-row>
             </div>
@@ -186,8 +171,8 @@ export default {
             showNum:true,
             formInline: {
                 date: '',
-                startTime: '',
-                endTime: ''
+                startTime: '08:00',
+                endTime: '22:00'
             },
 					vipData:{},
             downTime:'',
@@ -255,14 +240,20 @@ export default {
         init(storeId){
             let start_time=moment(new Date()).format('YYYY-MM-DD')
             this.downTime = start_time
-            this.downTimeLine = '00:00 - 23:59'
+            this.downTimeLine = '00:00 - 22:00'
 					  const _storeId = storeId || this.$store.state.app.storeId
-            let _params = {store_id:_storeId,starttime:start_time,endtime:start_time,hh:'00,23'}
+            let _params = {store_id:_storeId,starttime:start_time,endtime:start_time,hh:'00,22'}
             this.loadData(_params)
         },
         searchData(){
-					  const start_time=moment(this.formInline.date).format('YYYY-MM-DD')
+					  const start_time= (this.formInline.date === '' || this.formInline.date === null) ? moment(new Date()).format('YYYY-MM-DD') : moment(this.formInline.date).format('YYYY-MM-DD')
             this.downTime = start_time
+					  if(this.formInline.startTime === '' || this.formInline.startTime === null){
+							this.formInline.startTime = '08:00'
+						}
+						if(this.formInline.endTime === '' || this.formInline.endTime === null){
+							this.formInline.endTime = '22:00'
+						}
             this.downTimeLine = this.formInline.startTime +' - '+ this.formInline.endTime
 					  const _hh = this.formInline.startTime === '' ? '08,22' : this.formInline.startTime.substr(0,this.formInline.startTime.indexOf(':'))+','+this.formInline.endTime.substr(0,this.formInline.endTime.indexOf(':'))
 					  const _storeId = this.$store.state.app.storeId
@@ -276,7 +267,7 @@ export default {
             const res_data=res.data
             this.optionPieData.vip = res_data.vip
             this.tableData=res_data.hour
-            this.hourData = res_data.hour
+            this.hourData = res_data.hourPlot
             const arr = []
             for (const i in res_data.age) {
               arr.push(res_data.age[i])

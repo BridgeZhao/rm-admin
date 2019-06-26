@@ -13,11 +13,20 @@ service.interceptors.request.use(
     if (store.getters.token) {
       config.headers['Authorization'] ='Bearer '+getToken()
     }
-	  if(config.url.indexOf('/auth')!==-1){
-			config.baseURL= process.env.VUE_APP_HTTP_AUTH
-		}else{
-			config.baseURL= process.env.VUE_APP_HTTP_AUTH_AGENT
+    let HTTP_AUTH=`http://${document.location.hostname}${process.env.VUE_APP_HTTP_AUTH}`
+    let HTTP_AUTH_AGENT=`http://${document.location.hostname}${process.env.VUE_APP_HTTP_AUTH_AGENT}`
+		if(process.env.NODE_ENV=== 'development') {
+			HTTP_AUTH = process.env.VUE_APP_HTTP_AUTH
+			HTTP_AUTH_AGENT = process.env.VUE_APP_HTTP_AUTH_AGENT
 		}
+		if(config.url.indexOf('http://')===-1){
+			if (config.url.indexOf('/auth') !== -1) {
+				config.baseURL = HTTP_AUTH
+			} else {
+				config.baseURL = HTTP_AUTH_AGENT
+			}
+		}
+		console.log(config)
     return config
   },
   error => {
@@ -43,14 +52,14 @@ service.interceptors.response.use(
 	},
   error => {
 		console.log(error.response)
-		const {msg} = error.response.data
-		switch (error.response.status) {
+		const {msg,status} =error.response?error.response.data:{msg:'服务器故障错误',status:500}
+		switch (status) {
 			case 401:
 				MessageBox.confirm('登陆超时,请重新登录!', '重新登录', {
 					type: 'warning'
 				}).then(() => {
 					store.dispatch('user/resetToken').then(() => {
-						location.reload()
+						location.href='#/login'
 					})
 				})
 				break

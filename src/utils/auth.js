@@ -36,29 +36,29 @@ export function checkPermission() {
 	if(roles instanceof Array&&name) {
 		roles.push({name: 'welcome', parentId: 0, title: ''})
 		const routes = router.options.routes
+		let roles_obj
 		let route_obj = {}
-
 		for (let i = 0; i < routes.length; i++) {
 			if (routes[i].hasOwnProperty('hidden')) {
 				continue
 			}
 			if (routes[i].hasOwnProperty('redirect')) {
-				const obj = roles.find(item => {
-					return item.name === routes[i].name
-				})
-				if (obj) {
-					routes[i].children[0].meta.title = obj.title
+				 roles_obj =_find_item(roles,routes[i].children[0].name)
+				if (roles_obj) {
+					routes[i].orderNo=roles_obj.orderNo
+					routes[i].children[0].meta.title = roles_obj.title
 					route_filter.push(Object.assign({}, routes[i]))
 				}
 			} else {
+				 roles_obj =_find_item(roles,routes[i].name)
+				if (roles_obj) {
+					routes[i].orderNo = roles_obj.orderNo
+				}
 				route_obj = Object.assign({}, routes[i])
 				route_obj.children = []
 				for (let f = 0; f < routes[i].children.length; f++) {
 					for (let n = 0; n < roles.length; n++) {
 						const routeName=routes[i].children[f].name
-						// if (routeName === 'store-list'||routeName === 'system-list' && name !== 'admin') {
-						// 	continue
-						// }
 						if (roles[n].name === routeName && roles[n].parentId !== 0) {
 							routes[i].children[f].meta.title = roles[n].title
 							route_obj.children.push(routes[i].children[f])
@@ -71,5 +71,13 @@ export function checkPermission() {
 			}
 		}
 	}
+	route_filter.sort(function(a,b){
+		return a.orderNo-b.orderNo
+	})
   return route_filter
+}
+function _find_item(ary,rname) {
+return ary.find(item => {
+		return item.name === rname
+	})
 }

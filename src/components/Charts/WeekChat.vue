@@ -75,6 +75,9 @@ export default {
 							color: ['#3398DB','yellow'],
 
 						},
+					textStyle:{
+            	color:'#fff'
+					},
 					bottom: '0%'
         },
         series: [{

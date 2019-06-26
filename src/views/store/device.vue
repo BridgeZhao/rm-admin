@@ -3,7 +3,7 @@
     <!--头部按钮-->
     <el-row :gutter="20" class="table-head-btns">
       <el-col style="text-align: right">
-        <el-button v-permission="'add'" type="primary" round @click="()=>{btnDevice()}">+ 添加设备</el-button>
+        <el-button v-permission="'add'" type="primary" @click="()=>{btnDevice()}">+ 添加设备</el-button>
       </el-col>
     </el-row>
     <!--弹框-->
@@ -51,7 +51,7 @@
           <el-input v-model="fromInfo.rtsp" autocomplete="off" placeholder="请输入设备rtsp流地址"></el-input>
         </el-form-item>
       </el-form>
-      <el-form v-else v-loading="dgLoading" :model="fromInfo">
+      <el-form v-else v-loading="dgLoading" :model="fromInfo"  ref="myform">
         <el-row>
           <el-col :span="12">
             <el-row>
@@ -69,8 +69,8 @@
               </el-option>
                 </el-select>
               </el-col>
-            <el-col :span="8" style="text-align: left;padding-left: 20px">
-            <el-checkbox-group v-model="checkType[selectedArea]" @change="checkChange" class="ck-type">
+              <el-col :span="8" style="text-align: left;padding-left: 20px">
+								<el-checkbox-group v-model="checkType[selectedArea]" @change="checkChange" class="ck-type">
               <el-checkbox label="0">空岗监测</el-checkbox>
               <el-checkbox label="1">超员监测</el-checkbox>
             </el-checkbox-group>
@@ -88,7 +88,7 @@
         </el-row>
         <div class="perview-warp">
           <canvas id="canvasDevice" />
-          <img :src="fromInfo.snapshot">
+          <img :src="fromInfo.snapshot" onerror="notfound(this)">
         </div>
       </el-form>
       <div slot="footer" class="dialog-footer text-center">
@@ -449,6 +449,7 @@ export default {
   .perview-warp{
     position: relative;
     cursor:crosshair;
+		text-align: center;
     canvas{
       width: 100%;
       position: absolute;
@@ -456,7 +457,15 @@ export default {
       top:0;
       z-index: 2;
     }
-    img{ width: 100%;vertical-align: middle}
+		&.img-error{
+			canvas{display:none}
+		}
+    img{ width: 100%;vertical-align: middle;
+			&.error{
+				width: 100px;
+				margin: 30px auto;
+			}
+		}
   }
   .el-upload{
     width: 100%;

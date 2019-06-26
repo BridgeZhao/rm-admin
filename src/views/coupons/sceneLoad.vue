@@ -101,7 +101,7 @@
 				min-width="250"
 				align="center">
 				<template slot-scope="scope">
-					<el-button type="text" size="mini">发放记录</el-button>
+					<el-button type="text" size="mini" @click="lookRecord(scope.row)">发放记录</el-button>
 					<el-button type="text" size="mini" style="margin-right: 10px;" @click="edit(scope.row)">详情</el-button>
 					<el-button type="text" size="mini" @click="changeStatus(scope.row)">禁用</el-button>
 					<el-button type="text" size="mini" @click="deleteCoupon(scope.row)">删除</el-button>
@@ -317,7 +317,7 @@
 						"credit": 0,
 						"creditNum": 0,
 						"stores": [],
-						"id": 1,
+						"id": 4,
 						"status": 1,
 						"couponType": 1,
 						"end": 1560239639000,
@@ -389,6 +389,16 @@
 				this.dialogTableVisible = true
 				this.couponsFlag = row
 			},
+			// 查看记录
+			lookRecord(row){
+				const _id = row.id
+				this.$router.push({
+					path: "/record",
+					query: {
+						id: _id
+					}
+				})
+			},
 			// 修改状态
 			changeStatus(row){
 				const _status = row.status === 0 ? 1 : 0
@@ -428,13 +438,41 @@
 						this.couponsFlag.end = endTime
 						delete this.couponsFlag.time
 						console.log('保存的东西2',this.couponsFlag,this.fileList)
-						const data = {
-							json :this.couponsFlag,
-							cardNo: this.fileList
-						}
+						// const data = {
+						// 	json :this.couponsFlag,
+						// 	cardNo: this.fileList
+						// }
+						// id:'',
+						// 	storeId:[],
+						// 	couponType:'1',
+						// 	name:'',
+						// 	limit:'',
+						// 	weight:'',
+						// 	time:'',
+						// 	description:'',
+						// 	level:'',
+						// 	iconBase64:'',
+						// 	credit:'',
+						// 	creditNum:''
+						const {id,storeId,couponType,name,limit,weight,begin,end,description,level,iconBase64,credit,creditNum} = this.couponsFlag
+						let form = new FormData();
+						form.append("cardNo", this.fileList);
+						// form.append("id", this.couponsFlag.id);
+						form.append("storeId", this.couponsFlag.storeId);
+						form.append("couponType", this.couponsFlag.couponType);
+						form.append("name", this.couponsFlag.name);
+						form.append("limit", this.couponsFlag.limit);
+						form.append("weight", this.couponsFlag.weight);
+						form.append("begin", this.couponsFlag.begin);
+						form.append("end", this.couponsFlag.end);
+						form.append("description", this.couponsFlag.description);
+						form.append("level", this.couponsFlag.level);
+						form.append("iconBase64", this.couponsFlag.iconBase64);
+						form.append("credit", this.couponsFlag.credit);
+						form.append("creditNum", this.couponsFlag.creditNum);
 						// this.importCouponByUser(data)
 
-						postCouponsData(data).then(res =>{
+						postCouponsData(form).then(res =>{
 							console.log(res)
 						})
 					} else {
@@ -490,15 +528,6 @@
 					this.sceneList = res.data
 				})
 			},
-			// | 名称 | 描述  | 是否必填 |默认值|
-			// | --- | --- | --- | --- |
-			// |name | 优惠券名称 | 否 | |
-			// |storeId | 门店Id | 否 | |
-			// |scenarioId | 场景id | 否 | |
-			// |couponType | 优惠券类型 | 否 | |
-			// |status | 优惠券状态 | 否 | |
-			// |page | 分页参数 | 否 |1 |
-			// |size | 分页参数 | 否 |10|
 
 			// 优惠券列表查询
 			searchCouponsList(_storeId){
