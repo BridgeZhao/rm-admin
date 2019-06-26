@@ -3,14 +3,13 @@
     <div class="top-bar">
       <ul class="feature-tab-list">
         <li class="" :class="{ selected: gameTab }" @click='tabclick("first")'>店内导航</li>
-        <li class="" :class="{ selected: !gameTab }" @click='tabclick("second")'>小游戏</li>
+        <li class="" :class="{ selected: !gameTab }" @click='tabclick("second")'>关联游戏</li>
       </ul>
     </div>
     <div v-show='gameTab' class="first_item">
       <div class="filter-warp">
         <div class="drop-down area-drop-down">
           <template>
-            <!-- <el-select v-model="defaultStoreId" placeholder="请选择"  v-on:change="indexSelect" > -->
             <el-select v-model="defaultStoreId" placeholder="请选择" >
               <el-option v-for="item in storeList" :key="item.id" :label="item.name" :value="item.id">
               </el-option>
@@ -71,7 +70,7 @@
         </li>
       </ul>
     </div>
-    <!-- 小游戏 -->
+    <!-- 关联小游戏 -->
     <div v-show='!gameTab' class="second_item">
       <ul  class="data-list game-list">
         <li class="game-list-li" draggable="false" v-for='(item, key) in gameData' :key='key'>
@@ -84,18 +83,52 @@
           </div>
           <button class="btns handle-btn mr-top default">取消关联</button>
         </li>
+        <li  class="add" @click="addChannelGame">
+          <svg-icon icon-class="plus" class="svg-plus"></svg-icon>
+           <span class="font-red" >添加关联游戏</span>
+        </li>
       </ul>
+      <el-dialog title="添 加" :width="'720px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="()=>{clearClose()}">
+        <el-form  v-loading="dgLoading" :model="fromInfo" :rules="rules"  ref="myform">
+          <el-form-item label="选择游戏" :label-width="formLabelWidth"  >
+             <el-select v-model="fromInfo.areaId" placeholder="请选择" style='width: 40%;'>
+              <el-option
+                v-for="item in gameList"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="交互屏设置" :label-width="formLabelWidth"  >
+            <el-checkbox-group v-model="fromInfo.checked">
+              <el-checkbox label="全选按钮" name="type"></el-checkbox>
+            </el-checkbox-group>
+          </el-form-item>
+          <el-form-item label="应用设备" style="padding-left:90px;">
+            <el-checkbox-group v-model="fromInfo.type">
+              <el-checkbox label="交互设备1" name="type"></el-checkbox>
+              <el-checkbox label="交互设备2" name="type"></el-checkbox>
+              <el-checkbox label="交互设备3" name="type"></el-checkbox>
+              <el-checkbox label="交互设备4" name="type"></el-checkbox>
+            </el-checkbox-group>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer text-center">
+          <el-button type="primary"  @click="btnSubmit">确定添加</el-button></div>
+      </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
   import { mapGetters } from 'vuex'
+  import { addGame, gamePage, channelGame} from '@/api/game'
   export default {
     name: 'storeContent',
     data() {
       return {
-        gameTab: true,
+        gameTab: false,
         options: [{
           value: '选项1',
           label: '黄金糕'
@@ -121,7 +154,29 @@
         listdataImg : undefined,
         listdataIn : undefined,
         nowId : '',
-        defaultStoreId : undefined
+        defaultStoreId : undefined,
+        dgLoading: false,
+         fromInfo: {
+          name:'',
+          url:'',
+          areaId:'',
+          type: [{
+                'id': '1',
+                'product_inf': '女士银手链'
+            }, {
+                'id': '2',
+                'product_inf': '女士银手镯'
+            }, {
+                'id': '3',
+                'product_inf': '女士银耳环'
+            }],
+          checked: false, //全选框
+          checkList: []
+        },
+        formLabelWidth: '90px',
+        rules: {},
+        dialogVisible : false,
+        gameList:[],
       }
     },
     computed: {
@@ -132,6 +187,7 @@
     },
     created(){
     	this.defaultStoreId=this.storeId
+      this.gamePage()
     },
     methods: {
       tabclick(tabClickVal) {
@@ -189,13 +245,23 @@
         this.listdataIn = key
         this.listdataImg = type
       },
-      // indexSelect(){
-      //   let thisVal = this.value
-      //   this.nowId = this.defaultStoreId.find(function(item){
-      //     return item.value === thisVal
-      //   })
-      //   console.log(this.nowId)
-      // }
+      // 关联游戏模块
+      gamePage(){
+        console.log('门店列表',this.storeList,this.storeId)
+        return new Promise(resolve => {
+          gamePage().then(res => {
+            console.log("总游戏",res)
+            this.gameList = res
+            resolve(res)
+          })
+        })
+      },
+      addChannelGame(){
+        this.dialogVisible = true
+      },
+      btnSubmit () {
+        
+      }
     },
     watch: {
       defaultStoreId(val) {
