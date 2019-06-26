@@ -109,7 +109,6 @@
         label="创建时间"
         width="180">
         <template slot-scope="scope">
-          <i class="el-icon-time"></i>
           <span>{{ scope.row.createTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span>
         </template>
       </el-table-column>
