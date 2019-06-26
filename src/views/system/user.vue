@@ -161,7 +161,6 @@ export default {
   data() {
     return {
       dialogType: 'add',
-      stopRefresh: true,
       formLabelWidth: '85px',
       loading: true,
       dialogVisible: false,
@@ -219,9 +218,6 @@ export default {
 				this.pagination.total = total
 				this.pagination.page = page
 				this.pagination.size = size
-        this.$nextTick(() => {
-          this.stopRefresh = false
-        })
       }).finally(() => {
         this.loading = false
       })
@@ -262,11 +258,16 @@ export default {
       const nameAry = []
 			if(idAry&&idAry.roleIds) {
 				for (let i = 0; i < idAry.roleIds.length; i++) {
-					nameAry.push(this.rolesList.find(s_item => {
+					const _r = this.rolesList.find(s_item => {
 						return s_item.id === idAry.roleIds[i]
-					}).roleName || '')
+					})
+					if (_r) {
+						nameAry.push(_r.roleName)
+						console.log(_r)
+					}
 				}
 			}
+
       return nameAry.join('；')
     },
     btnSubmit(formName) {
