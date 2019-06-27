@@ -35,10 +35,10 @@ module.exports = {
 		'dashboard-screen':'Screen',
 		'tvShow':'tvShow',
 		'coupons':'Coupons',
-		'record':'record',
-    logout: 'Log Out',
-    adi: 'Adidas',
-    nb: 'New Banlance',
-    ln: 'LI Ning'
+		'coupons-manage':'Coupons',
+		'coupons-record':'record',
+    'game':'StoreContentManagement',
+    'store-content':'ContentMaintenance',
+    'mini-game':'miniGame'
   }
 }

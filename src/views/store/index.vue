@@ -134,13 +134,10 @@
             </el-button-group>
           </el-col>
         </el-row>
-        <div  v-waves v-if="fromInfo.imgBase64" class="perview-warp">
+        <div  v-waves class="perview-warp">
           <canvas id="canvasDom" />
           <img :src="fromInfo.imgBase64" onerror="notfound(this)"/>
         </div>
-				<div v-else class="perview-warp">
-					 <p class="color-active">没有上传平面图</p>
-				</div>
       </el-form>
       <div slot="footer" class="dialog-footer text-center">
         <el-button v-if="dialogType==='add'&&steps===2" @click="stepUp">上一步</el-button>
@@ -456,13 +453,18 @@ export default {
 			return obj
 		},
 		transIdtoName(id) {
-			if (id) {
-				const cityObj = this.regionIdTransName(id)
-				cityObj.city = this.allRegion[cityObj.province].find(item => {
+			const cityObj = this.regionIdTransName(id)
+			let r_str='未知'
+			if(cityObj.province) {
+				const city = this.allRegion[cityObj.province].find(item => {
 					return item.id === id
 				}) || {cityName: '-'}
-				return cityObj.province + ' — ' + cityObj.city.cityName
+				if (city) {
+					cityObj.city = city.cityName
+					r_str=cityObj.province + ' — ' + cityObj.city
+				}
 			}
+			return r_str
 		},
 		checkForm(type) {
 			if (!this.steps) {
@@ -483,7 +485,7 @@ export default {
 				this.disabledBtn = this.fromLoading = true
 				const data = this.fromInfo
 				// this.dialogType==='edit'&&
-				if (this.changeImgBase64 && this.steps === 2) {
+				if (this.steps === 2) {
 					data.pointData = Object.assign(this.size, this.drawLayer.getPoint())
 					console.log(data.pointData)
 				}
@@ -577,16 +579,10 @@ export default {
 		},
 		async setAreasProintData() {
 			const canvas = document.getElementById('canvasDom')
-			const {point, width, height, scale} = this.fromInfo.pointData
-			if (width && height) {
-				this.size = {width, height}
-				canvas.width = width
-				canvas.height = height
-			} else {
-				canvas.width = canvas.offsetWidth
-				this.size = await AutoImage(this.fromInfo.imgBase64, canvas.width)
-				canvas.height = this.size.height
-			}
+			const {point, scale} = this.fromInfo.pointData
+			canvas.width = canvas.offsetWidth
+			this.size = await AutoImage(this.fromInfo.imgBase64, canvas.width)
+			canvas.height = this.size.height
 			document.querySelector('.perview-warp').style.height = canvas.height + 'px'
 			this.drawLayer = new DrawImage(canvas, {
 				prointSize: 5,

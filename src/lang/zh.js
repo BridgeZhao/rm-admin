@@ -34,14 +34,12 @@ module.exports = {
 		'dashboard-couponAnalysis':'优惠券效果分析',
 		'dashboard-screen':'互动屏实时监控',
 		'tvShow':'4K屏展示',
-		'coupons':'优惠券管理',
-		'record':'发放记录',
-    'game':'游戏管理',
-    'store-content':'门店内容维护',
-    'mini-game':'小游戏',
-    logout:'退出',
-    adi: '阿迪达斯',
-    nb: '新百伦',
-    ln: '李宁'
+		'coupons':'优惠券',
+		'coupons-manage':'优惠券管理',
+		'coupons-record':'发放记录',
+    'game':'门店内容管理',
+    'store-content':'内容维护',
+    'mini-game':'小游戏'
   }
+
 }

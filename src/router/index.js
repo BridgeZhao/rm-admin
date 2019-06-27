@@ -158,7 +158,7 @@ export const constantRoutes = [
 				meta: {title: '门店客流分析'}
 			},
 			{
-				path: 'heatMap',
+				path: 'heatmap',
 				name: 'dashboard-heatMap',
 				component: () => import('@/views/dashboard/heatMap'),
 				meta: {title: '区域热力图'}
@@ -191,21 +191,17 @@ export const constantRoutes = [
 	},
 	{
 		path: '/tv-show',
-		redirect: '/tv-show',
+		name: 'tvShow',
 		component: () => import('@/views/dashboard/tvShow'),
 		meta: {
 			title: '4K屏演示',
 			icon: 'tv'
-		},
-		children: [{
-			path: '/tv-show',
-			name: 'tvShow',
-			meta: {title: '4K屏演示'}
-		}]
+		}
 	},
 	// 优惠券管理 chy
 	{
 		path: '/coupons',
+		name: 'coupons',
 		redirect: '/coupons/manage',
 		component: Layout,
 		meta: {
@@ -214,12 +210,12 @@ export const constantRoutes = [
 		},
 		children: [{
 			path: 'manage',
-			name: 'coupons',
+			name: 'coupons-manage',
 			component: () => import('@/views/coupons/config'),
 			meta: {title: '优惠券管理'}
 		},{
 			path: 'record',
-			name: 'record',
+			name: 'manage-record',
 			hidden: true ,
 			component: () => import('@/views/coupons/record')
 		}]
