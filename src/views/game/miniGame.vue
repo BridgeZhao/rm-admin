@@ -1,12 +1,12 @@
 <template>
-  <div class="mini_game">
+  <div class="app-container mini_game">
     <ul  class="data-list game-list">
       <li v-for='(item, key) in miniGame' :key='key'>
         <div  class="name-warp"><span  class="name">{{item.name}}</span>
          <svg-icon icon-class="trash" class="delete-icon" @click='delGame(item)' />
          </div>
         <div class="img">
-          <img :src='item.img' />
+          <img :src='item.img' onerror="notfound(this)" />
         </div>
       </li>
       <li  class="add" @click="addGame">

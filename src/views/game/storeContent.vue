@@ -1,10 +1,14 @@
 <template>
-  <div id='store_content'>
+  <div id='store_content' class="app-container">
     <div class="top-bar">
-      <ul class="feature-tab-list">
+      <!-- <ul class="feature-tab-list">
         <li class="" :class="{ selected: gameTab }" @click='tabclick("first")'>店内导航</li>
         <li class="" :class="{ selected: !gameTab }" @click='tabclick("second")'>关联游戏</li>
-      </ul>
+      </ul> -->
+      <el-radio-group v-model="gameTab">
+          <el-radio-button label="店内导航" class="radioBtn"></el-radio-button>
+          <el-radio-button label="关联游戏" class="radioBtn"></el-radio-button>
+      </el-radio-group>
     </div>
     <div v-show='gameTab' class="first_item">
     <!--  <div class="filter-warp">
@@ -71,7 +75,7 @@
       </ul>
   -->  </div>
     <!-- 关联小游戏 -->
-    <div v-show='!gameTab' class="second_item">
+    <div v-show='gameTab === "关联游戏" ' class="second_item">
       <ul  class="data-list game-list">
         <li class="game-list-li" draggable="false" v-for='(item, key) in gameData' :key='key'>
           <div  class="name-warp">
@@ -79,9 +83,9 @@
             <svg-icon icon-class="edit" class="svg-icon" @click="editChannelGame(item)"></svg-icon>
           </div>
           <div class="img">
-            <img :src="item.game.img" />
+            <img :src="item.game.img" onerror="notfound(this)"/>
           </div>
-          <button class="btns handle-btn mr-top default" @click="delChannelGame(item)">取消关联</button>
+          <el-button class="default" @click="delChannelGame(item)" size="small">取消关联</el-button>
         </li>
         <li  class="add" @click="addChannelGame('add')">
           <svg-icon icon-class="plus" class="svg-plus"></svg-icon>
@@ -141,7 +145,7 @@
     name: 'storeContent',
     data() {
       return {
-        gameTab: false,
+        gameTab: '关联游戏',
         value: '',
         listdata: [{
           id:'1',
@@ -194,9 +198,9 @@
       this.channelGamePage()
     },
     methods: {
-      tabclick(tabClickVal) {
-        this.gameTab = tabClickVal == 'second' ? false : true;
-      },
+      // tabclick(tabClickVal) {
+      //   this.gameTab = tabClickVal == 'second' ? false : true;
+      // },
       addRegion () {
          const _listdata = {
            id:'',
