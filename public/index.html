@@ -21,5 +21,10 @@
 			el.parentNode.className =el.parentNode.className+" img-error";
 			el.onerror=null
 		}
+		function getAndroidToken(token) {
+			console.log('成功进入!!～',token)
+			document.cookie="access_token=" + token;
+			// localStorage.setItem('access_token',token)
+		}
 	</script>
 </html>

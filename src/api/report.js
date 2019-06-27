@@ -63,5 +63,6 @@ export function getLeftImg(params) {
 		params
 	})
 }
+
 // http://172.16.2.182:8000/api/mg/dashboard/supermonitor?store_id=test0523
 

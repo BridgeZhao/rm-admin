@@ -53,8 +53,10 @@
       }
     },
     mounted() {
-
-
+			const step = this.$route.query.isStep
+			if(this.$route.query.hasOwnProperty("isStep")){
+				this.isStep = step;
+			}
     }
   }
 </script>
