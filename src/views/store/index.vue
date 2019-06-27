@@ -484,7 +484,7 @@ export default {
 				this.disabledBtn = this.fromLoading = true
 				const data = this.fromInfo
 				// this.dialogType==='edit'&&
-				if (this.changeImgBase64 && this.steps === 2) {
+				if (this.steps === 2) {
 					data.pointData = Object.assign(this.size, this.drawLayer.getPoint())
 					console.log(data.pointData)
 				}
