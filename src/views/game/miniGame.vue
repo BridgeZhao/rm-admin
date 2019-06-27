@@ -84,7 +84,6 @@
       gamePage(){
         return new Promise(resolve => {
           gamePage().then(res => {
-            console.log("bbbbbbb",res)
             this.miniGame = res.data
             resolve(this.miniGame)
           })

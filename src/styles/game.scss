@@ -18,6 +18,7 @@
   }
   .svg-icon{
     color: #999;
+    cursor: pointer;
   }
   .game-list{
       >li.add {
@@ -233,6 +234,7 @@
       }
       .btns.default {
         margin-top: 1rem;
+        cursor: pointer;
       }
     }
   }

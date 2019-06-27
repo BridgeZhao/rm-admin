@@ -290,6 +290,12 @@
       addChannelGame(){
         this.addEditType = true
         this.dialogVisible = true
+        this.fromInfo.id = ''
+        this.fromInfo.gameName = ''
+        this.fromInfo.gameId = ''
+        this.fromInfo.areaId = ''
+        this.fromInfo.checked = []
+
       },
       editChannelGame(val){
         this.addEditType = false
@@ -314,6 +320,7 @@
                 preRegistration: false,
                 logoBase64: this.gameList.find(item => item.id === this.fromInfo.gameId).img,
                 deviceIds: this.fromInfo.checked,
+                scenarioId:this.fromInfo.areaId
               }
             }else{
               this.upFromInfo = {
@@ -322,12 +329,12 @@
                 preRegistration: false,
                 logoBase64: this.gameList.find(item => item.id === this.fromInfo.gameId).img,
                 deviceIds: this.fromInfo.checked,
+                scenarioId:this.fromInfo.areaId
               }  
             }
             console.log(this.upFromInfo)
             channelGame(this.upFromInfo).then(() => {
               this.channelGamePage()
-              this.dgLoading = false
               this.clearClose('reload')
               this.$message.success('操作成功')
             })
@@ -358,6 +365,13 @@
           });
           console.log( _this.fromInfo.checked)
         }
+      },
+      // 全局门店下拉修改
+      $storeIdChanged(storeId){
+        if(storeId){
+          this.defaultStoreId=storeId
+        }
+        this.channelGamePage()
       }
     },
     watch: {
