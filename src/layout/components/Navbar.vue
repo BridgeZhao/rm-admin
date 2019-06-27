@@ -35,7 +35,7 @@
         <el-dropdown-menu class="user-dropdown">
           <el-dropdown-item>
             <span style="display:block;" @click="logout">
-							{{ $t("menus.logout") }}</span>
+							{{ $t("menus.loginout") }}</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>

@@ -105,7 +105,6 @@
             <el-row>
               <el-col :span="16">
                 <el-select
-                  class="mg-bot20"
                   v-model="selectedArea"
                   placeholder="绘制区域选择"
                   @change="onareaSelect">
@@ -125,7 +124,7 @@
               </el-col>
             </el-row>
           </el-col>
-          <el-col :span="12" style="text-align: right">
+          <el-col :span="12" style="text-align: right;">
             <el-button-group>
               <el-button @click="cancelArea"><svg-icon icon-class="cancel" />撤销</el-button>
               <el-button @click="setAllPoint"><svg-icon icon-class="all" />全绘</el-button>
@@ -134,6 +133,7 @@
             </el-button-group>
           </el-col>
         </el-row>
+				<div class="info-tips"><i class="el-icon-time"></i> 请按顺时针方向点击绘制点位，不得超过10个，下拉可选择对应的绘制区域</div>
         <div  v-waves class="perview-warp">
           <canvas id="canvasDom" />
           <img :src="fromInfo.imgBase64" onerror="notfound(this)"/>

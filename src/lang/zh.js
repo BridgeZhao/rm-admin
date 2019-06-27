@@ -14,6 +14,7 @@ module.exports = {
   },
   menus: {
     dashboard: '统计报表',
+		'loginout':'退出登录',
 		'store':'门店管理',
 		'store-list':'门店列表',
 		'store-device':'设备管理',
