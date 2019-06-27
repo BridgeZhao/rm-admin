@@ -79,7 +79,9 @@
                     <span>{{startWeekTime + ' - ' + endWeekTime }}</span>
                     <span>08:00 - 22:00</span>
                 </div>
-                <el-button type="primary" plain style="background-color: #1881a0;color: #494c50;" size="mini"><a href="#">下载数据</a></el-button>
+                <el-button type="primary" plain style="background-color: #1881a0;color: #494c50;padding:0;" size="medium">
+									<a :href="downloadPath" download="" style="text-decoration: none;color: #ffffff;display: block;width: 70px;height: 35px;line-height: 35px;">下载</a>
+								</el-button>
             </div>
             <div class="report-margin">
                 <el-row :gutter="24" class="report-margin">
@@ -90,10 +92,12 @@
                         <div style="width:90%;height:100%;margin: 2% auto">
                              <el-table
                             :data="tableData"
+														:default-sort = "{prop: 'hh', order: 'Ascending'}"
                             style="width: 100%">
                                 <el-table-column
                                     prop="hh"
                                     label="时间段"
+																		sortable
                                     >
                                 </el-table-column>
                                 <el-table-column
@@ -149,6 +153,9 @@ export default {
     components: {labelView, WeekChat},
     data(){
         return{
+						loadPath:'/mg/dashboard/weekflow/',
+						downloadPath:'',
+						int:moment(new Date()).valueOf(),
             radio:'图形报表',
             showNum:true,
             formInline:{
@@ -224,12 +231,12 @@ export default {
                  for (let i = 0; i < res_data.length; i++) {
                    arr.push([res_data[i].weekday - 1,res_data[i].hh - 8,res_data[i].count]);
                 }
-                console.log('返回的周时段客流数据变化前-》>>>',arr)
                 arr = arr.map(function (item) {
                     return [item[0], item[1], item[2] || '-']
                 })
                 this.$set(this.weekData,'data',arr)
            })
+					this.downloadPath = process.env.VUE_APP_HTTP_AUTH_AGENT + this.loadPath + this.int +'/?store_id=' + params.store_id +'&starttime='+params.starttime + '&endtime=' + params.endtime
         }
     }
 }

@@ -162,8 +162,32 @@ export const constantRoutes = [
 				name: 'dashboard-heatMap',
 				component: () => import('@/views/dashboard/heatMap'),
 				meta: {title: '区域热力图'}
+			},
+			{
+				path: 'advertising',
+				name: 'dashboard-advertising',
+				component: () => import('@/views/dashboard/advertising'),
+				meta: {title: '广告效果分析'}
+			},
+			{
+				path: 'couponAnalysis',
+				name: 'dashboard-couponAnalysis',
+				component: () => import('@/views/dashboard/couponAnalysis'),
+				meta: {title: '优惠券效果分析'}
+			},
+			{
+				path: 'screen',
+				name: 'dashboard-screen',
+				component: () => import('@/views/dashboard/screenAnalysis'),
+				meta: {title: '互动屏实时监控'}
 			}
 		]
+	},
+	// 传给安卓pad页面url
+	{
+		path: '/week-flow-pad',
+		component: () => import('@/views/dashboard/weekFlow'),
+		hidden: true
 	},
 	{
 		path: '/tv-show',

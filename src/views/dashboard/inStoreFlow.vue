@@ -92,7 +92,9 @@
                     <span>{{downTime}}</span>
                     <span style="margin-left:10px;">{{downTimeLine}}</span>
                 </div>
-                <el-button type="primary" plain style="background-color: #1881a0;color: #494c50;" size="small"><a href="#">下载数据</a></el-button>
+                <el-button type="primary" plain style="background-color: #1881a0;color: #494c50;padding:0;" size="medium">
+									<a :href="downloadPath" download="" style="text-decoration: none;color: #ffffff;display: block;width: 70px;height: 35px;line-height: 35px;">下载</a>
+								</el-button>
             </div>
             <div class="report-margin">
                 <el-row :gutter="24" class="report-margin">
@@ -165,6 +167,9 @@ export default {
     components: {labelView,BarChart,PieChart,BarChartAge,PeopleChart},
     data(){
         return{
+					  loadPath:'/mg/dashboard/camera/',
+					  downloadPath:'',
+					  int:moment(new Date()).valueOf(),
             isShow:true,
             chartHeight:'222px',
             radio:'图形报表',
@@ -286,6 +291,7 @@ export default {
             this.loadVip()
             this.loadHourPeople()
          })
+					this.downloadPath = process.env.VUE_APP_HTTP_AUTH_AGENT + this.loadPath + this.int +'/?store_id=' + params.store_id +'&starttime='+params.starttime + '&endtime=' + params.endtime + '&hh=' +params.hh
         },
 
         loadVip() {
