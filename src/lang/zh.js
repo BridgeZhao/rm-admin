@@ -29,6 +29,8 @@ module.exports = {
 		'dashboard-storeFlow':'门店客流',
 		'dashboard-weekFlow':'周客流统计',
 		'week-flow-pad':'周时段客流分析PAD',
+		'real-time-pad':'实时客流分析PAD',
+		'in-store-flow-pad':'进店客流分析',
 		'dashboard-inStoreFlow':'进店客流',
 		'dashboard-advertising':'广告效果分析',
 		'dashboard-couponAnalysis':'优惠券效果分析',

@@ -190,6 +190,16 @@ export const constantRoutes = [
 		hidden: true
 	},
 	{
+		path: '/real-time-pad',
+		component: () => import('@/views/dashboard/realTime'),
+		hidden: true
+	},
+	{
+		path: '/in-store-flow-pad',
+		component: () => import('@/views/dashboard/inStoreFlow'),
+		hidden: true
+	},
+	{
 		path: '/tv-show',
 		name: 'tvShow',
 		component: () => import('@/views/dashboard/tvShow'),

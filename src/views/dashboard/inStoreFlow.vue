@@ -239,9 +239,33 @@ export default {
 			}
 		},
 	  mounted(){
+			  this.isAndroid()
         this.init()
     },
      methods:{
+			 isAndroid(){
+				 const isStoreid = this.showWindowHref("storeId")
+				 if(isStoreid !== ''){
+					 let id = isStoreid.storeId
+					 this.$store.dispatch('app/setStoreId', id)
+				 }else{
+					 return false
+				 }
+			 },
+			 showWindowHref(){
+				 let sHref = window.location.href;
+				 let args = sHref.split('?');
+				 if(args[0] == sHref){
+					 return ""
+				 }
+				 let arr = args[1].split('&');
+				 let obj = {};
+				 for(let i = 0;i< arr.length;i++){
+					 let arg = arr[i].split('=');
+					 obj[arg[0]] = arg[1];
+				 }
+				 return obj
+			 },
         init(storeId){
             let start_time=moment(new Date()).format('YYYY-MM-DD')
             this.downTime = start_time

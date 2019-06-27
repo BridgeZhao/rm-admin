@@ -29,6 +29,8 @@ module.exports = {
 		'dashboard-storeFlow':'StoreFlow',
 		'dashboard-weekFlow':'WeekFlow',
 		'week-flow-pad':'WeekFlowPad',
+		'real-time-pad':'RealTimePad',
+		'in-store-flow-pad':'InStoreFlowPad',
 		'dashboard-inStoreFlow':'InStoreFlow',
 		'dashboard-advertising':'Advertising',
 		'dashboard-couponAnalysis':'CouponAnalysis',

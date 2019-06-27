@@ -147,7 +147,7 @@
 import moment from "moment"
 import labelView from  '@/components/Label/index'
 import WeekChat from "@/components/Charts/WeekChat"
-import { getWeekFlowData } from "@/api/report"
+import { getWeekFlowData, showWindowHref} from "@/api/report"
 export default {
     name:'intoShopFlow',
     components: {labelView, WeekChat},
@@ -178,12 +178,37 @@ export default {
 					dateTimeDay:new Date()
 				}
 				this.init(newVal)
+
 			}
 		},
     created(){
+			  this.isAndroid()
         this.init()
     },
      methods:{
+    	  isAndroid(){
+				 const isStoreid = this.showWindowHref("storeId")
+					if(isStoreid !== ''){
+						let id = isStoreid.storeId
+						this.$store.dispatch('app/setStoreId', id)
+					}else{
+						return false
+					}
+				},
+			 showWindowHref(){
+				 let sHref = window.location.href;
+				 let args = sHref.split('?');
+				 if(args[0] == sHref){
+					 return ""
+				 }
+				 let arr = args[1].split('&');
+				 let obj = {};
+				 for(let i = 0;i< arr.length;i++){
+					 let arg = arr[i].split('=');
+					 obj[arg[0]] = arg[1];
+				 }
+				 return obj
+			 },
         onSubmit() {
             console.log('submit!')
         },
