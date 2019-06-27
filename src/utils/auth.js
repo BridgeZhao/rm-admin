@@ -50,8 +50,11 @@ export function checkPermission() {
 			route_obj.children = []
 			for (let f = 0; f < routes[i].children.length; f++) {
 				for (let n = 0; n < roles.length; n++) {
-					const routeName = routes[i].children[f].name
-					if (roles[n].name === routeName && roles[n].parentId !== 0) {
+					const tmp_route= routes[i].children[f]
+					if (tmp_route.hasOwnProperty('hidden')) {
+						continue
+					}
+					if (roles[n].name === tmp_route.name && roles[n].parentId !== 0) {
 						routes[i].children[f].meta.title = roles[n].title
 						route_obj.children.push(routes[i].children[f])
 						break

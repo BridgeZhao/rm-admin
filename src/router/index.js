@@ -182,6 +182,7 @@ export const constantRoutes = [
 	// 优惠券管理 chy
 	{
 		path: '/coupons',
+		name: 'coupons',
 		redirect: '/coupons/manage',
 		component: Layout,
 		meta: {
@@ -190,12 +191,12 @@ export const constantRoutes = [
 		},
 		children: [{
 			path: 'manage',
-			name: 'coupons',
+			name: 'coupons-manage',
 			component: () => import('@/views/coupons/config'),
 			meta: {title: '优惠券管理'}
 		},{
 			path: 'record',
-			name: 'record',
+			name: 'manage-record',
 			hidden: true ,
 			component: () => import('@/views/coupons/record')
 		}]
