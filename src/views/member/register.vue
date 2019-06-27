@@ -18,7 +18,6 @@
       <el-form-item>
 				<el-button-group>
         <el-button type="primary" @click="()=>{pageChange(1)}">查询</el-button>
-        <el-button @click="clearSearch">清空</el-button>
 				</el-button-group>
       </el-form-item>
     </el-form>
@@ -131,10 +130,12 @@ export default {
   methods: {
     getTableData() {
       this.tableLoading = true
-      if (this.dateTimes.length) {
-				this.form.begin =this.dateTimes[0]
+			if (this.dateTimes&&this.dateTimes.length) {
+				this.form.begin=this.dateTimes[0]
 				this.form.end = this.dateTimes[1]
-      }
+			}else{
+				this.form.begin=this.form.end =''
+			}
       const _pagination = Object.assign(this.form, this.pagination)
       for (const k in _pagination) {
         if (!_pagination[k]) {
@@ -152,15 +153,6 @@ export default {
       }).finally(() => {
         this.tableLoading = false
       })
-    },
-    clearSearch() {
-      this.dateTimes = []
-      this.form = {
-        name: '',
-				storeId:this.storeId,
-        begin: '',
-        end: ''
-      }
     },
     pageChange(val) {
       this.pagination.page = ~~val
