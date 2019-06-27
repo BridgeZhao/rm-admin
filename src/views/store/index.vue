@@ -134,13 +134,10 @@
             </el-button-group>
           </el-col>
         </el-row>
-        <div  v-waves v-if="fromInfo.imgBase64" class="perview-warp">
+        <div  v-waves class="perview-warp">
           <canvas id="canvasDom" />
           <img :src="fromInfo.imgBase64" onerror="notfound(this)"/>
         </div>
-				<div v-else class="perview-warp">
-					 <p class="color-active">没有上传平面图</p>
-				</div>
       </el-form>
       <div slot="footer" class="dialog-footer text-center">
         <el-button v-if="dialogType==='add'&&steps===2" @click="stepUp">上一步</el-button>
