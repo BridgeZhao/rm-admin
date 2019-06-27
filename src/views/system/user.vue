@@ -263,7 +263,6 @@ export default {
 					})
 					if (_r) {
 						nameAry.push(_r.roleName)
-						console.log(_r)
 					}
 				}
 			}

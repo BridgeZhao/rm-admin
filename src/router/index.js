@@ -158,7 +158,7 @@ export const constantRoutes = [
 				meta: {title: '门店客流分析'}
 			},
 			{
-				path: 'heatMap',
+				path: 'heatmap',
 				name: 'dashboard-heatMap',
 				component: () => import('@/views/dashboard/heatMap'),
 				meta: {title: '区域热力图'}
