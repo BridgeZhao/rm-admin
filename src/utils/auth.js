@@ -1,7 +1,7 @@
 import Cookies from 'js-cookie'
 import store from '@/store'
 import router from '../router'
-const TokenKey = 'token'
+const TokenKey = 'access_token'
 
 export function getToken() {
   return Cookies.get(TokenKey)
@@ -31,50 +31,45 @@ export function checkPermissionButton(pathname,btnType){
 }
 export function checkPermission() {
 	const name = store.getters && store.getters.name
-  const roles = store.getters && store.getters.menus
+	const roles = store.getters && store.getters.menus
+	const routes = router.options.routes
 	const route_filter = []
-	if(roles instanceof Array&&name) {
+	if (roles instanceof Array && name) {
 		roles.push({name: 'welcome', parentId: 0, title: ''})
-		const routes = router.options.routes
 		let roles_obj
 		let route_obj = {}
 		for (let i = 0; i < routes.length; i++) {
 			if (routes[i].hasOwnProperty('hidden')) {
 				continue
 			}
-			if (routes[i].hasOwnProperty('redirect')) {
-				 roles_obj =_find_item(roles,routes[i].children[0].name)
-				if (roles_obj) {
-					routes[i].orderNo=roles_obj.orderNo
-					routes[i].children[0].meta.title = roles_obj.title
-					route_filter.push(Object.assign({}, routes[i]))
-				}
-			} else {
-				 roles_obj =_find_item(roles,routes[i].name)
-				if (roles_obj) {
-					routes[i].orderNo = roles_obj.orderNo
-				}
-				route_obj = Object.assign({}, routes[i])
-				route_obj.children = []
-				for (let f = 0; f < routes[i].children.length; f++) {
-					for (let n = 0; n < roles.length; n++) {
-						const routeName=routes[i].children[f].name
-						if (roles[n].name === routeName && roles[n].parentId !== 0) {
-							routes[i].children[f].meta.title = roles[n].title
-							route_obj.children.push(routes[i].children[f])
-						}
+			roles_obj = _find_item(roles, routes[i].name)
+			if (roles_obj) {
+				routes[i].orderNo = roles_obj.orderNo
+			}
+			route_obj = Object.assign({}, routes[i])
+			route_obj.children = []
+			for (let f = 0; f < routes[i].children.length; f++) {
+				for (let n = 0; n < roles.length; n++) {
+					const tmp_route= routes[i].children[f]
+					if (tmp_route.hasOwnProperty('hidden')) {
+						continue
+					}
+					if (roles[n].name === tmp_route.name && roles[n].parentId !== 0) {
+						routes[i].children[f].meta.title = roles[n].title
+						route_obj.children.push(routes[i].children[f])
+						break
 					}
 				}
-				if (route_obj.children.length) {
-					route_filter.push(route_obj)
-				}
+			}
+			if (route_obj.children.length) {
+				route_filter.push(route_obj)
 			}
 		}
 	}
-	route_filter.sort(function(a,b){
-		return a.orderNo-b.orderNo
+	route_filter.sort(function (a, b) {
+		return a.orderNo - b.orderNo
 	})
-  return route_filter
+	return route_filter
 }
 function _find_item(ary,rname) {
 return ary.find(item => {

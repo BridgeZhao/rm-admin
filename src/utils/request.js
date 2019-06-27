@@ -26,7 +26,6 @@ service.interceptors.request.use(
 				config.baseURL = HTTP_AUTH_AGENT
 			}
 		}
-		console.log(config)
     return config
   },
   error => {

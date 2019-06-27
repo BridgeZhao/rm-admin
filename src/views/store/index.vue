@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container store-list">
     <!--头部按钮-->
     <el-row :gutter="20" class="table-head-btns">
 			<el-col :span="12" class="flex">
@@ -17,7 +17,7 @@
     </el-row>
     <!--弹框-->
     <!--添加用户-->
-    <el-dialog v-if="dialogVisible"  :title="dialogType==='add'?'门店添加':stepNameTransform()+'修改'" :width="'720px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="()=>{clearClose()}" @closed="steps=0">
+    <el-dialog v-drag-dialog  :title="dialogType==='add'?'门店添加':stepNameTransform()+'修改'" :width="'720px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="()=>{clearClose()}" @closed="steps=0">
       <el-steps :active="steps" align-center finish-status="success" v-if="dialogType==='add'">
         <el-step title="基本信息"></el-step>
         <el-step title="区域管理"></el-step>
@@ -134,13 +134,10 @@
             </el-button-group>
           </el-col>
         </el-row>
-        <div v-if="fromInfo.imgBase64" class="perview-warp">
+        <div  v-waves class="perview-warp">
           <canvas id="canvasDom" />
           <img :src="fromInfo.imgBase64" onerror="notfound(this)"/>
         </div>
-				<div v-else class="perview-warp">
-					 <p class="color-active">没有上传平面图</p>
-				</div>
       </el-form>
       <div slot="footer" class="dialog-footer text-center">
         <el-button v-if="dialogType==='add'&&steps===2" @click="stepUp">上一步</el-button>
@@ -200,7 +197,6 @@
         label="更新时间"
         width="180">
         <template slot-scope="scope">
-          <i class="el-icon-time"></i>
           <span>{{ scope.row.updateTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span>
         </template>
       </el-table-column>
@@ -295,7 +291,7 @@ export default {
 			},
 			pagination: {
 				page: 1,
-				size: 10,
+				size: 8,
 				name: '',
 				total: 0
 			},
@@ -431,6 +427,7 @@ export default {
 			this.fromInfo.name = data.name
 			this.fromInfo.imgBase64 = data.floorGraph
 			this.fromInfo.storeId = this.fromInfo.id = data.id
+			this.getAreasData()
 			this.fromInfo.regionId = data.regionId
 			this.fromInfo.pointData = data.pointData
 			this.steps = idx - 0
@@ -456,13 +453,14 @@ export default {
 			return obj
 		},
 		transIdtoName(id) {
-			if (id) {
-				const cityObj = this.regionIdTransName(id)
-				cityObj.city = this.allRegion[cityObj.province].find(item => {
-					return item.id === id
-				}) || {cityName: '-'}
-				return cityObj.province + ' — ' + cityObj.city.cityName
+			const cityObj = this.regionIdTransName(id)
+			const city = this.allRegion[cityObj.province].find(item => {
+				return item.id === id
+			})||{cityName: '-'}
+			if (city) {
+				cityObj.city = city.cityName
 			}
+			return cityObj.province + ' — ' + cityObj.city
 		},
 		checkForm(type) {
 			if (!this.steps) {
@@ -483,7 +481,7 @@ export default {
 				this.disabledBtn = this.fromLoading = true
 				const data = this.fromInfo
 				// this.dialogType==='edit'&&
-				if (this.changeImgBase64 && this.steps === 2) {
+				if (this.steps === 2) {
 					data.pointData = Object.assign(this.size, this.drawLayer.getPoint())
 					console.log(data.pointData)
 				}
@@ -577,16 +575,10 @@ export default {
 		},
 		async setAreasProintData() {
 			const canvas = document.getElementById('canvasDom')
-			const {point, width, height, scale} = this.fromInfo.pointData
-			if (width && height) {
-				this.size = {width, height}
-				canvas.width = width
-				canvas.height = height
-			} else {
-				canvas.width = canvas.offsetWidth
-				this.size = await AutoImage(this.fromInfo.imgBase64, canvas.width)
-				canvas.height = this.size.height
-			}
+			const {point, scale} = this.fromInfo.pointData
+			canvas.width = canvas.offsetWidth
+			this.size = await AutoImage(this.fromInfo.imgBase64, canvas.width)
+			canvas.height = this.size.height
 			document.querySelector('.perview-warp').style.height = canvas.height + 'px'
 			this.drawLayer = new DrawImage(canvas, {
 				prointSize: 5,

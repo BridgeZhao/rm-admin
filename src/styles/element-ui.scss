@@ -1,4 +1,3 @@
-// cover some element-ui styles
 .el-form-item__label,.el-radio__label,.el-radio__input.is-checked+.el-radio__label,.el-breadcrumb__separator,.expanded{
   color: $menuText!important;
   font-weight: normal;
@@ -14,16 +13,16 @@
   border-bottom: 1px solid $bgColor;
 }
 .el-select{ width: 100%;}
-.el-button--primary,.el-button--primary:focus{
+.el-button--primary,.el-button--primary:focus,.el-button--primary:active{
   background-color:$menuActiveText!important;
   border-color: $menuText!important;
-  color: $bgColor;
+  color: $bgColor!important;
   &:hover{
     color:$subMenuBg!important;
     background-color:$menuText!important;
   }
 }
-.el-button--default{
+.el-button--default,.el-breadcrumb__inner.is-link, .el-breadcrumb__inner a{
   &:hover{
     color:$menuActiveText!important;
   }
@@ -72,6 +71,12 @@ table,table th,table td,.el-table--border,.el-button--default,.el-message-box,.e
     background:$menuText;
   }
 }
+.el-button.el-button--default:not(.el-button--primary) {
+	&:active,&:focus {
+		color: $menuActiveText !important;
+		border-color: $menuActiveText !important;
+}
+}
 .el-button--default,.el-select .el-tag{
   &:hover{
     border-color:$menuActiveText!important;
@@ -104,11 +109,6 @@ table,table th,table td,.el-table--border,.el-button--default,.el-message-box,.e
 .el-step__head.is-success,.el-button{
  border-color:$menuActiveText;
   .el-step__icon-inner, .el-step__icon.is-text{
-    color:$menuActiveText!important;
-  }
-}
-.el-button:not(.el-button--primary,.el-button--danger){
-  *:active,*:focus{
     color:$menuActiveText!important;
   }
 }

@@ -1,13 +1,13 @@
 <template>
-  <div class="app-container">
+  <div class="app-container store-device">
     <!--头部按钮-->
     <el-row :gutter="20" class="table-head-btns">
       <el-col style="text-align: right">
-        <el-button v-permission="'add'" type="primary" @click="()=>{btnDevice()}">+ 添加设备</el-button>
+        <el-button v-permission="'add'" type="primary" @click="btnDevice('add')">+ 添加设备</el-button>
       </el-col>
     </el-row>
     <!--弹框-->
-    <el-dialog :title="dialogType==='add'?'添 加':'编 辑'" :width="'720px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="()=>{clearClose()}">
+    <el-dialog v-drag-dialog :title="dialogType==='add'?'添 加':'编 辑'" :width="'720px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="()=>{clearClose()}">
       <!--基本信息-->
       <el-form v-if="drawType==='info'" v-loading="dgLoading" :model="fromInfo" :rules="rules"  ref="myform">
         <el-form-item label="设备名称" :label-width="formLabelWidth" prop="name" >
@@ -88,7 +88,7 @@
         </el-row>
         <div class="perview-warp">
           <canvas id="canvasDevice" />
-          <img :src="fromInfo.snapshot" onerror="notfound(this)">
+          <img :src="fromInfo.snapshot">
         </div>
       </el-form>
       <div slot="footer" class="dialog-footer text-center">
@@ -138,7 +138,6 @@
       <el-table-column
         label="更新时间">
         <template slot-scope="scope">
-          <i class="el-icon-time"></i>
           <span>{{ scope.row.updateTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span>
         </template>
       </el-table-column>
@@ -206,7 +205,7 @@ export default {
         name:'',
 				authName:'',
 				password:'',
-        areaId:0,
+        areaId:undefined,
         pointData:{},
         rtsp:'',
         usage:0,
@@ -236,18 +235,9 @@ export default {
       })
     },
     btnDevice(type='add'){
-      getAreas(this.fromInfo.storeId).then(res => {
-        this.areaList = res
-        if (res.length) {
-					this.fromInfo.areaId=res[0].id
-          this.selectedArea = res[0].id
-          this.areaText = res[0].name
-        }else{
-					this.fromInfo.areaId=null
-				}
-      })
+			this.dialogType=type
+			this.drawType='info'
       this.dialogVisible=true
-      this.dialogType=type
     },
     btnSubmit() {
 			if (this.drawType === 'draw') {
@@ -295,9 +285,13 @@ export default {
       })
     },
     async edtiData(id,type='draw'){
+			this.dialogVisible=true
       this.dialogType='edit'
       this.drawType=type
       this.fromInfo=await getDeviceInfo(id)
+			if(!this.areaList.length){
+				this.fromInfo.areaId=undefined
+			}
       if(type==='draw'){
         await  this.getAreasData()
         // 设置复选框
@@ -307,7 +301,6 @@ export default {
           this.setAreasProintData()
         })
       }
-      this.dialogVisible=true
     },
     setProintImg(){
       // 动态生成多选
@@ -323,15 +316,10 @@ export default {
     },
     async setAreasProintData() {
       const canvas=document.getElementById('canvasDevice')
-      const {point,width,height,scale}=this.fromInfo.pointData
-      if(width&&height){
-        canvas.width = width
-        canvas.height = height
-      }else{
-        canvas.width = canvas.offsetWidth
-        this.size=await AutoImage(this.fromInfo.snapshot,canvas.width)
-        canvas.height = this.size.height
-      }
+      const {point,scale}=this.fromInfo.pointData
+			canvas.width = canvas.offsetWidth
+			this.size=await AutoImage(this.fromInfo.snapshot,canvas.width)
+			canvas.height = this.size.height
       this.drawLayer = new DrawImage(canvas, {
         prointSize: 5,
         scale:scale,
@@ -361,13 +349,15 @@ export default {
     getAreasData() {
       return new Promise(resolve => {
         getAreas(this.fromInfo.storeId).then(res => {
-          this.areaList = res
-          if (res.length) {
-            this.fromInfo.areaId = res[0].id
-            this.fromInfo=Object.assign({}, this.fromInfo)
-            this.selectedArea = res[0].id
-            this.areaText = res[0].name
-          }
+					if (res.length) {
+						this.areaList = res
+						this.fromInfo.areaId=res[0].id
+						this.selectedArea = res[0].id
+						this.areaText = res[0].name
+					}else{
+						this.areaList = []
+					}
+					this.fromInfo=Object.assign({}, this.fromInfo)
           resolve()
         })
       })
@@ -426,6 +416,7 @@ export default {
     $storeIdChanged(storeId){
       if(storeId){
         this.fromInfo.storeId=storeId
+				this.getAreasData()
       }
       this.getTableData()
     }

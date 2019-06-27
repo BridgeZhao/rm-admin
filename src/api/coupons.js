@@ -41,7 +41,7 @@ export function getCouponsList(params) {
 // 导入优惠券
 export function postCouponsData(data) {
 	return request({
-		url: '/mg/coupons',
+		url: 'http://172.16.2.182:7087/api/mg/coupons',
 		method: 'post',
 		headers: {
 			'Content-Type': 'multipart/form-data'
@@ -50,17 +50,17 @@ export function postCouponsData(data) {
 	})
 }
 // 更新优惠券状态
-export function changeCouponsStatus(params) {
+export function changeCouponsStatus(data) {
 	return request({
 		url: '/mg/coupons/status',
 		method: 'put',
-		params
+		data
 	})
 }
 // 删除优惠券
 export function deleteCouponsList(params) {
 	return request({
-		url: '/mg/coupons',
+		url: '/mg/coupons/',
 		method: 'delete',
 		params
 	})
@@ -82,10 +82,18 @@ export function searchConnection(params) {
 	})
 }
 // 优惠券场景绑定
-export function sceneBind(params) {
+export function sceneBind(data) {
 	return request({
 		url: '/mg/scenario_coupons',
 		method: 'post',
-		params
+		data
+	})
+}
+
+// 删除关联场景列表内容
+export function delSceneData(id) {
+	return request({
+		url: `/mg/scenario_coupons/${id}`,
+		method: 'delete'
 	})
 }

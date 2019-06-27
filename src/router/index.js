@@ -60,6 +60,7 @@ export const constantRoutes = [
   {
     path: '/store',
     name: 'store',
+		redirect: '/store/list',
     component: Layout,
     meta: {
       title: '门店管理',
@@ -80,6 +81,7 @@ export const constantRoutes = [
   {
     path: '/system',
     name: 'system',
+		redirect: '/system/menus',
     component: Layout,
     meta: {
       title: '系统管理',
@@ -105,6 +107,7 @@ export const constantRoutes = [
   {
     path: '/member',
     name: 'member',
+		redirect: '/member/virtual',
     component: Layout,
     meta: {
       title: '会员管理',
@@ -126,6 +129,7 @@ export const constantRoutes = [
 	{
 		path: '/dashboard',
 		name: 'dashboard',
+		redirect: '/dashboard/real-time',
 		component: Layout,
 		meta: {title: '统计报表', icon: 'dashboard'},
 		children: [
@@ -154,7 +158,7 @@ export const constantRoutes = [
 				meta: {title: '门店客流分析'}
 			},
 			{
-				path: 'heatMap',
+				path: 'heatmap',
 				name: 'dashboard-heatMap',
 				component: () => import('@/views/dashboard/heatMap'),
 				meta: {title: '区域热力图'}
@@ -178,6 +182,7 @@ export const constantRoutes = [
 	// 优惠券管理 chy
 	{
 		path: '/coupons',
+		name: 'coupons',
 		redirect: '/coupons/manage',
 		component: Layout,
 		meta: {
@@ -186,12 +191,12 @@ export const constantRoutes = [
 		},
 		children: [{
 			path: 'manage',
-			name: 'coupons',
+			name: 'coupons-manage',
 			component: () => import('@/views/coupons/config'),
 			meta: {title: '优惠券管理'}
 		},{
 			path: 'record',
-			name: 'record',
+			name: 'manage-record',
 			hidden: true ,
 			component: () => import('@/views/coupons/record')
 		}]

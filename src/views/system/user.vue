@@ -2,6 +2,7 @@
   <div class="app-container">
     <!--添加用户-->
     <el-dialog
+			v-drag-dialog
       :title="dialogType==='add'?'管理员添加':'管理员修改'"
       append-to-body
       :width="'620px'"
@@ -109,7 +110,6 @@
         label="创建时间"
         width="180">
         <template slot-scope="scope">
-          <i class="el-icon-time"></i>
           <span>{{ scope.row.createTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span>
         </template>
       </el-table-column>
@@ -161,7 +161,6 @@ export default {
   data() {
     return {
       dialogType: 'add',
-      stopRefresh: true,
       formLabelWidth: '85px',
       loading: true,
       dialogVisible: false,
@@ -171,7 +170,7 @@ export default {
       tableData: [],
 			pagination: {
 				page: 1,
-				size: 15,
+				size: 10,
 				name: '',
 				storeId:0,
 				total: 0
@@ -219,9 +218,6 @@ export default {
 				this.pagination.total = total
 				this.pagination.page = page
 				this.pagination.size = size
-        this.$nextTick(() => {
-          this.stopRefresh = false
-        })
       }).finally(() => {
         this.loading = false
       })
@@ -262,11 +258,15 @@ export default {
       const nameAry = []
 			if(idAry&&idAry.roleIds) {
 				for (let i = 0; i < idAry.roleIds.length; i++) {
-					nameAry.push(this.rolesList.find(s_item => {
+					const _r = this.rolesList.find(s_item => {
 						return s_item.id === idAry.roleIds[i]
-					}).roleName || '')
+					})
+					if (_r) {
+						nameAry.push(_r.roleName)
+					}
 				}
 			}
+
       return nameAry.join('；')
     },
     btnSubmit(formName) {

@@ -84,10 +84,10 @@
           <el-input v-model="ruleForm.id" />
         </el-form-item>
         <el-form-item label="每日每人领取上线" prop="dayLimit">
-          <el-input-number v-model="ruleForm.dayLimit" controls-position="right" :min="1" :max="10000" style="width: 100%;"></el-input-number>
+          <el-input-number v-model="ruleForm.dayLimit" :controls="false" :min="1" :max="10000" style="width: 100%;"></el-input-number>
         </el-form-item>
         <el-form-item label="每日总领取上线" prop="totalLimit">
-					<el-input-number v-model="ruleForm.totalLimit" controls-position="right" :min="1" :max="10000" style="width: 100%;"></el-input-number>
+					<el-input-number v-model="ruleForm.totalLimit" :controls="false" :min="1" :max="10000" style="width: 100%;"></el-input-number>
         </el-form-item>
       </el-form>
       <div slot="footer">
