@@ -13,6 +13,7 @@ const state = {
 const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token
+		setToken(token)
   },
   SET_NAME: (state, name) => {
     state.name = name
@@ -32,7 +33,6 @@ const actions = {
         const { token } = response
         commit('SET_NAME', username)
         commit('SET_TOKEN', token)
-        setToken(token)
         resolve()
       }).catch(error => {
         reject(error)

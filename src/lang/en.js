@@ -15,6 +15,7 @@ module.exports = {
   menus: {
     dashboard: 'Dashboard',
 		'store':'Stores',
+		'loginout':'Login Out',
 		'store-list':'Store List',
 		'store-device':'Devices',
 		'system':'System',

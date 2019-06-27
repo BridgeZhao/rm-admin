@@ -195,11 +195,11 @@ export default {
       }],
 			rules: {
 				name: [
-					{required: true, message: '请输入门店名称', trigger: 'blur'},
+					{required: true, message: '请输入设备名称', trigger: 'blur'},
 					{min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'}
 				],
 				areaId:[{ required: true, message: '请先添加门店区域', trigger: 'change'}],
-				rtsp:[{ required: true, message: '所属省市不能为空', trigger: 'blur'}]
+				rtsp:[{ required: true, message: '不能为空', trigger: 'blur'}]
 			},
       fromInfo: {
         name:'',
