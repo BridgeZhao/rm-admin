@@ -456,13 +456,14 @@ export default {
 			return obj
 		},
 		transIdtoName(id) {
-			if (id) {
-				const cityObj = this.regionIdTransName(id)
-				cityObj.city = this.allRegion[cityObj.province].find(item => {
-					return item.id === id
-				}) || {cityName: '-'}
-				return cityObj.province + ' — ' + cityObj.city.cityName
+			const cityObj = this.regionIdTransName(id)
+			const city = this.allRegion[cityObj.province].find(item => {
+				return item.id === id
+			})||{cityName: '-'}
+			if (city) {
+				cityObj.city = city.cityName
 			}
+			return cityObj.province + ' — ' + cityObj.city
 		},
 		checkForm(type) {
 			if (!this.steps) {
@@ -577,16 +578,10 @@ export default {
 		},
 		async setAreasProintData() {
 			const canvas = document.getElementById('canvasDom')
-			const {point, width, height, scale} = this.fromInfo.pointData
-			if (width && height) {
-				this.size = {width, height}
-				canvas.width = width
-				canvas.height = height
-			} else {
-				canvas.width = canvas.offsetWidth
-				this.size = await AutoImage(this.fromInfo.imgBase64, canvas.width)
-				canvas.height = this.size.height
-			}
+			const {point, scale} = this.fromInfo.pointData
+			canvas.width = canvas.offsetWidth
+			this.size = await AutoImage(this.fromInfo.imgBase64, canvas.width)
+			canvas.height = this.size.height
 			document.querySelector('.perview-warp').style.height = canvas.height + 'px'
 			this.drawLayer = new DrawImage(canvas, {
 				prointSize: 5,
