@@ -167,17 +167,12 @@ export const constantRoutes = [
 	},
 	{
 		path: '/tv-show',
-		redirect: '/tv-show',
+		name: 'tvShow',
 		component: () => import('@/views/dashboard/tvShow'),
 		meta: {
 			title: '4K屏演示',
 			icon: 'tv'
-		},
-		children: [{
-			path: '/tv-show',
-			name: 'tvShow',
-			meta: {title: '4K屏演示'}
-		}]
+		}
 	},
 	// 优惠券管理 chy
 	{

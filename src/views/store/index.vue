@@ -454,13 +454,17 @@ export default {
 		},
 		transIdtoName(id) {
 			const cityObj = this.regionIdTransName(id)
-			const city = this.allRegion[cityObj.province].find(item => {
-				return item.id === id
-			})||{cityName: '-'}
-			if (city) {
-				cityObj.city = city.cityName
+			let r_str='未知'
+			if(cityObj.province) {
+				const city = this.allRegion[cityObj.province].find(item => {
+					return item.id === id
+				}) || {cityName: '-'}
+				if (city) {
+					cityObj.city = city.cityName
+					r_str=cityObj.province + ' — ' + cityObj.city
+				}
 			}
-			return cityObj.province + ' — ' + cityObj.city
+			return r_str
 		},
 		checkForm(type) {
 			if (!this.steps) {
