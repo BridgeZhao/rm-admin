@@ -21,8 +21,8 @@
         <el-form-item label="游戏名称" :label-width="formLabelWidth" prop="name" >
           <el-input v-model="fromInfo.name" autocomplete="off" placeholder="请输入游戏名称"></el-input>
         </el-form-item>
-        <el-form-item label="h5链接" :label-width="formLabelWidth" prop="url" >
-          <el-input v-model="fromInfo.url" autocomplete="on"  placeholder="请输入h5链接"></el-input>
+        <el-form-item label="h5链接" :label-width="formLabelWidth" prop="link" >
+          <el-input v-model="fromInfo.link" autocomplete="on"  placeholder="请输入h5链接"></el-input>
         </el-form-item>
         <el-form-item label="平面图" :label-width="formLabelWidth" prop="imgBase64" >
           <el-upload
@@ -62,7 +62,7 @@
         fileReader: new FileReader(),
         fromInfo: {
           name:'',
-          url:'',
+          link:'',
           imgBase64:undefined,
         },
         rules: {
@@ -70,7 +70,7 @@
         		{required: true, message: '请输入游戏名称', trigger: 'blur'},
         		{min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'}
         	],
-        	url:[{ required: true, message: '请输入游戏h5链接', trigger: 'blur'},
+        	link:[{ required: true, message: '请输入游戏h5链接', trigger: 'blur'},
             {type: 'url', message: '请输入正确的游戏h5链接', trigger: 'blur'},
           ],
           imgBase64:[{required: true, message: '请上传h5游戏图片', trigger: 'change'}]
@@ -132,18 +132,17 @@
         }
       	this.$refs['myform'].resetFields()
         this.fromInfo.name=''
-        this.fromInfo.url=''  
+        this.fromInfo.link=''  
         this.fromInfo.imgBase64 = ''
       },
       delGame (key) {
         this.$confirm('确认要删除' + key.name + '吗？')
-          .then(() => {
-            delGame(key.id).then(()=>{
-              this.$message.success('删除成功')
-              this.gamePage()
-            }).finally(() =>{})
-          })
-        
+        .then(() => {
+          delGame(key.id).then(()=>{
+            this.$message.success('删除成功')
+            this.gamePage()
+          }).finally(() =>{})
+        })
       }
     }
   }

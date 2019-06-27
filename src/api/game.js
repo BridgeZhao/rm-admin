@@ -30,34 +30,33 @@ export function gamePage(data) {
 }
 export function channelGame(data) {
   return request({
-    url: 'api/mg/channel_games',
+    url: '/mg/channel_games',
     method: 'post',
     data
   })
 }
 export function delChannelGame (id) {
   return request({
-    url: `/api/mg/channel_games/${id}`,
+    url: `/mg/channel_games/${id}`,
     method: 'delete'
   })
 }
 
 export function channelGameDetails (id) {
   return request({
-    url: `/api/mg/channel_games/${id}`,
+    url: `/mg/channel_games/${id}`,
     method: 'get'
   })
 }
-export function channelGamePage (data) {
+export function channelGamePage (id) {
   return request({
-    url: '/api/mg/channel_games',
+    url: `/mg/channel_games/by_store/${id}`,
     method: 'get',
-		data
   })
 }
 export function byDeviceGame (device){
   return request ({
-    url: `/api/mg/channel_games/by_device/${device.id}`,
+    url: `/mg/channel_games/by_device/${device.id}`,
     method: 'get',
     device
   })
