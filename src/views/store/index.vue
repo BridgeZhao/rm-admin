@@ -17,7 +17,7 @@
     </el-row>
     <!--弹框-->
     <!--添加用户-->
-    <el-dialog v-drag-dialog  :title="dialogType==='add'?'门店添加':stepNameTransform()+'修改'" :width="'720px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="()=>{clearClose()}" @closed="steps=0">
+    <el-dialog v-if="dialogVisible" v-drag-dialog  :title="dialogType==='add'?'门店添加':stepNameTransform()+'修改'" :width="'720px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="()=>{clearClose()}" @closed="steps=0">
       <el-steps :active="steps" align-center finish-status="success" v-if="dialogType==='add'">
         <el-step title="基本信息"></el-step>
         <el-step title="区域管理"></el-step>
@@ -299,22 +299,6 @@ export default {
 			canvas: undefined
 		}
 	},
-	watch: {
-		steps(val) {
-			console.log('watch', val)
-			if (val === 1) {
-				this.getAreasData()
-			} else if (val === 2) {
-				this.$nextTick(async () => {
-					await this.getAreasData()
-					this.setAreasProintData()
-					// 设置复选框
-					this.setProintImg()
-					this.tableLoading = false
-				})
-			}
-		}
-	},
 	created() {
 		this.getTableData()
 		// 获取省市列表
@@ -422,21 +406,31 @@ export default {
 				this.checkType[this.selectedArea]
 			)
 		},
-		edtiData(idx, data) {
+		async edtiData(idx, data) {
 			this.dialogType = 'edit'
+			this.steps = idx - 0
 			this.fromInfo.name = data.name
 			this.fromInfo.imgBase64 = data.floorGraph
 			this.fromInfo.storeId = this.fromInfo.id = data.id
-			this.getAreasData()
 			this.fromInfo.regionId = data.regionId
 			this.fromInfo.pointData = data.pointData
-			this.steps = idx - 0
 			if (this.steps === 0) {
 				const cityObj = this.regionIdTransName(data.regionId)
 				this.regionVal = cityObj.province
 				this.cityAry = this.allRegion[this.regionVal]
+			}else{
+				await this.getAreasData()
+				// 设置复选框
+				this.setProintImg()
 			}
+
 			this.dialogVisible = true
+			if(this.steps === 2){
+				this.$nextTick(()=>{
+					this.setAreasProintData()
+				})
+			}
+			this._resetFields()
 		},
 		regionIdTransName(id) {
 			const obj = {province: '', city: ''}
@@ -558,9 +552,6 @@ export default {
 						this.areaData.num = ''
 						this.getAreasData()
 						this.$message.success('操作成功')
-					}).finally(() => {
-						this.$refs['myform1'].resetFields()
-						this.fromLoading = false
 					})
 				}
 			})
@@ -615,6 +606,7 @@ export default {
 			this.dialogVisible = true
 			this.dialogType = 'add'
 			this.steps = 0
+			this._resetFields()
 		},
 		clearClose(reload) {
 			this.changeImgBase64 = false
@@ -645,6 +637,14 @@ export default {
 					break
 			}
 			return str
+		},
+		_resetFields(){
+			this.$nextTick(()=>{
+				const  t=this.$refs['myform']
+				if(t){
+					t.resetFields()
+				}
+			})
 		},
 		_getOrgions() {
 			getRegions().then(res => {
