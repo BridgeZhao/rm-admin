@@ -274,15 +274,13 @@ export default {
         if (valid) {
           this.loading = true
           const _data=this.form
-          let _function=addUser
-          if(this.dialogType === 'edit'){
-            _function=updateUser
-          }
-          console.log(_data)
+          const _function=this.dialogType === 'edit'?updateUser:addUser
           _function(_data).then(() => {
             this.clearClose('reload')
             this.$message.success('操作成功')
-          })
+          }).finally(()=>{
+						this.loading = false
+					})
         }
       })
     },
