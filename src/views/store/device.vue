@@ -334,6 +334,7 @@ export default {
         this.getTableData()
       }
       this.fromInfo.name=''
+      this.fromInfo.password=''
       this.fromInfo.rtsp=''
       delete this.fromInfo.id
       console.log(this.fromInfo)

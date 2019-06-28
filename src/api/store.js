@@ -10,19 +10,19 @@ export function getStores(params) {
 export function getStoresImg(id) {
 	return request({
 		url: `/auth/user-store/${id}`,
-		method: 'get',
+		method: 'get'
 	})
 }
 export function getAllStores(params) {
 	return request({
-		url: '/mg/stores',
+		url: '/auth/store',
 		method: 'get',
 		params
 	})
 }
 export function delStore(id) {
   return request({
-    url: `/mg/stores/${id}`,
+    url: `/auth/store/${id}`,
     method: 'delete'
   })
 }
@@ -34,8 +34,8 @@ export function getRegions() {
 }
 export function addUpdateStore(data) {
   return request({
-    url: '/mg/stores',
-    method: 'post',
+    url: '/auth/store',
+    method: 'put',
     data
   })
 }

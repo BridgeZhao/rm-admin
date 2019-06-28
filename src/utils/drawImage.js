@@ -54,7 +54,7 @@ export class DrawImage {
 		this.aryNum = option.aryNum
 		this.event = option.event||false
 		this.prointAry = {}
-		this.areaText = option.areaText || '未知区域'
+		this.areaText = option.areaText || ''
 		this.scale = option.scale || 1
 		this.prointAry[this.aryNum] = {data: [], areaId: this.aryNum, areaText: this.areaText}
 		this.canvas = canvas
@@ -139,6 +139,14 @@ export class DrawImage {
 			}
 		}
 		this.canvas.onmousedown = (ev) => {
+			if(!this.areaText){
+				Message({
+					message: '请先添加区域',
+					type: 'warning',
+					duration: 2 * 1000
+				})
+				return
+			}
 			let rect = {}
 			const x = ev.clientX
 			const y = ev.clientY

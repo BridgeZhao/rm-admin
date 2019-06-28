@@ -64,8 +64,7 @@
               <img :src="fromInfo.imgBase64" alt="">
             </div>
 						<div class="has-upload abs abs-center">
-							<el-button type="primary" size="small"><i class="el-icon-upload el-icon--plus"/> 点击修改</el-button>
-							<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500KB</div>
+							<el-button><i class="el-icon-upload el-icon--plus"/> 点击上传</el-button>
 						</div>
           </el-upload>
         </el-form-item>
@@ -559,10 +558,15 @@ export default {
 		getAreasData() {
 			return new Promise(resolve => {
 				getAreas(this.fromInfo.storeId).then(res => {
-					this.areaList = res
+
 					if (res.length) {
+						this.areaList = res
 						this.selectedArea = res[0].id
 						this.areaText = res[0].name
+					}else{
+						this.areaList = []
+						this.selectedArea=undefined
+						this.areaText = ''
 					}
 					resolve()
 				})
@@ -701,22 +705,27 @@ export default {
 		margin: 0;
 		text-shadow: 1px 1px 1px #000;
 	}
+	.upload-img{
+		border: 1px solid #195569;
+		border-radius: 5px;
+	}
   .upload-imgshow,.upload-img{
     color: #418aaa;
     width: 100%;
+		background: #00172f;
 		text-align: center;
     min-width: 550px;
     min-height: 100px;
-    background: #00172f;
     display: block;
 		.has-upload{
 			z-index: 2;
-			height: 80px;
+			height: 45px;
 		}
 		img{
-      width: 100%;
-			opacity: .7;
-			/*filter: blur(3px);*/
+      max-width: 100%;
+      max-height: 200px;
+      opacity: .5;
+			filter: blur(.5px);
 			z-index: 1;
       vertical-align: middle;
     }
