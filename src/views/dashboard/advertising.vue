@@ -93,10 +93,33 @@
 				<el-col :span="12"><div class="grid-content bg-purple report-line">
 					<div class="report-gang">
 						<span>区域成效</span>
-<!--						<el-button size="mini" @click="saveImage('客流年龄分布')">保存图片</el-button>-->
 					</div>
 					<div style="width:100%;height:100%;">
-<!--						<bar-chart-age :data="ageData" ref="客流年龄分布" :height="chartHeight"/>-->
+						<el-table
+							:data="areaData"
+							style="width: 100%"
+						>
+							<el-table-column
+								prop="adArea"
+								label="区域"
+							>
+							</el-table-column>
+							<el-table-column
+								prop="view"
+								label="欢看人数"
+								sortable>
+							</el-table-column>
+							<el-table-column
+								prop="viewUnique"
+								label="不重复欢看人数"
+								sortable>
+							</el-table-column>
+							<el-table-column
+								prop="converseRate"
+								label="扫二维码人数"
+								sortable>
+							</el-table-column>
+						</el-table>
 					</div>
 				</div></el-col>
 			</el-row>
@@ -104,10 +127,33 @@
 				<el-col :span="12"><div class="grid-content bg-purple report-line">
 					<div class="report-gang">
 						<span>广告内容成效</span>
-<!--						<el-button size="mini" @click="saveImage('客流类型分布')">保存图片</el-button>-->
 					</div>
 					<div style="width:100%;height:100%;">
-<!--						<pie-chart :data="vipData" ref="客流类型分布" :height="chartHeight"/>-->
+						<el-table
+							:data="contentData"
+							style="width: 100%"
+						>
+							<el-table-column
+								prop="adContent"
+								label="广告内容"
+								>
+							</el-table-column>
+							<el-table-column
+								prop="view"
+								label="欢看人数"
+								sortable>
+							</el-table-column>
+							<el-table-column
+								prop="viewUnique"
+								label="不重复欢看人数"
+								sortable>
+							</el-table-column>
+							<el-table-column
+								prop="converseRate"
+								label="扫二维码人数"
+								sortable>
+							</el-table-column>
+						</el-table>
 					</div>
 
 				</div></el-col>
@@ -117,7 +163,8 @@
 <!--						<el-button size="mini" @click="saveImage('客流年龄分布')">保存图片</el-button>-->
 					</div>
 					<div style="width:100%;height:100%;">
-<!--						<bar-chart-age :data="ageData" ref="客流年龄分布" :height="chartHeight"/>-->
+<!--						<bar-chart-age :data="ageData" />-->
+
 					</div>
 				</div></el-col>
 			</el-row>
@@ -125,8 +172,10 @@
 	</div>
 </template>
 <script>
+	import BarChartAge from "@/components/Charts/BarChartAge";
 export default {
 	name:'advertising',
+	components:{BarChartAge},
 	data(){
 		return{
 			formInline: {
@@ -136,6 +185,22 @@ export default {
 			viewUniqueTotal: 0,
 			qrcodeTotal: 0,
 			converseRate: 0.1,
+			contentData:[
+				{
+					adContent: "content1",
+					view: 10,
+					viewUnique: 1,
+					converseRate: 0.1
+				}
+			],
+			areaData:[
+				{
+					adArea: "area1",
+					view: 10,
+					viewUnique: 1,
+					converseRate: 0.1
+				}
+			]
 		}
 	},
 	mounted() {
