@@ -1,83 +1,89 @@
 <template>
   <div class="app-container">
-    <!--头部按钮-->
-    <el-form :inline="true" class="demo-form-inline">
-      <el-form-item label="注册时间">
-        <el-date-picker
-					style="width: 270px"
-          v-model="dateTimes"
-          type="daterange"
-          format="yyyy-MM-dd"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-					value-format="timestamp"
-					:default-time="['00:00:00', '23:59:59']"
-				>
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item>
-				<el-button-group>
-					<el-button type="primary" @click="()=>{pageChange(1)}">查询</el-button>
-				</el-button-group>
-      </el-form-item>
-    </el-form>
+		<el-row :gutter="20" class="table-head-btns">
+			<el-col :span="12">
+				<!--头部按钮-->
+				<el-form :inline="true" class="demo-form-inline">
+					<el-form-item label="注册时间">
+						<el-date-picker
+							style="width: 270px"
+							v-model="dateTimes"
+							type="daterange"
+							format="yyyy-MM-dd"
+							range-separator="至"
+							start-placeholder="开始日期"
+							end-placeholder="结束日期"
+							value-format="timestamp"
+							:default-time="['00:00:00', '23:59:59']"
+						>
+						</el-date-picker>
+					</el-form-item>
+					<el-form-item>
+						<el-button-group>
+							<el-button type="primary" @click="()=>{pageChange(1)}">查询</el-button>
+						</el-button-group>
+					</el-form-item>
+				</el-form>
+			</el-col>
+			<el-col :span="12" style="text-align: right">
+				<el-button @click="showType=!showType">
+					<svg-icon :icon-class="showType?'table':'menus'" />
+				</el-button>
+			</el-col>
+		</el-row>
    <!--数据列表-->
-    <!--<el-table-->
-      <!--v-loading="tableLoading"-->
-      <!--:data="tableData"-->
-      <!--element-loading-text="Loading"-->
-      <!--border-->
-      <!--stripe-->
-    <!--&gt;-->
-      <!--<el-table-column-->
-        <!--label="ID"-->
-        <!--width="80">-->
-        <!--<template slot-scope="scope">-->
-          <!--{{ scope.row.id }}-->
-        <!--</template>-->
-      <!--</el-table-column>-->
-      <!--<el-table-column-->
-        <!--label="头像"-->
-        <!--width="80">-->
-        <!--<template slot-scope="scope">-->
-          <!--<img :src="scope.row.avatar" class="avatar">-->
-        <!--</template>-->
-      <!--</el-table-column>-->
-      <!--<el-table-column-->
-        <!--label="门店名">-->
-        <!--<template slot-scope="scope">-->
-          <!--<el-tag :type="'info'">-->
-            <!--{{ storeList.find(s_item => { return s_item.id === scope.row.storeId }).name }}-->
-          <!--</el-tag>-->
-        <!--</template>-->
-      <!--</el-table-column>-->
-      <!--<el-table-column-->
-        <!--prop="gender"-->
-        <!--label="性别"-->
-        <!--width="150"-->
-      <!--&gt;-->
-        <!--<template slot-scope="scope">-->
-          <!--<el-tag :type="'info'">-->
-            <!--{{(scope.row.gender==='m'?'男':scope.row.gender==='w'?'女':'未知') }}-->
-          <!--</el-tag>-->
-        <!--</template>-->
-      <!--</el-table-column>-->
-      <!--<el-table-column-->
-        <!--prop="age"-->
-        <!--label="年龄"-->
-        <!--width="150"-->
-      <!--/>-->
-      <!--<el-table-column-->
-        <!--label="注册时间"-->
-        <!--width="180">-->
-        <!--<template slot-scope="scope">-->
-          <!--<i class="el-icon-time"></i>-->
-          <!--<span>{{ scope.row.createTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span>-->
-        <!--</template>-->
-      <!--</el-table-column>-->
-    <!--</el-table>-->
-  <el-row v-loading="tableLoading">
+    <el-table
+			v-if="showType"
+      v-loading="tableLoading"
+      :data="tableData"
+      element-loading-text="Loading"
+      border
+      stripe
+    >
+      <el-table-column
+        label="ID"
+        width="80">
+        <template slot-scope="scope">
+          {{ scope.row.id }}
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="头像"
+        width="180">
+        <template slot-scope="scope">
+          <img :src="scope.row.avatar" class="avatar">
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="门店名">
+        <template slot-scope="scope">
+          <el-tag :type="'info'">
+            {{ storeList.find(s_item => { return s_item.id === scope.row.storeId }).name }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="gender"
+        label="性别"
+      >
+        <template slot-scope="scope">
+          <el-tag :type="'info'">
+            {{(scope.row.gender==='m'?'男':scope.row.gender==='w'?'女':'未知') }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
+        prop="age"
+        label="年龄"
+      />
+      <el-table-column
+        label="注册时间">
+        <template slot-scope="scope">
+          <span>{{ scope.row.createTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span>
+        </template>
+      </el-table-column>
+    </el-table>
+  <el-row v-if="!showType" v-loading="tableLoading">
     <el-col :xs="8" :sm="4" :md="5" :lg="4" :xl="3" v-for="(item, index) in tableData" :key="index">
       <div class="user-box">
         <p class="avatar"><img :src="item.avatar" /></p>
@@ -107,6 +113,7 @@ export default {
   data() {
     return {
       dateTimes: [],
+			showType: false,
       tableLoading: false,
       form: {
         name: '',
@@ -205,4 +212,9 @@ export default {
 	vertical-align: top;
 	}
 }
+	table{
+		.avatar{
+			height: 60px;
+		}
+	}
 </style>
