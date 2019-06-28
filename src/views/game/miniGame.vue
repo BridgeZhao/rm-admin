@@ -6,7 +6,7 @@
          <svg-icon icon-class="trash" class="delete-icon" @click='delGame(item)' />
          </div>
         <div class="img">
-          <img :src='item.img' onerror="notfound(this)" />
+          <img :src='item.img' />
         </div>
       </li>
       <li  class="add" @click="addGame">
