@@ -1,5 +1,5 @@
 <template>
-  <div class="mini_game">
+  <div class="app-container mini_game">
     <ul  class="data-list game-list">
       <li v-for='(item, key) in miniGame' :key='key'>
         <div  class="name-warp"><span  class="name">{{item.name}}</span>
