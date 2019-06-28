@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-		<el-row :gutter="20" class="table-head-btns">
+		<el-row class="table-head-btns">
 			<el-col :span="12">
 				<!--头部按钮-->
 				<el-form :inline="true" class="demo-form-inline">
@@ -28,6 +28,7 @@
 			<el-col :span="12" style="text-align: right">
 				<el-button @click="showType=!showType">
 					<svg-icon :icon-class="showType?'table':'menus'" />
+					 {{showType?'网格':'列表'}}显示
 				</el-button>
 			</el-col>
 		</el-row>
@@ -188,28 +189,34 @@ export default {
 .user-box{
 	transition: all .5s;
 	transform: scale3d(1, 1, 1);
-  background: #00172f !important;
+  background: #002A46 !important;
   border: 1px solid #418aaa;
+	color: #2AB7DA;
   box-shadow: 1px 1px 4px 1px #000000;
   padding:0 10px 10px 10px;
 	margin: 10px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: normal;
-  p{ margin-top:10px}
-  p:last-child{ margin-bottom:10px}
+  p{ margin:5px 0 0 0;}
 	&:hover{
 		box-shadow: 3px 8px 15px 3px #000000;
 		transition: all .2s linear;
 		transform: scale3d(1.05, 1.05, 1.05);
 	}
 }
-.avatar{
-	height:160px;
+.table-head-btns{
 	margin: 0;
+	padding: 0 10px;
+}
+.avatar {
+	height: 120px;
+	margin: 0;
+	text-align: center;
 	vertical-align: top;
-	overflow:hidden;
-  img{width: 100%;
-	vertical-align: top;
+	overflow: hidden;
+	img {
+		width: 70%;
+		vertical-align: top;
 	}
 }
 	table{

@@ -169,10 +169,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  .gender {
-
-  }
-
   .user-box {
     animation-duration: 0.5s;
     animation-name: fadeIn;
@@ -190,7 +186,6 @@ export default {
       margin-bottom: 10px
     }
   }
-
   .avatar {
     width: 100%;
   }

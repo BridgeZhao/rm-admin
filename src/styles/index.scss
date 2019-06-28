@@ -96,6 +96,16 @@ div:focus {
 .table-head-btns{
   margin-bottom: 20px;
 }
+.el-tree-node__children {
+	.el-tree-node__content{
+		.custom-tree-node{
+			font-size: 15px;
+		}
+		.el-tree-node__expand-icon:before{
+			display: none!important;
+		}
+	}
+}
 // main-container global css
 .app-container {
 background: $menuBg;

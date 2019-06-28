@@ -55,7 +55,7 @@
         <el-button type="primary" @click="btnSubmit('myform')">确 定</el-button>
       </div>
     </el-dialog>
-    <el-row :gutter="20" class="table-head-btns">
+    <el-row class="table-head-btns">
 			<el-col :span="12" class="flex">
 				<el-input
 					style="width: 300px;margin-right: 10px"

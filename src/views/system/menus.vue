@@ -23,14 +23,14 @@
 					<el-form-item v-if="isOrderNo" label="排序" prop="orderNo" :label-width="formLabelWidth">
 						<el-input v-model.number="form.orderNo" type="number" autocomplete="off"></el-input>
 					</el-form-item>
+					<el-form-item style="text-align: center">
+						<el-button type="primary" @click="btnSubmit('myform')">
+							{{ !form.id?'确定添加':'确定修改' }}
+						</el-button>
+					</el-form-item>
         </el-form>
       </el-col>
-      <el-col :span="2" class="rel">
-        <div class="btn-center abs abs-center text-center">
-          <el-button class="btn-submit" @click="btnSubmit('myform')">
-            <svg-icon icon-class="right" />
-          </el-button>
-        </div>
+      <el-col :span="1">
       </el-col>
       <el-col  v-loading="loading" :span="8">
         <el-tree
@@ -177,8 +177,6 @@ export default {
   }
   .custom-tree-node{
     font-size: .9rem;
-  }
-  .el-tree-node{
     .custom-tree-node{
       span:first-child{
        margin-right: 20px;
