@@ -60,10 +60,15 @@
             :auto-upload="false"
             :show-file-list="false"
             :on-change="handlePreview">
-            <div v-if="fromInfo.imgBase64" class="upload-imgshow rel">
+						<div v-if="fromInfo.imgBase64" class="leave" @mouseenter="enterUploadBtn" @mouseleave="leaveUploadBtn">
+            <div class="upload-imgshow rel" >
               <img :src="fromInfo.imgBase64" alt="">
             </div>
 						<div class="has-upload abs abs-center">
+							<el-button><i class="el-icon-upload el-icon--plus"/> 点击修改</el-button>
+						</div>
+						</div>
+						<div v-else class="has-upload abs abs-center">
 							<el-button><i class="el-icon-upload el-icon--plus"/> 点击上传</el-button>
 						</div>
           </el-upload>
@@ -422,7 +427,6 @@ export default {
 				// 设置复选框
 				this.setProintImg()
 			}
-
 			this.dialogVisible = true
 			if(this.steps === 2){
 				this.$nextTick(()=>{
@@ -469,6 +473,14 @@ export default {
 			} else {
 				this.stepNext(type)
 			}
+		},
+		enterUploadBtn($event){
+			const name=$event.currentTarget.className.replace(/\s*(leave)/g,'')
+			$event.currentTarget.className=name+' enter'
+		},
+		leaveUploadBtn($event){
+			const name=$event.currentTarget.className.replace(/\s*(enter)/g,'')
+			$event.currentTarget.className=name+' leave'
 		},
 		stepNext(type = 'normal') {
 			if (this.steps > 2) {
@@ -666,6 +678,7 @@ export default {
 </script>
 <style lang="scss" scoped>
   .el-upload{
+		display: block;
     width: 100%!important;
     height: 300px;
     position: relative;
@@ -708,6 +721,16 @@ export default {
 	.upload-img{
 		border: 1px solid #195569;
 		border-radius: 5px;
+	}
+	.enter{
+		.has-upload{
+			display:block;
+		}
+	}
+	.leave {
+		.has-upload {
+			display: none;
+		}
 	}
   .upload-imgshow,.upload-img{
     color: #418aaa;
