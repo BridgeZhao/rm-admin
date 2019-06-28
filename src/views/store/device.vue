@@ -9,7 +9,7 @@
     <!--弹框-->
     <el-dialog v-if="dialogVisible" v-drag-dialog :title="dialogType==='add'?'添 加':'编 辑'" :width="'720px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="clearClose">
       <!--基本信息-->
-      <el-form v-if="drawType==='info'" v-loading="dgLoading" :model="fromInfo" :rules="rules"  ref="myform">
+      <el-form v-if="drawType==='info'" v-loading="dgLoading" :model="fromInfo" :rules="rules" ref="myform">
         <el-form-item label="设备名称" :label-width="formLabelWidth" prop="name" >
           <el-input v-model="fromInfo.name" autocomplete="off" placeholder="请输入设备名称"></el-input>
         </el-form-item>
@@ -51,7 +51,7 @@
           <el-input v-model="fromInfo.rtsp" autocomplete="off" placeholder="请输入设备rtsp流地址"></el-input>
         </el-form-item>
       </el-form>
-      <el-form v-else v-loading="dgLoading">
+      <el-form v-else v-loading="dgLoading" :model="fromInfo" :rules="rules" ref="myform">
         <el-row>
           <el-col :span="12">
             <el-row>
