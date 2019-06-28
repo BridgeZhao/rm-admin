@@ -7,7 +7,7 @@
       </el-col>
     </el-row>
     <!--弹框-->
-    <el-dialog v-drag-dialog :title="dialogType==='add'?'添 加':'编 辑'" :width="'720px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="()=>{clearClose()}">
+    <el-dialog v-if="dialogVisible" v-drag-dialog :title="dialogType==='add'?'添 加':'编 辑'" :width="'720px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="clearClose">
       <!--基本信息-->
       <el-form v-if="drawType==='info'" v-loading="dgLoading" :model="fromInfo" :rules="rules"  ref="myform">
         <el-form-item label="设备名称" :label-width="formLabelWidth" prop="name" >
@@ -47,11 +47,11 @@
 				<el-form-item v-if="fromInfo.deviceType!=='camera'" label="登陆密码" :label-width="formLabelWidth">
 					<el-input v-model="fromInfo.password" type="password" autocomplete="off" placeholder="123456"></el-input>
 				</el-form-item>
-        <el-form-item v-if="fromInfo.deviceType==='camera'" label="RTSP" :label-width="formLabelWidth" prop="rtsp">
+        <el-form-item v-if="fromInfo.deviceType==='camera'" label="RTSP" :label-width="formLabelWidth">
           <el-input v-model="fromInfo.rtsp" autocomplete="off" placeholder="请输入设备rtsp流地址"></el-input>
         </el-form-item>
       </el-form>
-      <el-form v-else v-loading="dgLoading" :model="fromInfo"  ref="myform">
+      <el-form v-else v-loading="dgLoading">
         <el-row>
           <el-col :span="12">
             <el-row>
@@ -198,8 +198,7 @@ export default {
 					{required: true, message: '请输入设备名称', trigger: 'blur'},
 					{min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'}
 				],
-				areaId:[{ required: true, message: '请先添加门店区域', trigger: 'change'}],
-				rtsp:[{ required: true, message: '不能为空', trigger: 'blur'}]
+				areaId:[{ required: true, message: '请先添加门店区域', trigger: 'change'}]
 			},
       fromInfo: {
         name:'',
@@ -285,13 +284,13 @@ export default {
       })
     },
     async edtiData(id,type='draw'){
-			this.dialogVisible=true
+			this.fromInfo=await getDeviceInfo(id)
       this.dialogType='edit'
       this.drawType=type
-      this.fromInfo=await getDeviceInfo(id)
 			if(!this.areaList.length){
 				this.fromInfo.areaId=undefined
 			}
+			this.dialogVisible=true
       if(type==='draw'){
         await  this.getAreasData()
         // 设置复选框
@@ -301,6 +300,7 @@ export default {
           this.setAreasProintData()
         })
       }
+			this.resetFields()
     },
     setProintImg(){
       // 动态生成多选
@@ -330,14 +330,12 @@ export default {
     },
     clearClose(reload){
       this.dialogVisible = false
-      if(reload){
+      if(reload==='reload'){
         this.getTableData()
       }
-			this.$refs['myform'].resetFields()
       this.fromInfo.name=''
       this.fromInfo.rtsp=''
       delete this.fromInfo.id
-
       console.log(this.fromInfo)
     },
     areaIdTransText(id) {
@@ -412,6 +410,14 @@ export default {
         this.checkType[this.selectedArea]
       )
     },
+		resetFields(){
+    	this.$nextTick(()=>{
+    		const  t=this.$refs['myform']
+				if(t){
+					t.resetFields()
+				}
+			})
+		},
     // 全局门店下拉修改
     $storeIdChanged(storeId){
       if(storeId){

@@ -303,21 +303,24 @@ export default {
       })
     },
     clearClose(reload) {
-      this.dialogVisible = false
-      if (reload === 'reload') {
-        this.getUsers()
-      }
-			this.$refs['myform'].resetFields()
-      this.form = {
-        username: '',
-        password: '',
-        email: '',
-        storeIds: [],
-        roleIds: [],
-        enabled: true,
-        userType: 0
-      }
-    },
+			this.dialogVisible = false
+			if (reload === 'reload') {
+				this.getUsers()
+			}
+			const f = this.$refs['myform']
+			if (f) {
+				f.resetFields()
+			}
+			this.form = {
+				username: '',
+				password: '',
+				email: '',
+				storeIds: [],
+				roleIds: [],
+				enabled: true,
+				userType: 0
+			}
+		},
 		pageChange(val){
 			this.pagination.page = val
 			this.getUsers()
@@ -331,7 +334,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .app-container {
+.app-container {
     .roles-table {
       margin-top: 30px;
     }
