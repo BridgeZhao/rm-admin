@@ -138,10 +138,12 @@
           </el-col>
         </el-row>
 				<div class="info-tips"><i class="el-icon-time"></i> 请按顺时针方向点击绘制点位，不得超过10个，下拉可选择对应的绘制区域</div>
-        <div  v-waves class="perview-warp">
-          <canvas id="canvasDom" />
-          <img :src="fromInfo.imgBase64" onerror="notfound(this)"/>
-        </div>
+        <div style="overflow: auto;height: 300px">
+					<div  v-waves class="perview-warp">
+						<canvas id="canvasDom" />
+						<img :src="fromInfo.imgBase64" onerror="notfound(this)"/>
+					</div>
+				</div>
       </el-form>
       <div slot="footer" class="dialog-footer text-center">
         <el-button v-if="dialogType==='add'&&steps===2" @click="stepUp">上一步</el-button>
