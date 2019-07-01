@@ -63,7 +63,7 @@
   import { mapGetters } from 'vuex'
   import { addGame, gamePage, channelGame ,channelGamePage ,delChannelGame} from '@/api/game'
   import { getScenarioData } from '@/api/coupons'
-  import { getDevices } from '@/api/device'
+  // import { getDevices } from '@/api/device'
   export default {
     name: 'disposeGame',
     props:[
@@ -84,7 +84,7 @@
           areaId:'',
           gameId:'',
           gameName:'',
-          checkList: [],
+          checkList: [{ id: 0,name: "screen"},{ id: 1,name: "pad"}],
           checked:[],
           isIndeterminate : false,
         },
@@ -111,16 +111,16 @@
     	this.defaultStoreId=this.storeId
       this.gamePage()
       this.getScenarioData()
-      this.getDevices()
+      // this.getDevices()
       this.channelGamePage()
     },
     methods: {
       // 关联游戏模块
       gamePage(){
-        console.log('门店列表',this.storeList,this.storeId)
+        //console.log('门店列表',this.storeList,this.storeId)
         return new Promise(resolve => {
           gamePage().then(res => {
-            console.log("总游戏",res.data)
+            //console.log("总游戏",res.data)
             this.gameList = res.data
             resolve(res)
           })
@@ -129,26 +129,26 @@
       getScenarioData(){
         return new Promise(resolve => {
           getScenarioData().then(res => {
-            console.log("场景总列表",res.data)
+            //console.log("场景总列表",res.data)
             this.ScenarioList = res.data
             resolve(res)
           })
         })
       },
-      getDevices () {
-        return new Promise(resolve => {
-          getDevices(this.defaultStoreId).then(res => { 
-            console.log("设备",res)
-            this.fromInfo.checkList = res
-            resolve(res)
-          })
-        })
-      },
+      // getDevices () {
+      //   return new Promise(resolve => {
+      //     getDevices(this.defaultStoreId).then(res => { 
+      //       console.log("设备",res)
+      //       this.fromInfo.checkList = res
+      //       resolve(res)
+      //     })
+      //   })
+      // },
       channelGamePage(){
         return new Promise(resolve => {
           channelGamePage(this.defaultStoreId).then(res => {  
             this.gameData =  res.data
-            console.log("关联游戏",this.gameData)
+            //console.log("关联游戏",this.gameData)
             resolve(res)
           })
         })
@@ -166,7 +166,7 @@
       editChannelGame(val){
         this.addEditType = false
         this.dialogVisible = true
-        console.log("编辑调用数据",val)
+        //console.log("编辑调用数据",val)
         this.fromInfo.id = val.id
         this.fromInfo.gameName = val.game.name
         this.fromInfo.gameId = val.game.id
@@ -198,7 +198,7 @@
                 scenarioId:this.fromInfo.areaId
               }  
             }
-            console.log(this.upFromInfo)
+            //console.log(this.upFromInfo)
             channelGame(this.upFromInfo).then(() => {
               this.channelGamePage()
               this.clearClose('reload')
@@ -229,7 +229,7 @@
               _this.fromInfo.checked.push(item.id);
             }
           });
-          console.log( _this.fromInfo.checked)
+          //console.log( _this.fromInfo.checked)
         }
       },
     },
@@ -237,6 +237,7 @@
       StoreId : function(newVal,oldVal){
         this.defaultStoreId = newVal
         this.channelGamePage()
+        // this.getDevices ()
       }
       
     }

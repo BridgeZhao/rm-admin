@@ -94,7 +94,7 @@
       },
       handlePreview(file) {
         const fileName = file.name
-        const isLimt = file.size / 500 / 500 < 1
+        const isLimt = file.size / 1024 < 500 
         const regex = /(.jpg|.jpeg|.png)$/
         if (regex.test(fileName.toLowerCase())) {
           if (isLimt) {

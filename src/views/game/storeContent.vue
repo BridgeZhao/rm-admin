@@ -9,7 +9,7 @@
     </div>
     <dispose-nav  v-show='gameTab === "店内导航"' ></dispose-nav>
     <dispose-game v-show='gameTab === "关联游戏"' :StoreId="defaultStoreId"></dispose-game>
-    <dispose-ad v-show='gameTab === "广告配置" '></dispose-ad>
+    <dispose-ad v-show='gameTab === "广告配置"' :StoreId="defaultStoreId"></dispose-ad>
   </div>
 </template>
 
@@ -27,7 +27,7 @@
     },
     data() {
       return {
-        gameTab: '关联游戏',
+        gameTab: '广告配置',
         defaultStoreId:''
       } 
     },
