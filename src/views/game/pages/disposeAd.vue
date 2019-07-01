@@ -222,7 +222,6 @@
       <el-table-column
         prop="area"
         label="区域"
-        width="80"
         :formatter="areaFormatter"
       />
       <el-table-column
@@ -276,7 +275,7 @@
               编辑
             </el-button>
             <el-button
-              type="info"
+              type="primary"
               size="small"
               @click.native.prevent="detailRow(scope.row)"
             >
@@ -543,7 +542,8 @@ export default {
         bannerImgBase64:'',
         imgBase64s:[],
         createTime:'',
-        areaIds:[]
+        areaIds:[],
+        area:[]
       }
     },
 		async pageChange(val){
@@ -556,13 +556,13 @@ export default {
       this.dialogVisible=true
     },
     timestampToTime (cjsj) {
-        var date = new Date(cjsj) //时间戳为10位需*1000，时间戳为13位的话不需乘1000
-        var Y = date.getFullYear() + '-'
-        var M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-'
-        var D = date.getDate() + ' '
-        var h = date.getHours() + ':'
-        var m = date.getMinutes() + ':'
-        var s = date.getSeconds()
+        let date = new Date(cjsj) //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        let Y = date.getFullYear() + '-'
+        let M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-'
+        let D = date.getDate() + ' '
+        let h = date.getHours() + ':'
+        let m = date.getMinutes() + ':'
+        let s = date.getSeconds()
         return Y+M+D+h+m+s
     },
     detailRow(data){

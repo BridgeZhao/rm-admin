@@ -250,5 +250,87 @@
   }
 </script>
 
-<style>
+<style lang="scss" scoped>
+   @import '@/styles/variables.scss';
+    //common
+    #store_content{
+      ul {
+        list-style: none;
+      }
+      .svg-icon{
+        cursor: pointer;
+      }
+      .svg-icon:hover{
+        color: #fe0000;
+      }
+      .data-list{
+          >li.add {
+            border: 1px dashed red;
+            box-sizing: border-box;
+            cursor: pointer;
+            background: transparent!important;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-size: .7rem;
+            color: #fe0000;
+            .svg-plus{
+              width: 3.3rem;
+              height: 3.3rem;
+              color: red;
+            }
+        }
+      }
+    }
+    .second_item{
+      .data-list {
+        // margin-top: 1.6rem;
+        display: flex;
+        flex-wrap: wrap;
+        padding-inline-start: 0;
+        >li {
+          width: 13.2rem;
+          height: 26rem;
+          background:$menuBg;
+          border:1px solid $borderColor;
+          border-radius: 4px;
+          margin-right: 1.2rem;
+          margin-bottom: 1.2rem;
+          padding: 0 1.2rem;
+          box-sizing: border-box;
+          display: flex;
+          flex-direction:column;
+          .name-warp {
+            display: flex;
+            margin-bottom: 1rem;
+            margin-top: 1.2rem;
+            align-items: center;
+            justify-content: space-between;
+          }
+          .img {
+             width: 10.8rem;
+             height: 19.2rem;
+             position: relative;
+             >img{
+               width: 100%;
+               height: 100%;
+             }
+             // >.error{
+             //   width: auto;
+             //   height: auto;
+             //   position: absolute;
+             //   top:50%;
+             //   left: 50%;
+             //   margin-top:-45px; 
+             //   margin-left:-58px;
+             // }
+          }
+          .default{
+            margin-top: .4rem;
+            cursor: pointer;
+          }
+        }
+      }
+    }
 </style>

@@ -3,13 +3,13 @@
     <div class="top-bar">
       <el-radio-group v-model="gameTab">
           <!-- <el-radio-button label="店内导航" class="radioBtn"></el-radio-button> -->
-          <el-radio-button label="关联游戏" class="radioBtn"></el-radio-button>
-          <el-radio-button label="广告配置" class="radioBtn"></el-radio-button>
+          <el-radio-button label="navGame" class="radioBtn">关联游戏</el-radio-button>
+          <el-radio-button label="navAd" class="radioBtn">广告配置</el-radio-button>
       </el-radio-group>
     </div>
-    <dispose-nav  v-show='gameTab === "店内导航"' ></dispose-nav>
-    <dispose-game v-show='gameTab === "关联游戏"' :StoreId="defaultStoreId"></dispose-game>
-    <dispose-ad v-show='gameTab === "广告配置"' :StoreId="defaultStoreId"></dispose-ad>
+    <dispose-nav  v-show='gameTab === "nav"' ></dispose-nav>
+    <dispose-game v-show='gameTab === "navGame"' :StoreId="defaultStoreId"></dispose-game>
+    <dispose-ad v-show='gameTab === "navAd"' :StoreId="defaultStoreId"></dispose-ad>
   </div>
 </template>
 
@@ -27,7 +27,7 @@
     },
     data() {
       return {
-        gameTab: '广告配置',
+        gameTab: 'navGame',
         defaultStoreId:''
       } 
     },
@@ -42,6 +42,8 @@
     }
   }
 </script>
-<style lang="scss">
-  @import "../../styles/game.scss";
+<style lang="scss" scoped>
+  .app-container {
+    background: none;
+  }
 </style>
