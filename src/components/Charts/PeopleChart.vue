@@ -90,13 +90,14 @@ export default {
             stack: "0",
             barMaxWidth: 60,
             itemStyle: {
-              normal: { label: { show: true, position: "left" },
-              color:'#50E3C2'},
+              normal: { label: { show: true, position: "insideTop",
+              },
+              color:'#50E3C2'}
             },
             data: [],
             label:this.showNum?{
               normal: {
-                show: true,
+                show: false,
                 textStyle: {
                   color: '#fff'
                 }
@@ -108,13 +109,14 @@ export default {
             type: "bar",
             stack: "0",
             itemStyle: {
-              normal: { label: { show: true, position: "right" },
-                color:'#71DCFF'}
+              normal: { label: { show: true, position: "insideTop",
+             },
+              color:'#71DCFF'}
             },
             data: [],
             label: {
               normal: {
-                show: true,
+                show: false,
                 textStyle: {
                   color: "#fff "
                 }

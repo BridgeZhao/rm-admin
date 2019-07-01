@@ -59,6 +59,13 @@ export default {
             center: ["50%", "50%"],
             data: [],
             itemStyle: {
+              normal:{ 
+                  label:{ 
+                    show: true, 
+                    formatter: '{b} : {c} ({d}%)' 
+                  }, 
+                  labelLine :{show:true} 
+                },
               emphasis: {
                 shadowBlur: 10,
                 shadowOffsetX: 0,

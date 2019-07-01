@@ -207,7 +207,7 @@ export default {
       bottomBoxLoading:false,
       radio2: 5,
       formInline: {
-        time: ''
+        time: [new Date(),new Date()]
       },
       SummaryData: {
         duration: 0,
