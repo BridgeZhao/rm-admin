@@ -106,6 +106,12 @@
           this.options.xAxis.push({
             type: 'category',
             boundaryGap: false,
+						splitLine: {
+							show: true,
+							lineStyle: {
+								color: ['rgba(113,220,255,.2)']
+							}
+						},
             data: item
           })
         })
