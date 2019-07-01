@@ -18,7 +18,7 @@
          <span class="font-red" >添加游戏</span>
       </li>
     </ul>
-    <!--弹框-->
+    <!--弹框asd-->
     <el-dialog :title="dialogType === 'add' ? '添加游戏' : '修改游戏'" :width="'720px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="()=>{clearClose()}">
       <!--基本信息-->
       <el-form  v-loading="dgLoading" :model="fromInfo" :rules="rules"  ref="myform">
