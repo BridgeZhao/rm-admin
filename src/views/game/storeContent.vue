@@ -2,7 +2,7 @@
   <div id='store_content' class="app-container">
     <div class="top-bar">
       <el-radio-group v-model="gameTab">
-          <el-radio-button label="店内导航" class="radioBtn"></el-radio-button>
+          <!-- <el-radio-button label="店内导航" class="radioBtn"></el-radio-button> -->
           <el-radio-button label="关联游戏" class="radioBtn"></el-radio-button>
           <el-radio-button label="广告配置" class="radioBtn"></el-radio-button>
       </el-radio-group>

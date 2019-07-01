@@ -128,7 +128,7 @@
                 <el-row :gutter="24" class="">
                   <el-col :span="12">
                     <div class="imgshow-banner">
-                      <img class="game_img"  :src="form.bannerImgBase64">
+                      <img class="game_img"  :src="form.bannerImg">
                     </div>
                   </el-col>
                   <el-col :span="12">
@@ -205,6 +205,7 @@
       :data="tableData"
       border
       stripe
+      style="width: 100%"
     >
       <el-table-column
         label="广告ID"
@@ -217,7 +218,6 @@
       <el-table-column
         prop="name"
         label="名称"
-        width="150"
       />
       <el-table-column
         prop="area"
@@ -255,7 +255,7 @@
       </el-table-column>
       <el-table-column
         label="操作"
-        width="273"
+        width="260"
       >
         <template slot-scope="scope">
           <div>
@@ -347,7 +347,8 @@ export default {
         imgs:[],
         status:0,
         createTime:'',
-        areaIds:[]
+        areaIds:[],
+        storeId:0
       },
       imgBase64Show:'',
       adStatusList:[{ id: '',name: "全部"},{ id: 0,name: "待生效"},{ id: 1,name: "投放中"},{ id: 2,name: "已撤销"},{ id: 3,name: "已结束"},],
@@ -373,10 +374,10 @@ export default {
     adPage(){
       return new Promise(resolve => {
         const _pagination = Object.assign({}, this.pagination)
-        // delete _pagination.total
-        // if(!_pagination.name){
-        // 	delete _pagination.name
-        // }
+        delete _pagination.total
+        if(!_pagination.name){
+        	delete _pagination.name
+        }
         console.log('初始数据',_pagination)
         adPage(_pagination).then(res => {
           console.log('广告列表',res)
@@ -433,6 +434,7 @@ export default {
           this.fileReader.onload = (res) => {
             if(key === '1'){
               this.form.bannerImgBase64 = res.currentTarget.result
+              this.form.bannerImg = res.currentTarget.result
             }else{
               this.form.imgBase64s.push(res.currentTarget.result)
               this.imgBase64Show = this.form.imgBase64s[0]
@@ -454,6 +456,8 @@ export default {
           this.form.areaIds = this.form.area
           this.form.begin = this.dateToMs(this.formTime[0])
           this.form.end = this.dateToMs(this.formTime[1])
+          delete this.form.bannerImg
+          this.form.storeId = this.pagination.storeId
           const _data=this.form
           addAd(_data).then(() => {
             this.clearClose('reload')
@@ -566,13 +570,18 @@ export default {
       data.end = this.timestampToTime(data.end)
       data.createTime = this.timestampToTime(data.createTime)  
       this.form = Object.assign({}, data)
+      if(data.area[0]){
+        console.log('详情区域length', data.area.length,this.form.imgs.length, )
+      }
       const areaId = []
       for(let i = 0; i<data.area.length; i++){
          areaId.push(data.area[i].id)
       }
       this.form.area = areaId 
-      this.imgBase64Show = this.form.imgs[0]
-      console.log('详情弹窗', this.form)
+      if(this.form.imgs[0]){
+        this.imgBase64Show = this.form.imgs[0]
+      }
+      console.log('详情弹窗', this.form,this.imgBase64Show)
       this.dialogType = 'detail'
       this.dialogVisible=true
     },
