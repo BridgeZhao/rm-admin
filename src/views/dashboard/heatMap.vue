@@ -1,7 +1,7 @@
 <template>
   <div class="app-container" v-loading="bigLaoding">
     <div class="box-header">
-      <span style="font-size: 1.3rem">客流热力图</span>
+      <span style="font-size: 18px">客流热力图</span>
       <div class="search">
         <el-form
           :inline="true"

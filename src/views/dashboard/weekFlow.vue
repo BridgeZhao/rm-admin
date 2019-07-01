@@ -163,7 +163,26 @@ export default {
             weekData:{},
             startWeekTime:'',
             endWeekTime:'',
-            tableData: []
+            tableData: [
+                {
+                    "weekday4": 14,
+                    "weekday2": 37,
+                    "weekday3": 33,
+                    "hh": 13
+                },
+                {
+                    "weekday4": 12,
+                    "hh": 14
+                },
+                {
+                    "weekday4": 12,
+                    "hh": 15
+                },
+                {
+                    "weekday4": 7,
+                    "hh": 16
+                },
+            ]
         }
     },
 		computed: {
@@ -260,7 +279,7 @@ export default {
                 })
                 this.$set(this.weekData,'data',arr)
            })
-					this.downloadPath = process.env.VUE_APP_HTTP_AUTH_AGENT + this.loadPath + this.int +'/?store_id=' + params.store_id +'&starttime='+params.starttime + '&endtime=' + params.endtime
+					this.downloadPath = 'http://172.16.2.182:8000/api' + this.loadPath + this.int +'/?store_id=' + params.store_id +'&starttime='+params.starttime + '&endtime=' + params.endtime
         }
     }
 }
