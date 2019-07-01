@@ -1,8 +1,5 @@
 @import './variables.scss';
 //common
-.app-container {
-  background: none;
-  }
 #store_content, .mini_game{
   ul {
     list-style: none;
@@ -189,7 +186,7 @@
          //   position: absolute;
          //   top:50%;
          //   left: 50%;
-         //   margin-top:-45px; 
+         //   margin-top:-45px;
          //   margin-left:-58px;
          // }
       }
@@ -239,7 +236,7 @@
             position: absolute;
             top:50%;
             left: 50%;
-            margin-top:-45px; 
+            margin-top:-45px;
             margin-left:-58px;
           }
         }

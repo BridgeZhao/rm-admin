@@ -94,7 +94,7 @@
       },
       handlePreview(file) {
         const fileName = file.name
-        const isLimt = file.size / 1024 < 500 
+        const isLimt = file.size / 1024 < 500
         const regex = /(.jpg|.jpeg|.png)$/
         if (regex.test(fileName.toLowerCase())) {
           if (isLimt) {
@@ -131,7 +131,7 @@
         }
       	this.$refs['myform'].resetFields()
         this.fromInfo.name=''
-        this.fromInfo.link=''  
+        this.fromInfo.link=''
         this.fromInfo.imgBase64 = ''
       },
       delGame (key) {
@@ -146,6 +146,6 @@
     }
   }
 </script>
-<style lang="scss">
-  @import "../../styles/game.scss";
+<style scoped lang="scss">
+  @import '@/styles/game.scss';
 </style>
