@@ -188,7 +188,7 @@
                 "borderWidth": 0.5
             },
             "emphasis": {
-                "areaColor": "rgba(255,178,72,1)",
+                "areaColor": "rgba(113,220,255,.5)",
                 "borderColor": "#eb8146",
                 "borderWidth": 1
             }
@@ -201,7 +201,7 @@
             },
             "emphasis": {
                 "textStyle": {
-                    "color": "rgb(137,52,72)"
+                    "color": "rgba(113,220,255,.5)"
                 }
             }
         }
@@ -242,7 +242,7 @@
         "axisTick": {
             "show": true,
             "lineStyle": {
-                "color": "rgba(65,138,170,0.32)"
+                "color": "rgba(113,220,255,.5)"
             }
         },
         "axisLabel": {
@@ -255,7 +255,7 @@
             "show": true,
             "lineStyle": {
                 "color": [
-                    "rgba(75,131,184,0.31)"
+                    "rgba(113,220,255,.5)"
                 ]
             }
         },
@@ -263,7 +263,7 @@
             "show": false,
             "areaStyle": {
                 "color": [
-                    "rgba(250,250,250,0.05)",
+                    "rgba(113,220,255,.5)",
                     "rgba(200,200,200,0.02)"
                 ]
             }
@@ -279,7 +279,7 @@
         "axisTick": {
             "show": true,
             "lineStyle": {
-                "color": "rgba(65,138,170,0.32)"
+                "color": "rgba(113,220,255,.5)"
             }
         },
         "axisLabel": {
@@ -300,7 +300,7 @@
             "show": false,
             "areaStyle": {
                 "color": [
-                    "rgba(250,250,250,0.05)",
+                    "rgba(113,220,255,.5)",
                     "rgba(200,200,200,0.02)"
                 ]
             }
@@ -455,8 +455,16 @@
             "#2b7fe3"
         ]
     },
+	  "series":{
+			"itemStyle": {
+				"normal": {
+					"color": "rgba(113,220,255,.5)",
+					"borderWidth": "50%"
+				}
+			}
+		},
     "dataZoom": {
-        "backgroundColor": "rgba(255,255,255,0)",
+        "backgroundColor": "rgba(113,220,255,.5)",
         "dataBackgroundColor": "rgba(114,204,255,1)",
         "fillerColor": "rgba(114,204,255,0.2)",
         "handleColor": "#72ccff",

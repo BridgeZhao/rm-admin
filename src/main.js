@@ -4,9 +4,9 @@ import '@/styles/element-variables.scss'
 import '@/styles/index.scss' // global css
 import '@/permission' // 路由权限判断
 import '@/icons' // icon
-import permission from '@/directive/permission/permission.js' // 按钮权限判断指令
-import drag from '@/directive/el-drag-dialog/drag.js' // 权限判断指令
-import waves from '@/directive/waves/waves.js' // 权限判断指令
+import permission from './directive/permission/permission.js' // 按钮权限判断指令
+import drag from './directive/el-drag-dialog/drag.js' // 权限判断指令
+import waves from './directive/waves/waves.js' // 权限判断指令
 import App from './App'
 import store from './store'
 import router from './router'

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <template>
   <div class="app-container mini_game">
     <ul  class="data-list game-list">
@@ -9,6 +10,15 @@
             <svg-icon icon-class="trash" class="delete-icon" @click='delGame(item)' />
           </div>
          </div>
+=======
+<template>
+  <div class="app-container mini_game">
+    <ul  class="data-list game-list">
+      <li v-for='(item, key) in miniGame' :key='key'>
+        <div  class="name-warp"><span  class="name">{{item.name}}</span>
+         <svg-icon icon-class="trash" class="delete-icon" @click='delGame(item)' />
+         </div>
+>>>>>>> bcec58461960fd770b0616bb06eba4f1c87ba873
         <div class="img">
           <img :src='item.img' />
         </div>
@@ -48,11 +58,19 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer text-center">
+<<<<<<< HEAD
         <el-button type="primary"  @click="btnSubmit">确定</el-button></div>
     </el-dialog>
   </div>
 </template>
 
+=======
+        <el-button type="primary"  @click="btnSubmit">确定添加</el-button></div>
+    </el-dialog>
+  </div>
+</template>
+
+>>>>>>> bcec58461960fd770b0616bb06eba4f1c87ba873
 <script>
   import { addGame, gamePage ,delGame } from '@/api/game'
   export default {
@@ -103,7 +121,7 @@
       handlePreview(file) {
         console.log(file)
         const fileName = file.name
-        const isLimt = file.size / 1024 < 500 
+        const isLimt = file.size / 1024 < 500
         const regex = /(.jpg|.jpeg|.png)$/
         if (regex.test(fileName.toLowerCase())) {
           if (isLimt) {
@@ -145,6 +163,7 @@
         }
       	this.$refs['myform'].resetFields()
         this.fromInfo.name=''
+<<<<<<< HEAD
         this.fromInfo.link=''  
         this.fromInfo.imgBase64 = undefined
         this.fromInfoImg = undefined
@@ -158,6 +177,10 @@
         this.fromInfo.link = val.link
         this.fromInfoImg = val.img
         this.dialogVisible = true
+=======
+        this.fromInfo.link=''
+        this.fromInfo.imgBase64 = ''
+>>>>>>> bcec58461960fd770b0616bb06eba4f1c87ba873
       },
       delGame (key) {
         this.$confirm('确认要删除' + key.name + '吗？')
@@ -168,6 +191,7 @@
           }).finally(() =>{})
         })
       }
+<<<<<<< HEAD
     }
   }
 </script>
@@ -253,4 +277,11 @@
         }
       }
     }
+=======
+    }
+  }
+</script>
+<style scoped lang="scss">
+  @import '@/styles/game.scss';
+>>>>>>> bcec58461960fd770b0616bb06eba4f1c87ba873
 </style>

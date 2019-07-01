@@ -242,6 +242,7 @@
 import {getAllStores,delStore, addUpdateStore, getRegions } from '@/api/store'
 import { addUpdateArea,getAreas,deleteArea} from '@/api/area'
 import { AutoImage,DrawImage } from '@/utils/drawImage'
+
 export default {
 	data() {
 		const validatePass = (rule, value, callback) => {
@@ -679,6 +680,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+/*@import '@/styles/variables.scss';*/
   .el-upload{
 		display: block;
     width: 100%!important;
