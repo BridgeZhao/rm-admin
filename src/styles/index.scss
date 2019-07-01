@@ -268,26 +268,4 @@ background: $menuBg;
 .color-active{
 	color: $menuActiveText;
 }
-.el-date-table td.disabled div{
-  background-color: #02050a;
-    opacity: 1;
-    cursor: not-allowed;
-    color: #434548;
-}
-.el-date-table td.in-range div, .el-date-table td.in-range div:hover, .el-date-table.is-week-mode .el-date-table__row.current div, .el-date-table.is-week-mode .el-date-table__row:hover div{
-  background-color: #12c9dc;
-}
-.el-picker-panel__icon-btn {
-  font-size: 14px;
-  color: #0874e4;
-}
- .el-radio-button__orig-radio:checked + .el-radio-button__inner {
-  color: #FFFFFF;
-  background-color: #13375d;
-  border-color: #409EFF;
-}
-.el-radio-button__inner {
-  background: #0f384a;
-  border: 1px solid #2480b3;
-  color: #909399;
-}
+

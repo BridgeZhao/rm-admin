@@ -16,7 +16,6 @@
 								<el-date-picker
 									type="week"
 									style="width: 200px"
-									:clearable="false"
 									value-format="yyyy-MM-dd"
 									v-model="formInline.dateTimeDay"
 									:picker-options="{

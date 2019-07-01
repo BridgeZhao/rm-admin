@@ -3,7 +3,7 @@
 		<el-row class="table-head-btns">
 			<el-col :span="12">
 				<!--头部按钮-->
-				<el-form :inline="true" class="demo-form-inline">
+				<el-form :inline="true">
 					<el-form-item label="注册时间">
 						<el-date-picker
 							style="width: 270px"
