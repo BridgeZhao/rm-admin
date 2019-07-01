@@ -328,7 +328,19 @@ export default {
     openDialog(){
       this.dialogType = 'add'
       this.dialogVisible=true
-    }
+    },
+		clearGetUsersData() {
+			this.pagination.page = 1
+			this.pagination.size = 10
+			this.getUsers()
+		},
+		// 全局门店下拉修改
+		$storeIdChanged(storeId){
+			if(storeId){
+				this.pagination.storeId=storeId
+				this.clearGetUsersData()
+			}
+		}
   }
 }
 </script>
