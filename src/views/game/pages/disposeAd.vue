@@ -114,7 +114,7 @@
             <el-form-item label="二维码链接" prop="codeUrl" :label-width="formLabelWidth">
               <el-input v-model="form.codeUrl" autocomplete="off"></el-input>
             </el-form-item>
-          </el-col>  
+          </el-col>
           <el-col :span="13" class="">
             <el-form-item label="" prop="bannerImgBase64" >
               <el-upload
@@ -161,7 +161,7 @@
                       <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500KB</div>
                     </div>
                     <div>
-                      
+
                     </div>
                   </el-col>
                 </el-row>
@@ -230,7 +230,7 @@
         prop="deviceType"
         width="80"
       />
-     
+
       <el-table-column
         label="创建时间"
         width="180">
@@ -366,7 +366,7 @@ export default {
 		])
   },
   async created() {
-  	this.pagination.storeId=this.storeId    
+  	this.pagination.storeId=this.storeId
     this.adPage()
     this.getAreas()
   },
@@ -393,7 +393,7 @@ export default {
     },
     getAreas(){
       return new Promise(resolve => {
-        getAreas(this.pagination.storeId).then(res => { 
+        getAreas(this.pagination.storeId).then(res => {
           console.log("区域",res)
           this.areasList = res
           resolve(res)
@@ -426,7 +426,7 @@ export default {
     handlePreview(file,key) {
       console.log(file,key)
       const fileName = file.name
-      const isLimt = file.size / 1024 < 500 
+      const isLimt = file.size / 1024 < 500
       const regex = /(.jpg|.jpeg|.png)$/
       if (regex.test(fileName.toLowerCase())) {
         if (isLimt) {
@@ -474,7 +474,7 @@ export default {
       console.log('广告列表',this.tableData)
       await  this.adPage()
       if( key !== ''){
-        const nameAry = [] 
+        const nameAry = []
         for(let i = 0; i< this.tableData.length; i++){
           if (this.tableData[i].status === key){
             nameAry.push(this.tableData[i])
@@ -491,7 +491,7 @@ export default {
       //   "status" : 2
       // }
       let _status = {}
-      _status.id = id 
+      _status.id = id
       _status.status = 2
       console.log(typeof  _status)
       this.$confirm('确认撤销此条数据吗？', '撤销数据', {
@@ -500,7 +500,7 @@ export default {
         type: 'warning'
       }).then(() => {
         console.log(_status)
-        statusAd(_status).then(() => {   
+        statusAd(_status).then(() => {
           this.clearClose('reload')
           this.$message.success('操作成功')
           this.adPage()
@@ -526,8 +526,9 @@ export default {
       this.dialogType = 'edit'
       this.dialogVisible = true
     },
-    
+
     clearClose(reload) {
+    	debugger
       this.dialogVisible = false
       if (reload === 'reload') {
         this.adPage()
@@ -568,7 +569,7 @@ export default {
     detailRow(data){
       data.begin = this.timestampToTime(data.begin)
       data.end = this.timestampToTime(data.end)
-      data.createTime = this.timestampToTime(data.createTime)  
+      data.createTime = this.timestampToTime(data.createTime)
       this.form = Object.assign({}, data)
       if(data.area[0]){
         console.log('详情区域length', data.area.length,this.form.imgs.length, )
@@ -577,7 +578,7 @@ export default {
       for(let i = 0; i<data.area.length; i++){
          areaId.push(data.area[i].id)
       }
-      this.form.area = areaId 
+      this.form.area = areaId
       if(this.form.imgs[0]){
         this.imgBase64Show = this.form.imgs[0]
       }
@@ -595,9 +596,9 @@ export default {
    watch:{
     StoreId : function(newVal,oldVal){
       this.pagination.storeId = newVal
-      this.adPage()   
+      this.adPage()
       this.getAreas(this.pagination.storeId)
-    }  
+    }
   }
 }
 </script>
