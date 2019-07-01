@@ -255,7 +255,7 @@
       </el-table-column>
       <el-table-column
         label="操作"
-        width="273"
+        width="292"
       >
         <template slot-scope="scope">
           <div>
@@ -276,7 +276,6 @@
               编辑
             </el-button>
             <el-button
-              type="info"
               size="small"
               @click.native.prevent="detailRow(scope.row)"
             >
