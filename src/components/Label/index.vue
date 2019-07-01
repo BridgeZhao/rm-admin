@@ -17,10 +17,10 @@ export default {
 
 <style lang="scss" scoped>
 .labelView{
+    margin-top: .4rem;
     font-size: 14px;
-	  padding-left: 20px;
-    /*line-height: 1.6rem;*/
-    /*height: 1.6rem;*/
+	padding-left: 20px;
+    height: 1.8rem;
     color: #71dcff;
     position: relative;
     display: -ms-flexbox;
@@ -38,11 +38,10 @@ export default {
         content: "";
         display: block;
         position: absolute;
-			   top:0;
         left:0;
-        /*top: 15%;*/
+        top: 15%;
         width: 3px;
-        height:26px;
+        height: 20px;
         background: #71dcff;
     }
 

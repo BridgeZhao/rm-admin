@@ -6,42 +6,6 @@
   import echarts from 'echarts'
 
   const animationDuration = 3000
-  // const options = {
-  //   tooltip: {
-  //     trigger: 'axis'
-  //   },
-  //   legend: {
-  //     top: '0',
-  //     icon: 'rect',
-  //     itemWidth: 14,
-  //     itemHeight: 5,
-  //     itemGap: 13,
-  //     data: [],
-  //     right: '4%'
-  //   },
-  //   grid: {
-  //     top: '12%',
-  //     left: '2%',
-  //     right: '2%',
-  //     bottom: '2%',
-  //     containLabel: true
-  //   },
-  //   xAxis: [],
-  //   yAxis: [{
-  //     type: 'value',
-  //     name: '(%)',
-  //     axisTick: {
-  //       show: false
-  //     },
-  //     axisLabel: {
-  //       margin: 10,
-  //       textStyle: {
-  //         fontSize: 14
-  //       }
-  //     }
-  //   }],
-  //   series: []
-  // }
   const colorAry = [{
     item: 'rgb(0, 136, 212)',
     area: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{offset: 0, color: 'rgba(0, 136, 212, 0.3)'}, {
@@ -189,7 +153,7 @@
 				let r = Math.random() * 255
 				let g = Math.random() * 255
 				let b = Math.random() * 255
-				let a = 0.3
+				let a = 0.4
 				const colors = `rgba(${r},${g},${b},${a})`
 				return colors
 			}
