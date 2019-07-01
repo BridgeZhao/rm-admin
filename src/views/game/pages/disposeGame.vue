@@ -63,7 +63,7 @@
   import { mapGetters } from 'vuex'
   import { addGame, gamePage, channelGame ,channelGamePage ,delChannelGame} from '@/api/game'
   import { getScenarioData } from '@/api/coupons'
-  // import { getDevices } from '@/api/device'
+  import { getDevices } from '@/api/device'
   export default {
     name: 'disposeGame',
     props:[
@@ -111,7 +111,7 @@
     	this.defaultStoreId=this.storeId
       this.gamePage()
       this.getScenarioData()
-      // this.getDevices()
+      this.getDevices()
       this.channelGamePage()
     },
     methods: {
@@ -135,17 +135,6 @@
           })
         })
       },
-<<<<<<< HEAD
-      // getDevices () {
-      //   return new Promise(resolve => {
-      //     getDevices(this.defaultStoreId).then(res => { 
-      //       console.log("设备",res)
-      //       this.fromInfo.checkList = res
-      //       resolve(res)
-      //     })
-      //   })
-      // },
-=======
       getDevices () {
         return new Promise(resolve => {
           getDevices(this.defaultStoreId).then(res => { 
@@ -161,7 +150,6 @@
           })
         })
       },
->>>>>>> zlDev
       channelGamePage(){
         return new Promise(resolve => {
           channelGamePage(this.defaultStoreId).then(res => {  
@@ -255,11 +243,7 @@
       StoreId : function(newVal,oldVal){
         this.defaultStoreId = newVal
         this.channelGamePage()
-<<<<<<< HEAD
-        // this.getDevices ()
-=======
         this.getDevices ()
->>>>>>> zlDev
       }
       
     }
