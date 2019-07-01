@@ -39,7 +39,7 @@ module.exports = {
 		'tvShow':'tvShow',
 		'coupons':'Coupons',
 		'coupons-manage':'Coupons',
-		'coupons-record':'record',
+		'coupons-record':'Record',
     'game':'StoreContentManagement',
     'store-content':'ContentMaintenance',
     'mini-game':'miniGame'

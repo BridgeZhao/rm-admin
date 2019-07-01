@@ -129,7 +129,7 @@
                                     >
                                 </el-table-column>
                                 <el-table-column
-                                    prop="weeday7"
+                                    prop="weekday7"
                                     label="周日"
                                     >
                                 </el-table-column>

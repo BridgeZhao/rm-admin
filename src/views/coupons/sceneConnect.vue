@@ -6,7 +6,7 @@
                     <el-input v-model="formInline.scene" placeholder="场景"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-button type="primary" @click="onSubmit">查询</el-button>
+                    <el-button type="primary" @click="search()">查询</el-button>
                 </el-form-item>
             </el-form>
             <el-button type="primary" @click="addSence">新增场景关联</el-button>
@@ -45,8 +45,8 @@
                     label="操作"
                     align="center">
                 <template slot-scope="scope">
-                    <el-button type="text" size="mini" style="margin-right: 10px;" @click="edit(scope.row)">编辑</el-button>
-                    <el-button type="text" size="mini" @click="deleteData(scope.row)">删除</el-button>
+                    <el-button type="text" style="margin-right: 10px;" @click="edit(scope.row)">编辑</el-button>
+                    <!-- <el-button type="text" size="mini" @click="deleteData(scope.row)">删除</el-button> -->
                 </template>
             </el-table-column>
         </el-table>
@@ -131,8 +131,8 @@
 			this.loadData()
 		},
     methods: {
-			onSubmit(){
-
+			search(){
+        this.loadData()
 			},
       addSence() {
         this.dialogTableVisible = true;
