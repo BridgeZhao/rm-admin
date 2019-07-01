@@ -63,7 +63,7 @@
   import { mapGetters } from 'vuex'
   import { addGame, gamePage, channelGame ,channelGamePage ,delChannelGame} from '@/api/game'
   import { getScenarioData } from '@/api/coupons'
-  // import { getDevices } from '@/api/device'
+  import { getDevices } from '@/api/device'
   export default {
     name: 'disposeGame',
     props:[
@@ -111,7 +111,7 @@
     	this.defaultStoreId=this.storeId
       this.gamePage()
       this.getScenarioData()
-      // this.getDevices()
+      this.getDevices()
       this.channelGamePage()
     },
     methods: {
@@ -135,15 +135,21 @@
           })
         })
       },
-      // getDevices () {
-      //   return new Promise(resolve => {
-      //     getDevices(this.defaultStoreId).then(res => { 
-      //       console.log("设备",res)
-      //       this.fromInfo.checkList = res
-      //       resolve(res)
-      //     })
-      //   })
-      // },
+      getDevices () {
+        return new Promise(resolve => {
+          getDevices(this.defaultStoreId).then(res => { 
+            let resDevices = []
+            for(let i = 0; i< res.length;i++){
+              if(res[i].deviceType === "screen" || res[i].deviceType === "pospad"){
+               resDevices.push(res[i])
+              }
+            }
+            this.fromInfo.checkList = resDevices
+            console.log("设备",resDevices )
+            resolve(res)
+          })
+        })
+      },
       channelGamePage(){
         return new Promise(resolve => {
           channelGamePage(this.defaultStoreId).then(res => {  
@@ -237,7 +243,7 @@
       StoreId : function(newVal,oldVal){
         this.defaultStoreId = newVal
         this.channelGamePage()
-        // this.getDevices ()
+        this.getDevices ()
       }
       
     }
