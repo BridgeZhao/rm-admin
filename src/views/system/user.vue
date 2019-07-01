@@ -318,7 +318,7 @@ export default {
 				storeIds: [],
 				roleIds: [],
 				enabled: true,
-				userType: 0
+				userType:'hall'
 			}
 		},
 		pageChange(val){

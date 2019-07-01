@@ -4,19 +4,12 @@
 
 <script>
   import echarts from 'echarts'
-
-  const animationDuration = 3000
+  const animationDuration = 1000
   const colorAry = [{
-    item: 'rgb(0, 136, 212)',
-    area: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{offset: 0, color: 'rgba(0, 136, 212, 0.3)'}, {
+    item: 'rgba(113,220,255,1)',
+    area: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{offset: 0, color: 'rgba(113,220,255,.1)'}, {
       offset: 0.8,
       color: 'rgba(0, 136, 212, 0)'
-    }], false)
-  }, {
-    item: 'rgb(137, 189, 27)',
-    area: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{offset: 0, color: 'rgba(137, 189, 27, 0.3)'}, {
-      offset: 0.8,
-      color: 'rgba(137, 189, 27, 0)'
     }], false)
   }]
   export default {
@@ -57,9 +50,9 @@
           },
           grid: {
             top: '12%',
-            left: '2%',
-            right: '2%',
-            bottom: '2%',
+            left: '3%',
+            right: '5%',
+            bottom: '5%',
             containLabel: true
           },
           xAxis: [
@@ -106,8 +99,7 @@
     },
     methods: {
       loadData(data) {
-        let _data = data
-        const {legendData, xAxisData, seriesData} = _data;
+        const {legendData, xAxisData, seriesData} = data;
         this.options.legend.data = legendData
         this.options.xAxis = []
         xAxisData.map(item => {
@@ -126,21 +118,21 @@
             symbol: 'circle',
             symbolSize: 5,
             showSymbol: false,
-            lineStyle: {
-              normal: {
-                width: 1
-              }
-            },
-            areaStyle: {
-              normal: {
-                color: this.initColor(),
-                // shadowColor: 'rgba(0, 0, 0, 0.1)',
-                shadowBlur: 10
-              }
-            },
+						areaStyle:{
+							normal:{
+								//颜色渐变函数 前四个参数分别表示四个位置依次为左、下、右、上
+								color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+									offset: 0,
+									color: 'rgba(113,220,255,.8)'
+								},{
+									offset: 1,
+									color: 'rgba(113,220,255,0)'
+								}])
+							}
+						},
             itemStyle: {
               normal: {
-                color: this.initColor(),
+								color: 'rgba(113,220,255,.9)',
                 borderWidth: 12
               }
             },
@@ -148,15 +140,8 @@
             animationDuration
           })
         })
-      },
-			initColor() {
-				let r = Math.random() * 255
-				let g = Math.random() * 255
-				let b = Math.random() * 255
-				let a = 0.4
-				const colors = `rgba(${r},${g},${b},${a})`
-				return colors
-			}
+				this.options=Object.assign({},this.options)
+      }
     }
   }
 </script>

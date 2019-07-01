@@ -116,7 +116,7 @@ table,table th,table td,.el-table--border,.el-radio-button__inner,.el-button--de
 	background: $menuText;
 	color:$menuActiveText;
 }
-.el-date-table td.current:not(.disabled) span{
+.el-date-table td.current:not(.disabled) span,.el-select .el-tag__close.el-icon-close:hover{
 	color:$menuBg;
 	background: $menuActiveText;
 }
@@ -135,10 +135,13 @@ table,table th,table td,.el-table--border,.el-radio-button__inner,.el-button--de
 		}
 	}
 }
-
-.el-select .el-tag,.el-select .el-tag__close.el-icon-close,.el-cascader-menu__item.is-active{
-  background: $menuActiveText;
-  color:$menuActiveText;
+.el-select .el-tag{
+	background: $menuBg;
+	color:$menuText;
+}
+.el-select .el-tag__close.el-icon-close,.el-cascader-menu__item.is-active{
+  background: $menuBg;
+  color:$menuText;
   &.el-cascader-menu__item--extensible:after{
     color:$menuActiveText;
   }
@@ -172,6 +175,10 @@ table,table th,table td,.el-table--border,.el-radio-button__inner,.el-button--de
 	background-color: $menuActiveText!important;
 	color: $bgColor;
 	text-shadow:none;
+}
+.active.el-button--default{
+	border-color: $menuActiveText!important;
+	color: $menuActiveText!important;
 }
 table th,.el-step__line{
   background-color:$menuText!important;
