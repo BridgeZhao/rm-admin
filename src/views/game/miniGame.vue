@@ -18,7 +18,7 @@
          <span class="font-red" >添加游戏</span>
       </li>
     </ul>
-    <!--弹框asd-->
+    <!--弹框-->
     <el-dialog :title="dialogType === 'add' ? '添加游戏' : '修改游戏'" :width="'720px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="()=>{clearClose()}">
       <!--基本信息-->
       <el-form  v-loading="dgLoading" :model="fromInfo" :rules="rules"  ref="myform">
@@ -28,7 +28,7 @@
         <el-form-item label="h5链接" :label-width="formLabelWidth" prop="link" >
           <el-input v-model="fromInfo.link" autocomplete="on"  placeholder="请输入h5链接"></el-input>
         </el-form-item>
-        <el-form-item label="效果图" :label-width="formLabelWidth" prop="imgBase64" >
+        <el-form-item label="" :label-width="formLabelWidth" prop="imgBase64" >
           <el-upload
             class="upload-img"
             action=""
@@ -97,7 +97,7 @@
         })
       },
       addGame () {
-        this.dialogType === 'add'
+        this.dialogType = 'add'
         this.dialogVisible = true
       },
       handlePreview(file) {
