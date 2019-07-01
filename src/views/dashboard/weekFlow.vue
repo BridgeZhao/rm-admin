@@ -80,8 +80,8 @@
                     <span>08:00 - 22:00</span>
                 </div>
                 <el-button type="primary" plain style="background-color: #1881a0;color: #494c50;padding:0;" size="medium">
-									<a :href="downloadPath" download="" style="text-decoration: none;color: #ffffff;display: block;width: 70px;height: 35px;line-height: 35px;">下载</a>
-								</el-button>
+                    <a :href="downloadPath" download="" style="text-decoration: none;color: #ffffff;display: block;width: 70px;height: 35px;line-height: 35px;">下载</a>
+                </el-button>
             </div>
             <div class="report-margin">
                 <el-row :gutter="24" class="report-margin">
@@ -92,12 +92,12 @@
                         <div style="width:90%;height:100%;margin: 2% auto">
                              <el-table
                             :data="tableData"
-														:default-sort = "{prop: 'hh', order: 'Ascending'}"
+							:default-sort = "{prop: 'hh', order: 'Ascending'}"
                             style="width: 100%">
                                 <el-table-column
                                     prop="hh"
                                     label="时间段"
-																		sortable
+									sortable
                                     >
                                 </el-table-column>
                                 <el-table-column

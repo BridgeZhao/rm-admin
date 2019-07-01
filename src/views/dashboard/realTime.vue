@@ -10,23 +10,23 @@
             <div class="report-title">店前客流</div>
             <div class="report-num" style="color: #d8b104;">{{summary.frontFlow}}</div>
             <div class="report-small">
-              <span>昨日同期</span>
+              <span style="color: #71dcff;">昨日同期</span>
               <i class="icon iconfont" :class="'icon-'+summaryClass(summary.frontFlowChange)" style="font-size:18px;"></i>
-              <span>{{summary.frontFlowChange}}%</span>
+              <span :class="'i-'+summaryClass(summary.frontFlowChange)">{{summary.frontFlowChange}}%</span>
             </div>
           </div>
         </el-col>
         <el-col :span="8">
           <div class="grid-content bg-purple report-line">
             <div class="report-title">进店客流</div>
-            <div class="report-num" style="color: #50e3c2;">{{summary.entryFlow}}</div>
+            <div class="report-num" style="color: #d8b104;">{{summary.entryFlow}}</div>
             <div class="report-small">
-              <span>昨日同期</span>
+              <span style="color: #71dcff;">昨日同期</span>
               <i
                 class="icon iconfont" :class="'icon-'+summaryClass(summary.entryFlowChange)"
                 style="font-size:18px;"
               ></i>
-              <span>{{summary.entryFlowChange}}%</span>
+              <span :class="'i-'+summaryClass(summary.entryFlowChange)">{{summary.entryFlowChange}}%</span>
             </div>
           </div>
         </el-col>
@@ -38,12 +38,12 @@
               style="color: #d8b104;"
             >{{(summary.entryRate * 100).toFixed(2)}}%</div>
             <div class="report-small">
-              <span>昨日同比</span>
+              <span style="color: #71dcff;">昨日同比</span>
               <i
                 class="icon iconfont"
 								:class="'icon-'+summaryClass(summary.entryRateChange)"
                 style='font-size:18px;'></i>
-              <span>{{summary.entryRateChange}}%</span>
+              <span :class="'i-'+summaryClass(summary.entryRateChange)">{{summary.entryRateChange}}%</span>
             </div>
           </div>
         </el-col>
@@ -313,10 +313,16 @@ export default {
 .app-container {
   background: none;
   .icon-up {
-    color: #f94905;
+    color: #f93205;
   }
   .icon-down {
-    color: #0776ea;
+    color: #48ec04;
+  }
+  .i-up {
+    color: #f93205;
+  }
+  .i-down {
+    color: #48ec04;
   }
 }
 </style>

@@ -126,7 +126,8 @@
             </div>
             <div style="width:100%;height:100%;">
 <!--              <line-time-chart :data="options2" ref="lineTimeChart"/>-->
-							<line-chart :data="options2" ref="lineChart"/>
+							<!-- <line-chart :data="options2" ref="lineChart"/> -->
+              <line-time-chart :data="options2" ref="lineTimeChart"/>
             </div>
           </div>
         </el-col>
@@ -212,7 +213,7 @@
         title: '',
         componentData: null,
         formInline: {
-          date: '',
+          date: [new Date(), new Date()],
           options: [
             {
               value: '1',
@@ -309,7 +310,23 @@
 				frequencyDatas:{},
         areaTopData: {},
         ageData: {},
-        genderData: {}
+        genderData: {},
+        // 测试数据
+        //  nn :[{"areaName":"PAD区","hh":"8","customerNum":0},
+        // {"areaName":"出口区","hh":"8","customerNum":8},
+        // {"areaName":"入口区","hh":"9","customerNum":8},
+        // {"areaName":"PAD区","hh":"9","customerNum":45},
+        // {"areaName":"出口区","hh":"10","customerNum":45},
+        // {"areaName":"入口区","hh":"10","customerNum":45},
+        // {"areaName":"PAD区","hh":"11","customerNum":33},
+        // {"areaName":"出口区","hh":"11","customerNum":0},
+        // {"areaName":"入口区","hh":"12","customerNum":0},
+        // {"areaName":"PAD区","hh":"12","customerNum":2},
+        // {"areaName":"出口区","hh":"13","customerNum":4},
+        // {"areaName":"入口区","hh":"13","customerNum":5},
+        // {"areaName":"PAD区","hh":"14","customerNum":6},
+        // {"areaName":"出口区","hh":"14","customerNum":6},
+        // ]
       }
     },
 		computed: {
@@ -424,30 +441,49 @@
 				this.options3 = obj
         // console.log('this.options3', this.options3)
       },
+      
       // 小时客流
-      loadData2(data) {
-				const sumData ={
+     loadData2(data) {
+       	const mockdata ={
 					seriesData: [],
 					xAxisData:[],
 					legendData:''
 				}
-				const obj = Object.assign({}, sumData)
-				const arry = []
-				const _seriesData = []
-				const hh = []
-				for (const i in data) {
-					arry.push(data[i].customerNum)
-				}
-				_seriesData.push(arry)
-				const _hh = []
-				for (const i in data) {
-					_hh.push(data[i].hh)
-				}
-				hh.push(_hh)
-				obj.xAxisData = hh
-				obj.legendData = ['小时客流']
-				obj.seriesData = _seriesData
-				this.options2 = obj
+        let obj = Object.assign({}, mockdata)
+        let xAxisData = new Set()
+        let legendData = new Set()
+        let mock = {}
+        data.forEach(element => {
+          let has = xAxisData.has(element.hh)
+          legendData.add(element.areaName)
+          if (!has) {
+            mock[element.hh] = {}
+          }
+          mock[element.hh][element.areaName] = element.customerNum
+
+          mock[element.hh]
+          xAxisData.add(element.hh)
+        })
+        let seriesData = [];
+        [...legendData].forEach(it => {
+          let dataList = [];
+          [...xAxisData].forEach(item => {
+            if (mock[item].hasOwnProperty(it)) {
+              dataList.push(mock[item][it])
+            } else {
+              dataList.push(0)
+            }
+          })
+          seriesData.push({
+            name: it,
+            data: dataList
+          })
+        })
+        obj.xAxisData = [...xAxisData]
+        obj.legendData= [...legendData]
+        obj.seriesData= [...seriesData]
+        console.log('lalala~~~',obj)
+        this.options2 = obj
       },
       // 到店频次
       laodFrequencyData(data) {

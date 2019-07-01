@@ -1,11 +1,11 @@
 <template>
     <div class="app-container reportInput" style="background:none">
         <div class="top">
-            <div style="width: 10%;float: left;margin-left: 1%;">
+            <div style="width:12%;float: left;margin-left: 1%;">
                 <label-view labelFather="进店客流统计"></label-view>
             </div>
            <div style="float: left">
-                <el-radio-group v-model="radio">
+                <el-radio-group v-model="radio" class="chose">
                     <el-radio-button label="图形报表" class="radioBtn"></el-radio-button>
                     <el-radio-button label="数据报表" class="radioBtn"></el-radio-button>
                 </el-radio-group>
@@ -175,7 +175,7 @@ export default {
             radio:'图形报表',
             showNum:true,
             formInline: {
-                date: '',
+                date: new Date(),
                 startTime: '08:00',
                 endTime: '22:00'
             },
@@ -269,9 +269,9 @@ export default {
         init(storeId){
             let start_time=moment(new Date()).format('YYYY-MM-DD')
             this.downTime = start_time
-            this.downTimeLine = '00:00 - 22:00'
+            this.downTimeLine = '08:00 - 22:00'
 					  const _storeId = storeId || this.$store.state.app.storeId
-            let _params = {store_id:_storeId,starttime:start_time,endtime:start_time,hh:'00,22'}
+            let _params = {store_id:_storeId,starttime:start_time,endtime:start_time,hh:'08,22'}
             this.loadData(_params)
         },
         searchData(){
@@ -384,8 +384,6 @@ export default {
 <style lang="scss" scoped>
 @import "@/styles/report.scss";
 .top{
-    /*display: flex;*/
-    /*justify-content: flex-start;*/
 	overflow: hidden;
      .radioBtn{
          background-color: #2b7a94 !important;
@@ -402,7 +400,7 @@ export default {
     display: flex;
     justify-content: space-between;
 }
-.el-radio-button__orig-radio:checked + .el-radio-button__inner {
+.chose .el-radio-button__orig-radio:checked + .el-radio-button__inner {
   color: #FFFFFF;
   background-color: #13375d;
   border-color: #409EFF;
