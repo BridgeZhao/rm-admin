@@ -128,11 +128,7 @@
                 <el-row :gutter="24" class="">
                   <el-col :span="12">
                     <div class="imgshow-banner">
-<<<<<<< HEAD
-                      <img class="game_img"  :src="form.bannerImgBase64">
-=======
                       <img class="game_img"  :src="form.bannerImg">
->>>>>>> zlDev
                     </div>
                   </el-col>
                   <el-col :span="12">
@@ -209,10 +205,7 @@
       :data="tableData"
       border
       stripe
-<<<<<<< HEAD
-=======
       style="width: 100%"
->>>>>>> zlDev
     >
       <el-table-column
         label="广告ID"
@@ -225,10 +218,6 @@
       <el-table-column
         prop="name"
         label="名称"
-<<<<<<< HEAD
-        width="150"
-=======
->>>>>>> zlDev
       />
       <el-table-column
         prop="area"
@@ -266,11 +255,7 @@
       </el-table-column>
       <el-table-column
         label="操作"
-<<<<<<< HEAD
-        width="292"
-=======
         width="260"
->>>>>>> zlDev
       >
         <template slot-scope="scope">
           <div>
@@ -291,10 +276,7 @@
               编辑
             </el-button>
             <el-button
-<<<<<<< HEAD
-=======
               type="info"
->>>>>>> zlDev
               size="small"
               @click.native.prevent="detailRow(scope.row)"
             >
@@ -365,12 +347,8 @@ export default {
         imgs:[],
         status:0,
         createTime:'',
-<<<<<<< HEAD
-        areaIds:[]
-=======
         areaIds:[],
         storeId:0
->>>>>>> zlDev
       },
       imgBase64Show:'',
       adStatusList:[{ id: '',name: "全部"},{ id: 0,name: "待生效"},{ id: 1,name: "投放中"},{ id: 2,name: "已撤销"},{ id: 3,name: "已结束"},],
@@ -396,17 +374,10 @@ export default {
     adPage(){
       return new Promise(resolve => {
         const _pagination = Object.assign({}, this.pagination)
-<<<<<<< HEAD
-        // delete _pagination.total
-        // if(!_pagination.name){
-        // 	delete _pagination.name
-        // }
-=======
         delete _pagination.total
         if(!_pagination.name){
         	delete _pagination.name
         }
->>>>>>> zlDev
         console.log('初始数据',_pagination)
         adPage(_pagination).then(res => {
           console.log('广告列表',res)
@@ -463,10 +434,7 @@ export default {
           this.fileReader.onload = (res) => {
             if(key === '1'){
               this.form.bannerImgBase64 = res.currentTarget.result
-<<<<<<< HEAD
-=======
               this.form.bannerImg = res.currentTarget.result
->>>>>>> zlDev
             }else{
               this.form.imgBase64s.push(res.currentTarget.result)
               this.imgBase64Show = this.form.imgBase64s[0]
@@ -488,11 +456,8 @@ export default {
           this.form.areaIds = this.form.area
           this.form.begin = this.dateToMs(this.formTime[0])
           this.form.end = this.dateToMs(this.formTime[1])
-<<<<<<< HEAD
-=======
           delete this.form.bannerImg
           this.form.storeId = this.pagination.storeId
->>>>>>> zlDev
           const _data=this.form
           addAd(_data).then(() => {
             this.clearClose('reload')
@@ -605,26 +570,18 @@ export default {
       data.end = this.timestampToTime(data.end)
       data.createTime = this.timestampToTime(data.createTime)  
       this.form = Object.assign({}, data)
-<<<<<<< HEAD
-=======
       if(data.area[0]){
         console.log('详情区域length', data.area.length,this.form.imgs.length, )
       }
->>>>>>> zlDev
       const areaId = []
       for(let i = 0; i<data.area.length; i++){
          areaId.push(data.area[i].id)
       }
       this.form.area = areaId 
-<<<<<<< HEAD
-      this.imgBase64Show = this.form.imgs[0]
-      console.log('详情弹窗', this.form)
-=======
       if(this.form.imgs[0]){
         this.imgBase64Show = this.form.imgs[0]
       }
       console.log('详情弹窗', this.form,this.imgBase64Show)
->>>>>>> zlDev
       this.dialogType = 'detail'
       this.dialogVisible=true
     },
