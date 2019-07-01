@@ -4,35 +4,6 @@
 
 <script>
 const animationDuration = 2000
-const options = {
-  tooltip: {
-    trigger: 'axis',
-    axisPointer: { // 坐标轴指示器，坐标轴触发有效
-      type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-    }
-  },
-  grid: {
-    top: '10%',
-    left: '2%',
-    right: '2%',
-    bottom: '3%',
-    containLabel: true
-  },
-  xAxis: [{
-    type: 'category',
-    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    axisTick: {
-      alignWithLabel: true
-    }
-  }],
-  yAxis: [{
-    type: 'value',
-    axisTick: {
-      show: false
-    }
-  }],
-  series: []
-}
 export default {
   props: {
     className: {
@@ -55,38 +26,38 @@ export default {
     }
   },
   data() {
-    return {
-      options: {
-        tooltip: {
-            trigger: 'axis',
-            axisPointer: { // 坐标轴指示器，坐标轴触发有效
-              type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-            }
-          },
-          grid: {
-            top: '10%',
-            left: '2%',
-            right: '2%',
-            bottom: '3%',
-            containLabel: true
-          },
-          xAxis: [{
-            type: 'category',
-            data: [],
-            axisTick: {
-              alignWithLabel: true
-            }
-          }],
-          yAxis: [{
-            type: 'value',
-            axisTick: {
-              show: false
-            }
-          }],
-          series: []
-        }
-      }
-  },
+		return {
+			options: {
+				tooltip: {
+					trigger: 'axis',
+					axisPointer: { // 坐标轴指示器，坐标轴触发有效
+						type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+					}
+				},
+				grid: {
+					top: '10%',
+					left: '2%',
+					right: '5%',
+					bottom: '5%',
+					containLabel: true
+				},
+				xAxis: [{
+					type: 'category',
+					data: [],
+					axisTick: {
+						alignWithLabel: true
+					}
+				}],
+				yAxis: [{
+					type: 'value',
+					axisTick: {
+						show: false
+					}
+				}],
+				series: []
+			}
+		}
+	},
   created() {
     this.options.xAxis.data = this.data.xAxisData
     const series_data = []
@@ -97,6 +68,12 @@ export default {
         stack: 'vistors',
         barWidth: '80%',
         data: item.data,
+				itemStyle: {
+					normal: {
+						color: 'rgba(113,220,255,.9)',
+						borderWidth: 12
+					}
+				},
         animationDuration
       })
     })
