@@ -59,7 +59,7 @@
         <!-- 热力图 -->
         <div class="box-card main-map">
           <div
-            :style="{'background-image': heatmapBackImage && 'url(' + heatmapBackImage + ')'}"
+            :style="'background-image: url('+heatmapBackImage+')'"
             class="heat-map-container"
             ref="heatmapContainer"
           ></div>
@@ -168,8 +168,8 @@
 	import moment from 'moment'
 	import h337 from 'heatmap.js'
 	import BarChartNew from '@/components/Charts/BarChartNew'
-	import {getImageData, getLeftImg, getPinData} from '@/api/report'
-
+  import {getImageData, getLeftImg, getPinData} from '@/api/report'
+  import {getStoresImg} from "@/api/store"
 	const MAX_HEAT_VALUE = 10;
 	export default {
   name: "aptitude-demonstration",
@@ -229,7 +229,7 @@
           number: 1417
         }
       ],
-      heatmapBackImage: require("./map.png"),
+      heatmapBackImage: '',
       heatmap: null,
       heampChartdataList: {},
       viewDataList: {}
@@ -341,6 +341,15 @@
           })
         })
     },
+    // 获取平面图
+    setStoreImg(storeId){
+    	const _storeId = storeId || this.$store.state.app.storeId
+			getStoresImg(_storeId).then(res =>{
+				const img = res.floorGraph
+				this.heatmapBackImage = img;
+				 console.log('热力图片～～',img)
+			})
+		},
     init(storeId) {
 			const _storeId = storeId || this.$store.state.app.storeId
 			const _params = {
@@ -350,6 +359,7 @@
         endtime: this.timeData[1],
         hh: '08,22'
       }
+      this.setStoreImg(storeId)
       this.setHeampData(_params)
       this.setImgData()
       this.setBigDatas(_storeId)

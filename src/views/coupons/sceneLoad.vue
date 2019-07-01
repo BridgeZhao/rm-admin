@@ -3,7 +3,7 @@
 		<div class="header">
 			<el-form :inline="true" :model="formInline" class="demo-form-inline">
 				<el-form-item label="名称">
-					<el-input v-model="formInline.name" placeholder="场景"></el-input>
+					<el-input v-model="formInline.name" placeholder="请输入卡券名称"></el-input>
 				</el-form-item>
 				<el-form-item label="关联场景">
 					<el-select v-model="formInline.scene" clearable filterable placeholder="请选择">
@@ -64,6 +64,16 @@
 				label="关联场景"
 				align="center"
 				show-overflow-tooltip>
+				<template slot-scope="scope">
+					<div v-if="Array.isArray(scope.row.scenarios)">
+						<ul style="list-style: none;display: flex;justify-content: left;padding: 0;overflow: hidden;height: 20px;">
+							<li v-for="(item,index) in scope.row.scenarios" :key="index">
+								<span>{{index+1}}、{{item.name}};</span>
+							</li>
+						</ul>
+					</div>
+					<span v-else></span>
+				</template>
 			</el-table-column>
 			<el-table-column
 				prop="limit"
@@ -83,7 +93,7 @@
 				<template slot-scope="scope">
 					<div v-if="Array.isArray(scope.row.stores)">
 						<ul style="list-style: none;display: flex;justify-content: left;padding: 0;overflow: hidden;height: 20px;">
-							<li v-for="(item,index) in scope.row.stores" >
+							<li v-for="(item,index) in scope.row.stores" :key="index">
 								<span>{{index+1}}、{{item.name}};</span>
 							</li>
 						</ul>
@@ -473,6 +483,7 @@
 				this.dialogTableVisible = true
 			},
 			cancle() {
+				
 				this.dialogTableVisible = false
 			},
 			edit(row) {
@@ -570,18 +581,24 @@
 					id :row.id
 				}
 				deleteCouponsList(row.id).then(res =>{
-					this.$message({
-						message: '已删除',
-						type: 'success'
-					})
-					this.searchCouponsList()
+					if(res === 'OK'){
+						this.$message({
+							message: '删除成功！',
+							type: 'success'
+						})
+						this.searchCouponsList()
+					} else{
+						this.$message({
+							message: '删除失败！',
+							type: 'warning'
+						})
+					}
 				})
 			},
 			saveOne(){
 				console.log(this.couponsFlag)
 				this.$refs['couponsFlag'].validate((valid) => {
 					if (valid) {
-						alert(1)
 						const times = this.couponsFlag.time
 						const startTime = times[0]
 						const endTime = times[1]
