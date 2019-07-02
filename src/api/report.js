@@ -1,4 +1,11 @@
 import request from '@/utils/request'
+// 进店时间统计
+export function inStoreTimeData(faceId) {
+	return request({
+		url: `/mg/dashboard/faceid_detail?face_id=${faceId}`,
+		method: 'get'
+	})
+}
 // 实时客流 、进店客流
 export function getRealTimeData(params) {
   return request({

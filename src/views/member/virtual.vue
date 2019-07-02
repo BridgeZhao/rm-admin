@@ -42,15 +42,11 @@
 			stripe
 		>
 			<el-table-column
-				label="ID"
-				width="80">
-				<template slot-scope="scope">
-					{{ scope.row.id }}
-				</template>
-			</el-table-column>
+				label="faceId"
+				prop="faceId"/>
 			<el-table-column
 				label="头像"
-				width="180">
+				width="150">
 				<template slot-scope="scope">
 					<img :src="scope.row.avatar" class="avatar">
 				</template>
@@ -65,6 +61,7 @@
 			</el-table-column>
 			<el-table-column
 				prop="gender"
+				width="80"
 				label="性别"
 			>
 				<template slot-scope="scope">
@@ -75,6 +72,7 @@
 			</el-table-column>
 			<el-table-column
 				prop="age"
+				width="80"
 				label="年龄"
 			/>
 			<el-table-column
@@ -83,16 +81,22 @@
 					<span>{{ scope.row.createTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span>
 				</template>
 			</el-table-column>
+			<el-table-column
+				label="操作">
+				<template slot-scope="scope">
+					<el-button @click="getInStoreData(scope.row)">进店记录</el-button>
+				</template>
+			</el-table-column>
 		</el-table>
 		<el-row v-if="!showType" v-loading="tableLoading">
 			<el-col :xs="8" :sm="4" :md="5" :lg="4" :xl="3" v-for="(item, index) in tableData" :key="index">
 				<div class="user-box">
 					<p class="avatar"><img :src="item.avatar"/></p>
-					<p><span>{{ storeList.find(s_item => { return s_item.id === item.storeId }).name }}</span></p>
+					<p style="text-align: center"><el-tag type="info">{{ storeList.find(s_item => { return s_item.id === item.storeId }).name }}</el-tag></p>
 					<p class="inline"><label>性别：</label><span>{{ item.gender==='m'?'男':item.gender==='w'?'女':'未知' }}</span></p>
 					<p class="inline"><label>年龄：</label><span>{{ item.age }}</span></p>
 					<p><span>{{ item.createTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span></p>
-					<p class="button"><el-button>进店记录</el-button></p>
+					<p class="button"><el-button @click="getInStoreData(item)">进店记录</el-button></p>
 				</div>
 			</el-col>
 		</el-row>
@@ -106,18 +110,45 @@
 			/>
 		</nav>
 		<el-dialog v-if="dialogVisible" v-drag-dialog  title="进店记录" :width="'720px'" :visible.sync="dialogVisible">
-      <div class="dg-chart">
+			<el-row :gutter="20" class="dg-head">
+				<el-col :span="8">
+					<div style="text-align: right"><img :src="editData.avatar" height="130"/></div>
+				</el-col>
+				<el-col :span="16">
+					<p style="margin:0">
+						<span>{{ storeList.find(s_item => { return s_item.id === editData.storeId }).name }}</span>
+						FaceID：<el-tag type="success">{{editData.faceId}}</el-tag>
+					</p>
+					<p class="inline">
+						<label>性别：</label><span>{{ editData.gender==='m'?'男':editData.gender==='w'?'女':'未知' }}</span>
+						<label>年龄：</label><span>{{ editData.age }}</span>
+					</p>
+					<p class="inline"><span>进店时间：{{ editData.createTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span></p>
+					<ul class="dg-info">
+						<li><span>累计进店</span>
+							<label class="txt-blue">{{editData.accuCount}}次</label>
+						</li>
+						<li><span>到店频次（周）</span>
+							<label class="txt-org">{{editData.avgWeekCount}}次</label>
+						</li>
+						<li><span>最近一次到店</span>
+							<label class="txt-gyl">{{editData.lastDay}}天前</label>
+						</li>
+					</ul>
+				</el-col>
+			</el-row>
+			<div class="dg-chart">
 				<el-radio-group v-model.number="chartType">
 					<el-radio-button :label="0">进店时间</el-radio-button>
 					<el-radio-button :label="1">进店时段</el-radio-button>
 				</el-radio-group>
 				<section class="chart-card-item">
-					<line-chart v-if="!chartType" :data="TimeOptionData" />
-					<bar-chart v-else :data="intervalData" />
+					<line-chart v-if="!chartType" :data="TimeOptionData" :grid="grid" height="250px" />
+					<bar-chart v-else :data="intervalData" :grid="grid" height="250px"  />
 				</section>
 			</div>
 			<div slot="footer" class="dialog-footer text-center">
-				<el-button type="primary">关 闭</el-button>
+				<el-button type="primary" @click="dialogVisible=false">关 闭</el-button>
 			</div>
 		</el-dialog>
 
@@ -127,6 +158,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import { getVirtualMember } from '@/api/member'
+import { inStoreTimeData } from '@/api/report'
 import LineChart from '@/components/Charts/LineChart'
 import barChart from "@/components/Charts/BarChart";
 export default {
@@ -134,20 +166,28 @@ export default {
   data() {
     return {
 			TimeOptionData: {
-				seriesData: [[120, 110, 125, 145, 122, 165, 122, 220, 182, 191, 134, 150]],
-				legendData: ['CMCC'],
-				xAxisData: [['13:00', '13:05', '13:10', '13:15', '13:20', '13:25', '13:30', '13:35', '13:40', '13:45', '13:50', '13:55']]
+				seriesData: [],
+				yAxisName: '',
+				xAxisData: []
 			},
-			intervalData:{
-				xAxisData: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-				seriesData: [
-					{ name: 'name1', data: [79, 52, 200, 334, 390, 330, 220] }]
+			intervalData: {
+				seriesData: [],
+				yAxisName: '',
+				xAxisData: []
+			},
+			grid:{
+				top: '20%',
+				left: '2%',
+				right: '5%',
+				bottom: '5%',
+				containLabel: true
 			},
       dateTimes: [],
 			chartType:0,
-			dialogVisible: true,
+			dialogVisible: false,
 			showType: false,
       tableLoading: false,
+			editData:{},
       form: {
         name: '',
         storeId: '',
@@ -204,6 +244,45 @@ export default {
       this.pagination.page = ~~val
       this.getTableData()
     },
+		getInStoreData(item) {
+			this.tableLoading = true
+			this.editData = item
+			this.TimeOptionData.seriesData = []
+			this.TimeOptionData.xAxisData = []
+			this.intervalData.xAxisData = []
+			this.intervalData.seriesData = []
+			inStoreTimeData(item.faceId).then(res => {
+				const _data = res.data
+				this.editData = Object.assign(this.editData, _data)
+				console.log('this.editData', this.editData)
+				const _seriesData = []
+				const _xAxisData = []
+				_data.date.forEach(item => {
+					_seriesData.push(item.count)
+					_xAxisData.push(item.date.replace(item.date.split('-')[0] + '-', ''))
+				})
+
+				const _intvlSeriesData = []
+				const _intvAxisData = []
+				_data.hour.forEach(item => {
+					_intvlSeriesData.push(item.count)
+					_intvAxisData.push(item.hh + ':00')
+				})
+
+				this.intervalData.xAxisData = _intvAxisData
+				this.intervalData.yAxisName = '次数'
+				this.intervalData.seriesData = _intvlSeriesData
+
+
+				this.TimeOptionData.seriesData = [_seriesData]
+				this.TimeOptionData.xAxisData = [_xAxisData]
+				this.TimeOptionData.yAxisName = '次数'
+
+				this.dialogVisible = true
+			}).finally(() => {
+				this.tableLoading = false
+			})
+		},
 		// 全局门店下拉修改
 		$storeIdChanged(storeId){
 			if(storeId){
@@ -219,6 +298,26 @@ export default {
  text-align: center;
 	.chart-box{
 
+	}
+}
+.dg-head{
+	color:#9fe7ff;
+	margin-bottom: 20px;
+	p{margin: 12px 0 0 0;
+	 img{
+		 vertical-align: top;
+	 }
+	}
+	.inline{
+		span{
+			margin-right: 20px;
+		}
+	}
+}
+.dg-info{
+	li{
+		display: inline-block;
+		margin:12px 30px 0 0;
 	}
 }
 .user-box{
