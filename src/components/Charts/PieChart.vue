@@ -9,9 +9,6 @@
 </template>
 
 <script>
-import echarts from "echarts";
-const animationDuration = 2000;
-
 export default {
   props: {
     className: {
@@ -59,19 +56,18 @@ export default {
             center: ["50%", "50%"],
             data: [],
             itemStyle: {
-              normal:{ 
-                  label:{ 
-                    show: true, 
-                    formatter: '{b} : {c} ({d}%)' 
-                  }, 
-                  labelLine :{show:true} 
+              normal:{
+                  label:{
+                    show: true,
+                    formatter: '{b} : {c} ({d}%)'
+                  },
+                  labelLine :{show:true}
                 },
               emphasis: {
                 shadowBlur: 10,
                 shadowOffsetX: 0,
                 shadowColor: "rgba(0, 0, 0, 0.5)"
-              },
-
+              }
             }
           }
         ]

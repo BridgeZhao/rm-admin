@@ -58,11 +58,10 @@ export function changeCouponsStatus(data) {
 	})
 }
 // 删除优惠券
-export function deleteCouponsList(params) {
+export function deleteCouponsList(id) {
 	return request({
-		url: '/mg/coupons/',
-		method: 'delete',
-		params
+		url: `/mg/coupons/${id}`,
+		method: 'delete'
 	})
 }
 // 查看记录

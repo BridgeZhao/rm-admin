@@ -6,7 +6,7 @@
 					<div class="grid-content bg-purple">
 						<el-form :model="ruleForm" :inline="true" status-icon ref="ruleForm" class="demo-ruleForm">
 							<el-form-item label="券号" prop="couponNo">
-								<el-input v-model="ruleForm.couponNo" autocomplete="off"></el-input>
+								<el-input v-model="ruleForm.couponNo" autocomplete="off" placeholder="输入券号"></el-input>
 							</el-form-item>
 							<el-form-item label="名称" prop="name">
 								<el-input v-model="ruleForm.name" autocomplete="off" placeholder="输入名称"></el-input>
@@ -149,7 +149,6 @@
 				</el-col>
 			</el-row>
 		</el-dialog>
-		>
 	</div>
 </template>
 <script>
@@ -209,6 +208,7 @@
 			}
 		},
 		mounted() {
+			this.getSceneList()
 			this.init()
 		},
 

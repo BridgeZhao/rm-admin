@@ -3,7 +3,7 @@
 		<div class="header">
 			<el-form :inline="true" :model="formInline" class="demo-form-inline">
 				<el-form-item label="名称">
-					<el-input v-model="formInline.name" placeholder="场景"></el-input>
+					<el-input v-model="formInline.name" placeholder="请输入卡券名称"></el-input>
 				</el-form-item>
 				<el-form-item label="关联场景">
 					<el-select v-model="formInline.scene" clearable filterable placeholder="请选择">
@@ -64,6 +64,16 @@
 				label="关联场景"
 				align="center"
 				show-overflow-tooltip>
+				<template slot-scope="scope">
+					<div v-if="Array.isArray(scope.row.scenarios)">
+						<ul style="list-style: none;display: flex;justify-content: left;padding: 0;overflow: hidden;height: 20px;">
+							<li v-for="(item,index) in scope.row.scenarios" :key="index">
+								<span>{{index+1}}、{{item.name}};</span>
+							</li>
+						</ul>
+					</div>
+					<span v-else></span>
+				</template>
 			</el-table-column>
 			<el-table-column
 				prop="limit"
@@ -83,7 +93,7 @@
 				<template slot-scope="scope">
 					<div v-if="Array.isArray(scope.row.stores)">
 						<ul style="list-style: none;display: flex;justify-content: left;padding: 0;overflow: hidden;height: 20px;">
-							<li v-for="(item,index) in scope.row.stores" >
+							<li v-for="(item,index) in scope.row.stores" :key="index">
 								<span>{{index+1}}、{{item.name}};</span>
 							</li>
 						</ul>
@@ -135,7 +145,7 @@
 		</div>
 		<el-dialog :title="importCoupons" :visible.sync="dialogTableVisible" :close-on-click-modal="false">
 			<el-form :model="couponsFlag" :rules="couponsFlagRules" ref="couponsFlag" label-width="85px">
-				<el-row :gutter="20">
+				<el-row :gutter="24">
 					<el-col :span="12"><div class="grid-content bg-purple">
 						<el-form-item label="名称" prop="name">
 							<el-input v-model="couponsFlag.name"></el-input>
@@ -144,11 +154,11 @@
 							<el-input-number v-model="couponsFlag.limit" :controls="false" :min="0" :max="100000" style="width: 244px;"></el-input-number>
 						</el-form-item>
 						<el-form-item label="发放权重" prop="weight">
-							<el-input-number v-model="couponsFlag.weight" :controls="false" style="width: 244px;"></el-input-number>
+							<el-input-number v-model="couponsFlag.weight" :controls="false" style="width: 244px;" :min="0" :max="100000"></el-input-number>
 						</el-form-item>
 						<el-form-item label="有效期" prop="time">
-							<el-date-picker
-								style="width: 250px;font-size: 12px;"
+							<el-date-picker class="timeBtn"
+								style="width: 244px;font-size: 12px;"
 								v-model="couponsFlag.time"
 								type="datetimerange"
 								range-separator="至"
@@ -177,17 +187,17 @@
 					</div></el-col>
 					<el-col :span="12"><div class="grid-content bg-purple">
 						<el-form-item label="优惠券说明">
-							<textarea class="input" v-model="couponsFlag.description" style="width: 17.5rem;height: 150px;overflow-y: auto;resize: none;"/>
+							<textarea class="input" v-model="couponsFlag.description" style="width: 17.5rem;height: 100px;overflow-y: auto;resize: none;"/>
 						</el-form-item>
 						<el-form-item label="奖券图标">
 							<el-upload
 								action=''
+								:auto-upload="false"
 								:on-change="getFile"
-								:limit="1"
-								list-type="picture"
-								:on-preview="handlePictureCardPreview"
+								:show-file-list="false"
+								accept="image/jpeg,image/png"
 								:on-remove="handleRemove"
-								:auto-upload="false">
+								>
 								<img v-if="couponsFlag.iconBase64" :src="couponsFlag.iconBase64" class="avatar">
 								<i v-else class="el-icon-plus avatar-uploader-icon"></i>
 							</el-upload>
@@ -198,8 +208,8 @@
 						<el-form-item v-if="!commandNumber" label="积分数量" prop="creditNum">
 							<el-input-number v-model="couponsFlag.creditNum" :controls="false" :min="0" :max="100000000" style="width: 244px;"></el-input-number>
 						</el-form-item>
-						<el-form-item v-if="commandNumber" label="导入优惠券">
-							<el-upload
+						<el-form-item v-if="commandNumber" label="导入优惠券" style="margin-bottom:0px;">
+							<!-- <el-upload
 								class="upload-demo"
 								action=""
 								:on-change="fileChange"
@@ -209,9 +219,34 @@
 								:auto-upload="false"
 								>
 								<el-button size="small" type="primary">点击上传</el-button>
-							</el-upload>
-<!--							<cs-file-upload accept="text/plain" @change="onCouponFileChange" style="width: 12.8rem"></cs-file-upload>-->
+							</el-upload> -->
+							<!-- <a href="javascript:;" class="a-upload">
+								<input type="file" id="uploadFile" class="file" accept="text/plain" @change="fileChange" style="opacity: 0;">点击这里上传文件
+							</a>
+							<i class="icon='el-icon-upload'"></i> -->
+							<input type="file" id="uploadFile" class="file" accept="text/plain" @change="fileChange">
+							
 						</el-form-item>
+						<div  v-show="dialog2Visible">
+							<span style="size:12px;color: #a00c0c;">*支持预览前50个</span>
+							<el-table
+								:data="couponData"
+								border
+								size='mini'
+								max-height="100"
+								style="width: 100%">
+								<el-table-column
+								type="index"
+								label="序号"
+								>
+								</el-table-column>
+								<el-table-column
+								prop="couponNum"
+								label="券号"
+								>
+								</el-table-column>
+							</el-table>
+						</div>
 					</div></el-col>
 				</el-row>
 
@@ -240,6 +275,8 @@
 		},
 		data() {
 			return {
+				dialog2Visible:false,
+				couponData:[],
 				actionUrl: `${process.env.VUE_APP_HTTP_MG}/mg/coupons`,
 				importCoupons:'导入优惠券',
 				dialogImageUrl:'',
@@ -267,7 +304,7 @@
 					credit:null,
 					creditNum:null
 				},
-				fileList:[],
+				fileList:{},
 				sceneList:[],
 				page: {
 					total: 20,
@@ -338,6 +375,32 @@
 			}
 		},
 		methods: {
+			readFile(file) {
+				return new Promise(function(resolve, reject) {
+					let reader = new FileReader();
+					reader.readAsText(file);
+					reader.onload = function(e, rs) {
+					resolve(e.target.result);
+					}
+				})
+			},
+			fileChange() {
+				let file = document.getElementById("uploadFile").files[0];
+				this.fileList = file
+				console.log('^^^^^',file)
+				let vm = this;
+				this.readFile(file).then(res => {
+					let arr = res.split(/[\n]/);
+					let newArr = arr.slice(0,50)
+					newArr.forEach((item, index) => {
+					let obj = {
+						couponNum: item
+					};
+					vm.$set(vm.couponData, index, obj);  //这里一定要用Vue.set(),不然视图不会更新
+					})
+					vm.dialog2Visible = true;   //显示一个dialog里面放一个table，将this.fileData的数据与之绑定即可
+				});
+				},
 			getBase64(file) {
 				return new Promise(function (resolve, reject) {
 					let reader = new FileReader()
@@ -354,15 +417,25 @@
 					}
 				})
 			},
-			fileChange(file){
-				console.log('~~~~~',file)
-				this.fileList.push(file.raw)
-			},
+			// fileChange(file){
+			// 	console.log('~~~~~',file[0])
+			// 	this.fileList.push(file.raw)
+			// },
 			getFile(file) {
+				console.log('#####',file)
+				const isLt2M = file.size / 1024 / 1024 / 1024 < 500;
+				if (!isLt2M) {
+				    this.$message.error('上传头像图片大小不能超过 500KB!');
+				}else{
+					this.getBase64(file.raw).then(res => {
+					this.couponsFlag.iconBase64 = res
+				  })
+				}
 				this.getBase64(file.raw).then(res => {
 					this.couponsFlag.iconBase64 = res
-					console.log(this.couponsFlag)
 				})
+				// this.dialogImageUrl = file.url
+				// this.dialogImg = true
 			},
 			handleRemove(file, fileList) {
 				console.log(file, fileList)
@@ -388,7 +461,7 @@
 					credit:null,
 					creditNum:null
 					}
-				this.fileList = []
+				this.fileList = {}
 				if(command === '1'){
 					this.couponsFlag = couponsFlag2
 					this.couponsFlag.couponType = 1
@@ -410,6 +483,7 @@
 				this.dialogTableVisible = true
 			},
 			cancle() {
+				
 				this.dialogTableVisible = false
 			},
 			edit(row) {
@@ -507,18 +581,24 @@
 					id :row.id
 				}
 				deleteCouponsList(row.id).then(res =>{
-					this.$message({
-						message: '已删除',
-						type: 'success'
-					})
-					this.searchCouponsList()
+					if(res === 'OK'){
+						this.$message({
+							message: '删除成功！',
+							type: 'success'
+						})
+						this.searchCouponsList()
+					} else{
+						this.$message({
+							message: '删除失败！',
+							type: 'warning'
+						})
+					}
 				})
 			},
 			saveOne(){
 				console.log(this.couponsFlag)
 				this.$refs['couponsFlag'].validate((valid) => {
 					if (valid) {
-						alert(1)
 						const times = this.couponsFlag.time
 						const startTime = times[0]
 						const endTime = times[1]
@@ -527,8 +607,9 @@
 						delete this.couponsFlag.time
 						console.log('保存的东西2',this.couponsFlag,this.fileList)
 						let form = new FormData();
-						form.append("cardNo", JSON.stringify(this.fileList));
+						form.append("cardNo", this.fileList);
 						form.append("json", JSON.stringify(this.couponsFlag))
+						console.log('保存的东西3',form)
 						postCouponsData(form).then(res =>{
 							this.dialogTableVisible = false
 							this.searchCouponsList()
@@ -667,14 +748,50 @@
 	.avatar-uploader-icon {
 		font-size: 28px;
 		color: #8c939d;
-		width: 100px;
-		height: 100px;
-		line-height: 100px;
+		width: 50px;
+		height: 50px;
+		line-height: 50px;
 		text-align: center;
 	}
 	.avatar {
-		width: 100px;
-		height: 100px;
+		width: 50px;
+		height: 50px;
 		display: block;
 	}
+	.a-upload {
+		width: 100%;
+		padding: 4px 10px;
+		height: 35px;
+		line-height: 26px;
+		position: relative;
+		cursor: pointer;
+		border: 1px solid;
+		background-color: #00172f !important;
+		border-color: #195569 !important;
+		color: #418aaa !important;
+		overflow: hidden;
+		display: inline-block;
+		*display: inline;
+		*zoom: 1
+}
+
+.a-upload  input {
+	width: 100%;
+    height: 100%;
+    position: absolute;
+    font-size: 100px;
+    right: 0;
+    top: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    cursor: pointer
+}
+.el-date-picker.timeBtn .el-picker-panel__footer {
+    border-top: 1px solid #72dcff;
+    padding: 4px;
+    text-align: right;
+    position: relative;
+    font-size: 0;
+	background: none;}
+	
 </style>

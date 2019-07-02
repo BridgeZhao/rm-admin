@@ -7,13 +7,17 @@
   font-weight: 400 !important;
   color: #71dcff;
 }
+.el-tree{
+	padding:.5rem;
+	background: none;
+}
 .el-dialog__header{
   background: $borderColor;
   padding: 15px 20px;
   border-bottom: 1px solid $bgColor;
 }
 .el-select{ width: 100%;}
-.el-button--primary,.el-button--primary:focus,.el-button--primary:active{
+.el-button--primary,.el-button--primary:focus,.el-button--primary:active,.el-radio-button__orig-radio:checked + .el-radio-button__inner{
   background-color:$menuActiveText!important;
   border-color: $menuText!important;
   color: $bgColor!important;
@@ -22,7 +26,7 @@
     background-color:$menuText!important;
   }
 }
-.el-button--default,.el-breadcrumb__inner.is-link, .el-breadcrumb__inner a{
+.el-button--default,.el-breadcrumb__inner.is-link, .el-breadcrumb__inner a,.el-radio-button__inner{
   &:hover{
     color:$menuActiveText!important;
   }
@@ -33,15 +37,7 @@
 .el-dialog{
   border: 1px solid $subMenuBg!important;
 }
-.el-date-table td.in-range div{
-	background-color:$menuText!important;
-	color:$menuActiveText!important;
- }
-.el-date-table td.start-date span, .el-date-table td.end-date span{
-	background-color:$menuActiveText!important;
-	color:$subMenuBg!important;
-}
-table,table th,table td,.el-table--border,.el-button--default,.el-message-box,.el-dialog,.el-button--danger,.el-select-dropdown.is-multiple .el-select-dropdown__item.selected,.el-cascader-menus,.el-cascader-menu__item{
+table,table th,table td,.el-table--border,.el-radio-button__inner,.el-button--default,.el-message-box,.el-dialog,.el-button--danger,.el-select-dropdown.is-multiple .el-select-dropdown__item.selected,.el-cascader-menus,.el-cascader-menu__item{
   background-color:$subMenuBg!important;
   border-color: #195569!important;
   color: $menuText;
@@ -91,7 +87,7 @@ table,table th,table td,.el-table--border,.el-button--default,.el-message-box,.e
   border:none!important;
   min-width: 120px;
 }
-.el-cascader-menu__item--extensible:after,.el-range-separator,.el-cascader__label,.el-step__icon-inner,.el-step__title,.el-upload__tip,.el-message--success,.area-list.el-tag,.area-list.el-tag .el-icon-close,.el-message-box__headerbtn .el-message-box__close,.el-input__icon.el-range__close-icon{
+.el-cascader-menu__item--extensible:after,.el-range-separator,.el-cascader__label,.el-step__icon-inner,.el-step__title,.el-upload__tip,.el-message--success,.area-list.el-tag,.area-list.el-tag .el-icon-close,.el-message-box__headerbtn .el-message-box__close,.el-input__icon.el-range__close-icon,.el-picker-panel__icon-btn{
   color:$menuText!important;
 }
 .area-list.el-tag{
@@ -112,9 +108,40 @@ table,table th,table td,.el-table--border,.el-button--default,.el-message-box,.e
     color:$menuActiveText!important;
   }
 }
-.el-select .el-tag,.el-select .el-tag__close.el-icon-close,.el-cascader-menu__item.is-active, .el-date-table td.in-range div:hover, .el-date-table.is-week-mode .el-date-table__row.current div, .el-date-table.is-week-mode .el-date-table__row:hover div{
-  background: $borderColor;
-  color:$menuActiveText;
+.el-date-table td.in-range div,.el-date-table td.start-date span, .el-date-table td.end-date span{
+	background-color:$menuActiveText!important;
+	color:$subMenuBg!important;
+}
+.el-date-table.is-week-mode .el-date-table__row.current div,.el-date-table td.today span{
+	background: $menuText;
+	color:$menuActiveText;
+}
+.el-date-table td.current:not(.disabled) span,.el-select .el-tag__close.el-icon-close:hover{
+	color:$menuBg;
+	background: $menuActiveText;
+}
+.el-date-table td.disabled div{
+	background: none;
+	color:$disabled;
+}
+.el-date-table .next-month.disabled{
+	background: $borderColor;
+}
+.el-date-table td.in-range div,.el-date-table.is-week-mode .el-date-table__row{
+	&:not(.current):hover{
+		div{
+			background: $menuBg;
+			color:$menuText;
+		}
+	}
+}
+.el-select .el-tag{
+	background: $menuBg;
+	color:$menuText;
+}
+.el-select .el-tag__close.el-icon-close,.el-cascader-menu__item.is-active{
+  background: $menuBg;
+  color:$menuText;
   &.el-cascader-menu__item--extensible:after{
     color:$menuActiveText;
   }
@@ -143,6 +170,15 @@ table,table th,table td,.el-table--border,.el-button--default,.el-message-box,.e
 }
 .el-date-table td.available:hover{
   color: $menuActiveText!important;
+}
+.el-button--primary{
+	background-color: $menuActiveText!important;
+	color: $bgColor;
+	text-shadow:none;
+}
+.active.el-button--default{
+	border-color: $menuActiveText!important;
+	color: $menuActiveText!important;
 }
 table th,.el-step__line{
   background-color:$menuText!important;
@@ -311,11 +347,6 @@ table .cell{
       }
     }
   }
-}
-.el-date-table td.today span,.el-button--primary{
-  background-color: $menuActiveText!important;
-  color: $bgColor;
-  text-shadow:none;
 }
 .el-input__icon,.el-input__suffix,.el-checkbox__label,.el-pagination__jump,.el-table__empty-text{
   color: $menuText!important;

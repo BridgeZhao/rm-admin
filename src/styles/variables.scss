@@ -2,7 +2,6 @@
 $menuText:#418aaa;
 $menuActiveText:#71dcff;
 $subMenuActiveText:#71dcff; //https://github.com/ElemeFE/element/issues/12951
-
 $menuBg:#0a2949;
 $menuHover:#00172f;
 $bgColor:#00172f;
@@ -10,7 +9,7 @@ $borderColor: #195569;
 $tbHover: #07203a;
 $subMenuBg:#06203a;
 $subMenuHover:#00172f;
-
+$disabled:#3c5973;
 $sideBarWidth: 210px;
 $--color-primary: teal;
 // the :export directive is the magic sauce for webpack
@@ -22,6 +21,7 @@ $--color-primary: teal;
   menuBg: $menuBg;
   borderColor:$borderColor;
   tbHover:$tbHover;
+	disabled:$disabled;
   menuHover: $menuHover;
   subMenuBg: $subMenuBg;
   subMenuHover: $subMenuHover;

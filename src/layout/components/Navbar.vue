@@ -33,14 +33,14 @@
           <span>{{name}}</span>
         </div>
         <el-dropdown-menu class="user-dropdown">
-          <el-dropdown-item>
-            <span style="display:block;" @click="logout">
-							{{ $t("menus.loginout") }}</span>
-          </el-dropdown-item>
 					<el-dropdown-item>
             <span style="display:block;" @click="logout">
 							{{ $t("menus.password") }}</span>
 					</el-dropdown-item>
+          <el-dropdown-item>
+            <span style="display:block;" @click="logout">
+							{{ $t("menus.loginout") }}</span>
+          </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
       <screenfull id="screenfull" class="right-menu-item hover-effect" />

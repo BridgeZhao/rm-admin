@@ -99,6 +99,8 @@
       addGame () {
         this.dialogType = 'add'
         this.dialogVisible = true
+        this.rules.imgBase64 = [{required: true, message: '请上传h5游戏图片', trigger: 'change'}]
+        this.fromInfo.imgBase64 = undefined
       },
       handlePreview(file) {
         console.log(file)

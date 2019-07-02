@@ -28,12 +28,6 @@
         align="center"
       />
       <el-table-column
-        prop="id"
-        label="场景"
-        min-width="120"
-        align="center"
-      />
-      <el-table-column
         prop="dayLimit"
         label="每日每人人领取上限"
         min-width="160"
@@ -76,12 +70,12 @@
       </el-button>
     </div>
     <el-dialog :title="dialogTitle" :visible.sync="dialogTableVisible">
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="140px">
+      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="140px" 
+	    style="width: 80%;
+		margin-left: 10%;
+		margin-top: 2%;"> 
         <el-form-item label="场景名称" prop="name">
           <el-input v-model="ruleForm.name" />
-        </el-form-item>
-        <el-form-item label="场景" prop="id">
-          <el-input v-model="ruleForm.id" />
         </el-form-item>
         <el-form-item label="每日每人领取上线" prop="dayLimit">
           <el-input-number v-model="ruleForm.dayLimit" :controls="false" :min="1" :max="10000" style="width: 100%;"></el-input-number>
@@ -90,7 +84,7 @@
 					<el-input-number v-model="ruleForm.totalLimit" :controls="false" :min="1" :max="10000" style="width: 100%;"></el-input-number>
         </el-form-item>
       </el-form>
-      <div slot="footer">
+      <div slot="footer" style="width: 90%;">
         <el-button @click="cancle">
           取 消
         </el-button>
@@ -123,15 +117,11 @@
 				ruleForm: {
 					name: '',
 					dayLimit: null,
-					id: '',
 					totalLimit: null
 				},
 				rules: {
 					name: [
 						{required: true, message: '请输入场景名称', trigger: 'blur'}
-					],
-					id: [
-						{required: true, message: '请输入场景', trigger: 'blur'}
 					],
 					dayLimit: [
 						{required: true, message: '每日每人领取上线', trigger: 'blur'}
@@ -163,12 +153,13 @@
 				this.ruleForm = {
 					name: '',
 					dayLimit: null,
-					id: '',
 					totalLimit: null
 				}
 			},
 			cancle() {
 				this.dialogTableVisible = false
+				this.$refs['ruleForm'].resetFields();
+				// this.getTableList()
 			},
 			edit(row) {
 				this.dialogTableVisible = true
@@ -194,7 +185,6 @@
 				})
 			},
 			submit() {
-				this.dialogTableVisible = false
 				this.$refs['ruleForm'].validate((valid) => {
 					if (valid) {
 						const data = this.ruleForm
@@ -206,14 +196,16 @@
 								})
 								this.formInline.scene = ''
 								this.getTableList()
+								this.dialogTableVisible = false
 							} else{
 								this.$message({
 									message: this.dialogTitle === '新增场景' ? '添加失败' :'修改失败',
 									type: 'warning'
 								})
+								this.dialogTableVisible = false
 							}
 						})
-					} else {
+					}else {
 						return false
 					}
 				})
@@ -224,6 +216,7 @@
 			},
 			handleCurrentChange(val) {
 				this.current = val
+				this.page.page = val
 				this.getTableList()
 			},
 			next() {
