@@ -212,6 +212,11 @@ export default {
   },
   methods: {
     getUsers() {
+    	for(let key in this.pagination){
+    		if(!this.pagination[key]){
+    			delete this.pagination[key]
+				}
+			}
       userQuery(this.pagination).then(res => {
 				const {size, total, page, data} = res
 				this.tableData = data
