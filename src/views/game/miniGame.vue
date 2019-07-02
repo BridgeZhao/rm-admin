@@ -78,7 +78,7 @@
         		{min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur'}
         	],
         	link:[{ required: true, message: '请输入游戏h5链接', trigger: 'blur'},
-            {type: 'url', message: '请输入正确的游戏h5链接', trigger: 'blur'},
+            // {type: 'url', message: '请输入正确的游戏h5链接', trigger: 'blur'},
           ],
           imgBase64:[{required: true, message: '请上传h5游戏图片', trigger: 'change'}]
         },
