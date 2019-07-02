@@ -616,18 +616,11 @@ export default {
       //   this.$message.error('请选择大于现在的结束时间')
       // }
     },
-    // pickerOptions:{
-    //   disabledDate: time => {
-    //     console.log(new Date(), time)
-    //     return(
-    //       time < new Date(this.form.cooperationBegin + " 00:00:00") || time > new Date(this.form.cooperationEnd + " 00:00:00")
-    //     )
-    //   }
-    // }
   },
    watch:{
     StoreId : function(newVal,oldVal){
       this.pagination.storeId = newVal
+      this.pagination.page = 1
       this.adPage()
       this.getAreas(this.pagination.storeId)
     }
