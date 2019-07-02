@@ -92,7 +92,8 @@
                              <el-table
                             :data="tableData"
 							:default-sort = "{prop: 'hh', order: 'Ascending'}"
-                            style="width: 100%">
+                            style="width: 100%"
+                            stripe=true>
                                 <el-table-column
                                     prop="hh"
                                     label="时间段"
@@ -272,7 +273,7 @@ export default {
                this.tableData = res.data.weekHeatTable
                let arr = []
                  for (let i = 0; i < res_data.length; i++) {
-                   arr.push([res_data[i].weekday - 1,res_data[i].hh - 8,res_data[i].count]);
+                   arr.push([res_data[i].weekday - 1,res_data[i].hh,res_data[i].count]);
                 }
                 arr = arr.map(function (item) {
                     return [item[0], item[1], item[2] || '-']

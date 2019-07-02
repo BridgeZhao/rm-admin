@@ -233,6 +233,7 @@ table tr.hover-row td,table tr.current-row>td,.el-cascader-menu__item:focus:not(
 }
 .el-table {
   box-shadow: 0 0 6px #01182f;
+  background: none!important;
   .el-table__row--striped{
     td{
       background: $subMenuBg!important;
@@ -241,6 +242,10 @@ table tr.hover-row td,table tr.current-row>td,.el-cascader-menu__item:focus:not(
   .cell {
     text-align: center
   }
+}
+
+.sort-caret.descending{
+  border-top-color: $menuText;
 }
 button{
   .el-icon-loading:before{
