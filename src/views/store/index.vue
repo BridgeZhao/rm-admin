@@ -484,7 +484,6 @@ export default {
 			$event.currentTarget.className=name+' leave'
 		},
 		stepNext(type = 'normal') {
-			debugger
 			if (this.steps > 2) {
 				return
 			}
@@ -598,7 +597,7 @@ export default {
 			canvas.width = canvas.offsetWidth
 			this.size = await AutoImage(this.fromInfo.imgBase64, canvas.width)
 			canvas.height = this.size.height
-			// document.querySelector('.perview-warp').style.height = canvas.height + 'px'
+			document.querySelector('.perview-warp').style.height = canvas.height + 'px'
 			this.drawLayer = new DrawImage(canvas, {
 				prointSize: 5,
 				scale: scale,

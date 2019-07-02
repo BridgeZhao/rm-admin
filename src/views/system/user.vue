@@ -60,7 +60,7 @@
 				<el-input
 					style="width: 300px;margin-right: 10px"
 					placeholder="请输入用户名"
-					v-model="pagination.name">
+					v-model="pagination.username">
 					<i slot="prefix" class="el-input__icon el-icon-search"></i>
 				</el-input>
 				<el-button type="primary" icon="el-icon-search" @click="getUsers">搜索</el-button>
@@ -171,7 +171,7 @@ export default {
 			pagination: {
 				page: 1,
 				size: 10,
-				name: '',
+				username: '',
 				storeId:0,
 				total: 0
 			},
