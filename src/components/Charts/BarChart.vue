@@ -18,6 +18,18 @@ export default {
       type: String,
       default: '300px'
     },
+		grid:{
+    	type:Object,
+			default(){
+    		return {
+					top: '10%',
+					left: '2%',
+					right: '5%',
+					bottom: '5%',
+					containLabel: true
+				}
+			}
+		},
     data: {
       type: Object,
       default() {
@@ -34,50 +46,42 @@ export default {
 						type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
 					}
 				},
-				grid: {
-					top: '10%',
-					left: '2%',
-					right: '5%',
-					bottom: '5%',
-					containLabel: true
-				},
-				xAxis: [{
+				grid: this.grid,
+				xAxis: {
 					type: 'category',
 					data: [],
 					axisTick: {
 						alignWithLabel: true
 					}
-				}],
-				yAxis: [{
+				},
+				yAxis: {
 					type: 'value',
+					name:'%',
 					axisTick: {
 						show: false
 					}
-				}],
-				series: []
+				},
+				series: {
+					name: '123',
+					type: 'bar',
+					stack: 'vistors',
+					barWidth: '10',
+					data: [],
+					itemStyle: {
+						normal: {
+							color: 'rgba(113,220,255,.9)',
+							borderWidth: 12
+						}
+					},
+					animationDuration
+				}
 			}
 		}
 	},
   created() {
     this.options.xAxis.data = this.data.xAxisData
-    const series_data = []
-    this.data.seriesData.map(item => {
-      series_data.push({
-        name: item.name,
-        type: 'bar',
-        stack: 'vistors',
-        barWidth: '80%',
-        data: item.data,
-				itemStyle: {
-					normal: {
-						color: 'rgba(113,220,255,.9)',
-						borderWidth: 12
-					}
-				},
-        animationDuration
-      })
-    })
-    this.options.series = series_data
+    this.options.series.data = this.data.seriesData
+    this.options.yAxis.name = this.data.yAxisName
     console.log(this.options)
   }
 }

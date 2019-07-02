@@ -26,6 +26,18 @@
         type: String,
         default: '300px'
       },
+			grid:{
+				type:Object,
+				default(){
+					return {
+						top: '10%',
+						left: '2%',
+						right: '5%',
+						bottom: '5%',
+						containLabel: true
+					}
+				}
+			},
       data: {
         type: Object,
         default() {
@@ -48,13 +60,7 @@
             data: [],
             right: '4%'
           },
-          grid: {
-            top: '12%',
-            left: '3%',
-            right: '5%',
-            bottom: '5%',
-            containLabel: true
-          },
+					grid: this.grid,
           xAxis: [
             {
               type: 'category',
@@ -62,7 +68,7 @@
               data: []
             }
           ],
-          yAxis: [{
+          yAxis: {
             type: 'value',
             name: '(%)',
             axisTick: {
@@ -74,7 +80,7 @@
                 fontSize: 14
               }
             }
-          }],
+          },
           series: []
         }
       }
@@ -99,9 +105,10 @@
     },
     methods: {
       loadData(data) {
-        const {legendData, xAxisData, seriesData} = data;
-        this.options.legend.data = legendData
+        const {legendData, xAxisData,yAxisName, seriesData} = data;
+        this.options.legend.data = legendData||[]
         this.options.xAxis = []
+        this.options.yAxis.name =  yAxisName || '%'
         xAxisData.map(item => {
           this.options.xAxis.push({
             type: 'category',
@@ -118,7 +125,7 @@
         this.options.series = []
         seriesData.map((item, idx) => {
           this.options.series.push({
-            name: legendData[idx],
+            name: legendData?legendData[idx]:'',
             type: 'line',
             smooth: true,
             symbol: 'circle',
