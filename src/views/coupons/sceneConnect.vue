@@ -2,8 +2,8 @@
     <div class="config">
         <div class="header">
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
-                <el-form-item label="场景">
-                    <el-input v-model="formInline.scene" placeholder="场景"></el-input>
+                <el-form-item label="发放场景">
+                    <el-input v-model="formInline.scene" placeholder="输入发放场景"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="search()">查询</el-button>
@@ -54,7 +54,7 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="page.current"
-                :page-sizes="[100, 200, 300, 400]"
+                :page-sizes="[10, 20, 30, 40]"
                 :page-size="page.size"
                 class="pagination"
                 layout="total, sizes, prev, pager, next, jumper"

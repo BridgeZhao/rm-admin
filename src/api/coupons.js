@@ -8,11 +8,11 @@ export function getScenarioData(params) {
 	})
 }
 // 查询列表
-export function searchScenarioData(id) {
+export function searchScenarioData(params) {
 	return request({
-		url: `/mg/scenario/${id}`,
-		method: 'get'
-
+		url: '/mg/scenario',
+		method: 'get',
+        params
 	})
 }
 // 编辑列表内容

@@ -167,7 +167,6 @@
         this.fromInfo.gameId = ''
         this.fromInfo.areaId = ''
         this.fromInfo.checked = []
-  
       },
       editChannelGame(val){
         this.addEditType = false
@@ -176,6 +175,7 @@
         this.fromInfo.id = val.id
         this.fromInfo.gameName = val.game.name
         this.fromInfo.gameId = val.game.id
+        this.fromInfo.checked = []
         for(let i = 0 ; i<val.devices.length; i++ ){
           this.fromInfo.checked.push(val.devices[i].id)
         }
@@ -295,6 +295,7 @@
           background:$menuBg;
           border:1px solid $borderColor;
           border-radius: 4px;
+          margin-top:1.2rem;
           margin-right: 1.2rem;
           margin-bottom: 1.2rem;
           padding: 0 1.2rem;

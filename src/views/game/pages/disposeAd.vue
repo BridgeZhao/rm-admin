@@ -95,6 +95,7 @@
                 size="mini"
                 style="width:100%;"
                 @change='handleTime'
+                :picker-options="pickerOptions" 
               ></el-date-picker>
             </el-form-item>
             <el-form-item label="区域" prop="area" v-if='form.deviceType !== "pad"'  :label-width="formLabelWidth">
@@ -134,7 +135,7 @@
                   <el-col :span="12">
                     <div class="text-left">
                       <el-button type="primary" size="small"><i class="el-icon-upload el-icon--right"/> 点击上传</el-button>
-                      <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500KB</div>
+                      <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过12MB</div>
                     </div>
                   </el-col>
                 </el-row>
@@ -158,7 +159,7 @@
                   <el-col :span="12">
                     <div  class="text-left">
                       <el-button type="primary" size="small"><i class="el-icon-upload el-icon--right"/> 点击上传</el-button>
-                      <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500KB</div>
+                      <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过12MB</div>
                     </div>
                     <div>
 
@@ -224,12 +225,13 @@
         label="区域"
         :formatter="areaFormatter"
       />
-      <el-table-column
-        label="设备类型"
-        prop="deviceType"
-        width="80"
-      />
-
+      <el-table-column  label="设备类型"  prop="deviceType"  width="80">
+        <template slot-scope="scope">
+          <el-tag :type="scope.row.deviceType==='camera'?'success':scope.row.deviceType==='pad'?'':'warning'">
+            {{ scope.row.deviceType }}
+          </el-tag>
+        </template>
+      </el-table-column >
       <el-table-column
         label="创建时间"
         width="180">
@@ -244,12 +246,11 @@
           <span>{{ scope.row.begin | dateformat('YYYY-MM-DD') }} - {{ scope.row.end | dateformat('YYYY-MM-DD') }}</span>
         </template>
       </el-table-column>
-       <el-table-column
-        label="状态"
-      	width="80"
-      >
+       <el-table-column label="状态" width="80">
         <template slot-scope="scope">
-          <el-tag>{{ scope.row.status === 0 ? '待生效': scope.row.status === 1 ?'投放中': scope.row.status === 2 ? '已撤销':'已结束' }}</el-tag>
+          <el-tag :type="scope.row.status === 0 ?'success':scope.row.status === 1 ?'warning' : scope.row.status === 2 ? 'danger':'info'">
+          {{ scope.row.status === 0 ? '待生效': scope.row.status === 1 ?'投放中': scope.row.status === 2 ? '已撤销':'已结束' }}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column
@@ -357,7 +358,14 @@ export default {
       areasList: [],
       formTime:[],
       fileReader: new FileReader(),
-      showImgBase64s:''
+      showImgBase64s:'',
+      pickerOptions:{
+        disabledDate: time => {
+          return (
+            time < new Date()
+          )
+        }
+      }
     }
   },
   computed: {
@@ -426,7 +434,7 @@ export default {
     handlePreview(file,key) {
       console.log(file,key)
       const fileName = file.name
-      const isLimt = file.size / 1024 < 500
+      const isLimt = file.size / 1024 < 12288
       const regex = /(.jpg|.jpeg|.png)$/
       if (regex.test(fileName.toLowerCase())) {
         if (isLimt) {
@@ -436,13 +444,16 @@ export default {
               this.form.bannerImgBase64 = res.currentTarget.result
               this.form.bannerImg = res.currentTarget.result
             }else{
-              this.form.imgBase64s.push(res.currentTarget.result)
-              this.imgBase64Show = this.form.imgBase64s[0]
+              // this.form.imgBase64s.push(res.currentTarget.result)
+              console.log(this.form.imgBase64s)
+              this.form.imgBase64s[0]  = res.currentTarget.result
+              
+              this.imgBase64Show = this.form.imgBase64s[this.form.imgBase64s.length - 1]
             }
             this.form = Object.assign({}, this.form)
           }
         }else{
-          this.$message.error('上传图片不能超过500KB')
+          this.$message.error('上传图片不能超过12MB')
         }
       }else{
         this.$message.error('只能上传jpg或png格式')
@@ -456,7 +467,16 @@ export default {
           this.form.areaIds = this.form.area
           this.form.begin = this.dateToMs(this.formTime[0])
           this.form.end = this.dateToMs(this.formTime[1])
+          if(this.dialogType === 'edit'){
+            if(!this.form.bannerImgBase64){
+              delete this.form.bannerImgBase64
+            }
+            if(this.form.imgBase64s.length === 0){
+              delete this.form.imgBase64s
+            }
+          }
           delete this.form.bannerImg
+          delete this.form.imgs
           this.form.storeId = this.pagination.storeId
           const _data=this.form
           addAd(_data).then(() => {
@@ -485,11 +505,6 @@ export default {
     },
     cancelRow(id) {
       console.log(this)
-      //JSON.stringify()
-      // let _status = {
-      //   "id": id,
-      //   "status" : 2
-      // }
       let _status = {}
       _status.id = id
       _status.status = 2
@@ -517,10 +532,11 @@ export default {
       console.log("区域",this.form.area)
       this.formTime[0] = this.timestampToTime(data.begin)
       this.formTime[1] = this.timestampToTime(data.end)
-      this.form.bannerImgBase64 = data.bannerImg
-      this.form.imgBase64s = data.imgs
-      if(this.form.imgBase64s){
-        this.imgBase64Show = this.form.imgBase64s[0]
+      // this.form.bannerImgBase64 = data.bannerImg
+      // this.form.imgBase64s = data.imgs
+      this.form.imgBase64s = []
+      if(data.imgs){
+        this.imgBase64Show = data.imgs[0]
       }
       console.log('编辑', this.form)
       this.dialogType = 'edit'
@@ -528,7 +544,7 @@ export default {
     },
 
     clearClose(reload) {
-    	debugger
+    	// debugger
       this.dialogVisible = false
       if (reload === 'reload') {
         this.adPage()
@@ -554,10 +570,12 @@ export default {
 		},
     addAd(){
       this.dialogType = 'add'
+      this.formTime = []
+      this.imgBase64Show = ''
       this.dialogVisible=true
     },
     timestampToTime (cjsj) {
-        let date = new Date(cjsj) //时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        let date = new Date(cjsj)
         let Y = date.getFullYear() + '-'
         let M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-'
         let D = date.getDate() + ' '
@@ -592,6 +610,14 @@ export default {
         this.$message.error('请选择大于现在的结束时间')
       }
     },
+    // pickerOptions:{
+    //   disabledDate: time => {
+    //     console.log(new Date(), time)
+    //     return(
+    //       time < new Date(this.form.cooperationBegin + " 00:00:00") || time > new Date(this.form.cooperationEnd + " 00:00:00")
+    //     )
+    //   }
+    // }
   },
    watch:{
     StoreId : function(newVal,oldVal){

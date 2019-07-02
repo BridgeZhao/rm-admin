@@ -149,10 +149,14 @@
 				console.log(arr);
 			},
 			deleteRow(index, rows) {
-				rows.splice(index, 1)
+				let num =  this.ruleForm.couponId.findIndex(item => item === rows[index].couponId)
+				console.log('index',index,'表格',rows,'num',num,'this.ruleForm.couponId:',this.ruleForm.couponId)
 				this.$nextTick(function () {
-					this.ruleForm.couponId.splice(this.ruleForm.couponId.findIndex(item => item.id === rows[index].id), 1)
+					this.ruleForm.couponId.splice(num, 1)
 				})
+				rows.splice(index, 1)
+				console.log('this.ruleForm.couponId---',this.ruleForm.couponId)
+				
 			},
 			// 保存像后台传新增的场景关联的值
 			postData(){
@@ -169,17 +173,19 @@
 						}
 						obj = JSON.parse(JSON.stringify(obj))
 						sceneBind(obj).then(res =>{
-							if(res.code !== 200){
+							alert('子组件保存事件')
+							if(res === 'OK'){
 								this.$message({
 									showClose: true,
-									message: '成功！',
+									message: '新增成功！',
 									type: 'success'})
-							}
-							this.$message({
+								
+							}else{
+								this.$message({
 								showClose: true,
 								message: res.msg,
 								type: 'warning'})
-
+							}
 						})
 					} else {
 						return false;
