@@ -22,30 +22,36 @@
     <el-dialog :title="dialogType === 'add' ? '添加游戏' : '修改游戏'" :width="'720px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="()=>{clearClose()}">
       <!--基本信息-->
       <el-form  v-loading="dgLoading" :model="fromInfo" :rules="rules"  ref="myform">
-        <el-form-item label="游戏名称" :label-width="formLabelWidth" prop="name" >
-          <el-input v-model="fromInfo.name" autocomplete="off" placeholder="请输入游戏名称"></el-input>
-        </el-form-item>
-        <el-form-item label="path" :label-width="formLabelWidth" prop="link" >
-          <el-input v-model="fromInfo.link" autocomplete="on"  placeholder="请输入path"></el-input>
-        </el-form-item>
-        <el-form-item label="" :label-width="formLabelWidth" prop="imgBase64" >
-          <el-upload
-            class="upload-img"
-            action=""
-            ref="upload"
-            name="imgBase64"
-            :auto-upload="false"
-            :show-file-list="false"
-            :on-change="handlePreview">
-            <div v-if="!fromInfoImg"  class="text-left">
-              <el-button type="primary" size="small"><i class="el-icon-upload el-icon--right"/> 点击上传</el-button>
-              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500KB</div>
+        <el-row :gutter="24" class="">
+          <el-col :span="16">
+            <el-form-item label="游戏名称" :label-width="formLabelWidth" prop="name" >
+              <el-input v-model="fromInfo.name" autocomplete="off" placeholder="请输入游戏名称"></el-input>
+            </el-form-item>
+            <el-form-item label="path" :label-width="formLabelWidth" prop="link" >
+              <el-input v-model="fromInfo.link" autocomplete="on"  placeholder="请输入path"></el-input>
+            </el-form-item>
+            <el-form-item label="" :label-width="formLabelWidth" prop="imgBase64" >
+              <el-upload
+                class="upload-img"
+                action=""
+                ref="upload"
+                name="imgBase64"
+                :auto-upload="false"
+                :show-file-list="false"
+                :on-change="handlePreview">
+                <div class="text-left">
+                  <el-button type="primary" size="small"><i class="el-icon-upload el-icon--right"/> 点击上传</el-button>
+                  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500KB</div>
+                </div>  
+              </el-upload>
+          </el-form-item>
+          </el-col >
+          <el-col :span="8">
+            <div class="upload-imgshow">
+              <img class="game_img" :src="fromInfoImg" onerror="notfound(this)">
             </div>
-            <div v-else class="upload-imgshow">
-              <img class="game_img" :src="fromInfoImg" alt="">
-            </div>
-          </el-upload>
-        </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer text-center">
         <el-button type="primary"  @click="btnSubmit">确定</el-button></div>
@@ -232,10 +238,17 @@
           }
         }
       }
-      .game_img{
-        width: 100%;
-        max-height: 200px;
-        vertical-align: middle;
+      .upload-imgshow{
+        max-width:100%;
+        display: flex;
+        justify-content: center;
+        // background: $bgColor;
+        // border:1px solid $borderColor;
+        .game_img{
+          max-width: 100%;
+          max-height: 260px;
+          vertical-align: middle;
+        }
       }
       .data-list{
         >li.add {
