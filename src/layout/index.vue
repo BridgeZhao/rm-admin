@@ -25,11 +25,16 @@ export default {
   mixins: [ResizeMixin],
   computed: {
     sidebar() {
+    	console.log(this.$store.state.app.sidebar)
       return this.$store.state.app.sidebar
     },
     device() {
       return this.$store.state.app.device
     },
+		smallRatio(){
+    	console.log(document.body.offsetWidth,document.body.offsetWidth<1600)
+			return document.body.offsetWidth<1600
+		},
     fixedHeader() {
       return this.$store.state.settings.fixedHeader
     },
@@ -42,6 +47,11 @@ export default {
       }
     }
   },
+	created(){
+  	if(this.smallRatio){
+			this.$store.dispatch('app/toggleSideBar')
+		}
+	},
   methods: {
     handleClickOutside() {
       this.$store.dispatch('app/closeSideBar', {withoutAnimation: false})
