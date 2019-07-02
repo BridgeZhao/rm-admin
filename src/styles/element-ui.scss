@@ -1,4 +1,4 @@
-.el-form-item__label,.el-button--text,.el-radio__label,.el-radio__input.is-checked+.el-radio__label,.el-breadcrumb__separator,.expanded{
+.el-form-item__label,.el-button--text,.el-pagination__total,.el-radio__label,.el-radio__input.is-checked+.el-radio__label,.el-breadcrumb__separator,.expanded{
   color: $menuText!important;
   font-weight: normal;
 }
@@ -6,6 +6,11 @@
 .el-breadcrumb__inner a {
   font-weight: 400 !important;
   color: #71dcff;
+}
+.el-tag--info{
+	background: #14385a;
+	color: $menuActiveText;
+	border-color: $borderColor;
 }
 .el-tree{
 	padding:.5rem;
@@ -54,7 +59,7 @@
 table,table th,table td,.el-picker-panel__footer,.el-time-panel.el-popper,.el-table--border,.el-radio-button__inner,.el-button--default,.el-message-box,.el-dialog,.el-button--danger,.el-select-dropdown.is-multiple .el-select-dropdown__item.selected,.el-cascader-menus,.el-cascader-menu__item{
   background-color:$subMenuBg!important;
   border-color: #195569!important;
-  color: $menuText;
+  color: $menuActiveText;
 }
 .el-button--danger{
   color: #af4a4a!important;
