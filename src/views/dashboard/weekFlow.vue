@@ -61,7 +61,7 @@
                  <el-row :gutter="24" class="report-margin">
                     <el-col :span="24"><div class="grid-content bg-purple report-line">
                         <div class="report-gang">
-                            <span>客流性别对比</span>
+                            <span>图形报表</span>
                             <el-button size="mini" @click="saveImage('客流性别对比')">保存图片</el-button>
                         </div>
                         <div style="width:100%;height:100%;">
