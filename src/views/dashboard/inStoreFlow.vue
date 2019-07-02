@@ -315,7 +315,8 @@ export default {
             this.loadVip()
             this.loadHourPeople()
          })
-					this.downloadPath = 'http://172.16.2.182:8000/api'+ this.loadPath + this.int +'/?store_id=' + params.store_id +'&starttime='+params.starttime + '&endtime=' + params.endtime + '&hh=' +params.hh
+                    this.downloadPath = 'http://172.16.2.182:8000/api'+ this.loadPath + this.int +'/?store_id=' + params.store_id +'&starttime='+params.starttime + '&endtime=' + params.endtime + '&hh=' +params.hh
+                    console.log('this.downloadPath',this.downloadPath)
         },
 
         loadVip() {

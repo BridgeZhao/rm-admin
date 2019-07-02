@@ -78,7 +78,7 @@
               <i class="el-icon-info report-tip"></i>
             </el-tooltip>
             <div class="report-title">平均到店频次</div>
-            <div class="report-num" style="color: #50e3c2;">{{SummaryData.totalAvgFrequency}}</div>
+            <div class="report-num" style="color: #50e3c2;">{{(SummaryData.totalAvgFrequency).toFixed(2)}}</div>
             <div class="report-small"></div>
           </div>
         </el-col>
