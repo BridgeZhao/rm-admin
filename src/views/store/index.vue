@@ -138,11 +138,9 @@
           </el-col>
         </el-row>
 				<div class="info-tips"><i class="el-icon-time"></i> 请按顺时针方向点击绘制点位，不得超过10个，下拉可选择对应的绘制区域</div>
-        <div style="overflow: auto;height: 300px">
-					<div  v-waves class="perview-warp">
-						<canvas id="canvasDom" />
-						<img :src="fromInfo.imgBase64" onerror="notfound(this)"/>
-					</div>
+				<div  v-waves class="perview-warp">
+					<canvas id="canvasDom" />
+					<img :src="fromInfo.imgBase64" onerror="notfound(this)"/>
 				</div>
       </el-form>
       <div slot="footer" class="dialog-footer text-center">
@@ -486,6 +484,7 @@ export default {
 			$event.currentTarget.className=name+' leave'
 		},
 		stepNext(type = 'normal') {
+			debugger
 			if (this.steps > 2) {
 				return
 			}
@@ -526,6 +525,11 @@ export default {
 					this.$message.error('请先添加区域')
 				} else {
 					this.steps++
+					if(this.steps === 2){
+						this.$nextTick(()=>{
+							this.setAreasProintData()
+						})
+					}
 				}
 			}
 		},
@@ -566,6 +570,7 @@ export default {
 						this.areaData.num = ''
 						this.getAreasData()
 						this.$message.success('操作成功')
+						this.$refs['myform' + this.steps].resetFields()
 					})
 				}
 			})
@@ -593,7 +598,7 @@ export default {
 			canvas.width = canvas.offsetWidth
 			this.size = await AutoImage(this.fromInfo.imgBase64, canvas.width)
 			canvas.height = this.size.height
-			document.querySelector('.perview-warp').style.height = canvas.height + 'px'
+			// document.querySelector('.perview-warp').style.height = canvas.height + 'px'
 			this.drawLayer = new DrawImage(canvas, {
 				prointSize: 5,
 				scale: scale,
@@ -640,6 +645,7 @@ export default {
 			this.regionVal = undefined
 			this.areaData = {name: '', num: undefined}
 			this.cityAry = []
+			this.areaList = []
 			console.log(this.fromInfo)
 		},
 		stepNameTransform() {
