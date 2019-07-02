@@ -364,7 +364,6 @@
         this.loadData(_params)
       },
 			searchData(){
-        console.log(this.formInline.date)
 				const startTime = moment(this.formInline.date[0]).format('YYYY-MM-DD')
 				const endTime = moment(this.formInline.date[1]).format('YYYY-MM-DD')
 				const _storeId = this.$store.state.app.storeId
@@ -373,7 +372,6 @@
 			},
       loadData(params) {
         getStoreFlowData(params).then(res => {
-          console.log('loadData->', res)
 					const _data = res.data
           this.SummaryData = _data.summaryData[0]
           // this.$nextTick(() => {

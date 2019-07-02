@@ -31,9 +31,9 @@
 				default(){
 					return {
 						top: '10%',
-						left: '2%',
+						left: '3%',
 						right: '5%',
-						bottom: '5%',
+						bottom: '4%',
 						containLabel: true
 					}
 				}
@@ -62,7 +62,7 @@
           },
 					grid: this.grid,
           xAxis: [
-            {
+            { 
               type: 'category',
               boundaryGap: false,
               data: []
@@ -70,7 +70,7 @@
           ],
           yAxis: {
             type: 'value',
-            name: '(%)',
+            name: '人数',
             axisTick: {
               show: false
             },
@@ -108,7 +108,7 @@
         const {legendData, xAxisData,yAxisName, seriesData} = data;
         this.options.legend.data = legendData||[]
         this.options.xAxis = []
-        this.options.yAxis.name =  yAxisName || '%'
+        this.options.yAxis.name =  yAxisName || '人数'
         xAxisData.map(item => {
           this.options.xAxis.push({
             type: 'category',

@@ -142,7 +142,7 @@
 			<el-button size="mini" style="width: 100px;margin-right: 10px;" @click="next(1)">上一步</el-button>
 			<el-button type="primary" size="mini" style="width: 100px;" @click="next(3)">下一步</el-button>
 		</div>
-		<el-dialog :title="importCoupons" :visible.sync="dialogTableVisible" :close-on-click-modal="false">
+		<el-dialog :title="importCoupons" :visible.sync="dialogTableVisible" :close-on-click-modal="false" :before-close="beforeClose">
 			<el-form :model="couponsFlag" :rules="couponsFlagRules" ref="couponsFlag" label-width="85px">
 				<el-row :gutter="24">
 					<el-col :span="12"><div class="grid-content bg-purple">
@@ -207,7 +207,7 @@
 						<el-form-item v-if="!commandNumber" label="积分数量" prop="creditNum">
 							<el-input-number v-model="couponsFlag.creditNum" :controls="false" :min="0" :max="100000000" style="width: 244px;"></el-input-number>
 						</el-form-item>
-						<el-form-item v-if="commandNumber" label="导入优惠券" style="margin-bottom:0px;">
+						<el-form-item v-if="commandNumber" label="导入优惠券" style="margin-bottom:0px;" prop=''>
 							<!-- <el-upload
 								class="upload-demo"
 								action=""
@@ -383,6 +383,7 @@
 					}
 				})
 			},
+			
 			fileChange() {
 				let file = document.getElementById("uploadFile").files[0];
 				this.fileList = file
@@ -478,9 +479,17 @@
 			addSence() {
 				this.dialogTableVisible = true
 			},
+			beforeClose(){
+				document.getElementById("uploadFile").value = "";
+				this.fileList = {}
+				this.couponData = []
+				this.dialog2Visible = false
+				this.dialogTableVisible = false;
+			},
 			cancle() {
+				this.beforeClose()
+				this.$refs['couponsFlag'].resetFields()
 				this.dialogTableVisible = false
-				this.$refs['couponsFlag'].resetFields();
 			},
 			edit(row) {
 				console.log('row',row)
@@ -498,23 +507,6 @@
 					credit:null,
 					creditNum:null
 				}
-				// begin: (...)
-				// couponType: 1
-				// createTime: 1561456955000
-				// credit: (...)
-				// creditNum: (...)
-				// description: (...)
-				// end: (...)
-				// icon: ""
-				// id: (...)
-				// level: ""
-				// limit: 2
-				// name: "优惠券1"
-				// scenarios: Array(0)
-				// status: 1
-				// stores: Array(2)
-				// weight: 10
-
 				this.dialogTableVisible = true
 				this.fileList = JSON.parse(JSON.stringify(row.scenarios))
 				let data = JSON.parse(JSON.stringify(row));
@@ -596,16 +588,13 @@
 				this.$refs['couponsFlag'].validate((valid) => {
 					if (valid) {
 						const times = this.couponsFlag.time
-						const startTime = times[0]
-						const endTime = times[1]
-						this.couponsFlag.begin = moment(startTime).valueOf()
-						this.couponsFlag.end = moment(endTime).valueOf()
-						delete this.couponsFlag.time
-						console.log('保存的东西2',this.couponsFlag,this.fileList)
-						let form = new FormData();
-						form.append("cardNo", this.fileList);
-						form.append("json", JSON.stringify(this.couponsFlag))
-						console.log('保存的东西3',form)
+						let obj = Object.assign({},this.couponsFlag)
+						obj.begin = moment(times[0]).valueOf()
+						obj.end = moment(times[1]).valueOf()
+						delete obj.time
+						let form = new FormData()
+						form.append("cardNo", this.fileList)
+						form.append("json", JSON.stringify(obj))
 						postCouponsData(form).then(res =>{
 							this.dialogTableVisible = false
 							this.searchCouponsList()

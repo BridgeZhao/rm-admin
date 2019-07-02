@@ -1,10 +1,10 @@
 <template>
     <div class="app-container reportInput" style="background:none">
         <div class="top">
-            <div style="width:12%;float: left;margin-left: 1%;">
+            <div style="float: left;margin-left: 1%;">
                 <label-view labelFather="进店客流统计"></label-view>
             </div>
-           <div style="float: left">
+           <div style="float: left;">
                 <el-radio-group v-model="radio" class="chose">
                     <el-radio-button label="图形报表" class="radioBtn"></el-radio-button>
                     <el-radio-button label="数据报表" class="radioBtn"></el-radio-button>
@@ -16,6 +16,7 @@
 								<el-date-picker
 									class="input-shadow"
 									v-model="formInline.date"
+                                    style="width:150px;"
 									type="date"
 									placeholder="选择日期">
 								</el-date-picker>
@@ -24,6 +25,7 @@
 								<el-time-select
 									placeholder="起始时间"
 									v-model="formInline.startTime"
+                                    style="width:100px;"
 									:picker-options="{
                     start: '08:00',
                     step: '01:00',
@@ -34,6 +36,7 @@
 								<el-time-select
 									placeholder="结束时间"
 									v-model="formInline.endTime"
+                                    style="width:100px;"
 									:picker-options="{
                     start: '08:00',
                     step: '01:00',
@@ -316,7 +319,7 @@ export default {
             this.loadHourPeople()
          })
                     this.downloadPath = 'http://172.16.2.182:8000/api'+ this.loadPath + this.int +'/?store_id=' + params.store_id +'&starttime='+params.starttime + '&endtime=' + params.endtime + '&hh=' +params.hh
-                    console.log('this.downloadPath',this.downloadPath)
+                
         },
 
         loadVip() {

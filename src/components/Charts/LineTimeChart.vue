@@ -44,9 +44,9 @@
           },
           grid: {
             top: '16%',
-            left: '2%',
-            right: '3%',
-            bottom: '2%',
+            left: '3%',
+            right: '5%',
+            bottom: '4%',
             containLabel: true
           },
           xAxis: {

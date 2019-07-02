@@ -56,7 +56,7 @@ export default {
 				},
 				yAxis: {
 					type: 'value',
-					name:'%',
+					name:'',
 					axisTick: {
 						show: false
 					}

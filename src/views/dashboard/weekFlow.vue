@@ -93,7 +93,7 @@
                             :data="tableData"
 							:default-sort = "{prop: 'hh', order: 'Ascending'}"
                             style="width: 100%"
-                            stripe=true>
+                            stripe>
                                 <el-table-column
                                     prop="hh"
                                     label="时间段"

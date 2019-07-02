@@ -290,8 +290,8 @@ export default {
       return optionConfig({
         grid: {
           top: "20%",
-          left: "10%",
-          right: "5%",
+          left: "15%",
+          right: "10%",
           bottom: "15%"
         },
         xAxis: {

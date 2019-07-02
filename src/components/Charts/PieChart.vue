@@ -61,7 +61,7 @@ export default {
                     show: true,
                     formatter: '{b} : {c} ({d}%)'
                   },
-                  labelLine :{show:true}
+                  labelLine :{show:true,length:1}
                 },
               emphasis: {
                 shadowBlur: 10,
