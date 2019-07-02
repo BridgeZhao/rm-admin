@@ -157,8 +157,8 @@
 							<el-input-number v-model="couponsFlag.weight" :controls="false" style="width: 244px;" :min="0" :max="100000"></el-input-number>
 						</el-form-item>
 						<el-form-item label="有效期" prop="time">
-							<el-date-picker class="timeBtn"
-								style="width: 244px;font-size: 12px;"
+							<el-date-picker
+								style="width: 244px;"
 								v-model="couponsFlag.time"
 								type="datetimerange"
 								range-separator="至"
@@ -225,7 +225,7 @@
 							</a>
 							<i class="icon='el-icon-upload'"></i> -->
 							<input type="file" id="uploadFile" class="file" accept="text/plain" @change="fileChange">
-							
+
 						</el-form-item>
 						<div  v-show="dialog2Visible">
 							<span style="size:12px;color: #a00c0c;">*支持预览前50个</span>
@@ -483,7 +483,7 @@
 				this.dialogTableVisible = true
 			},
 			cancle() {
-				
+
 				this.dialogTableVisible = false
 			},
 			edit(row) {
@@ -775,23 +775,4 @@
 		*zoom: 1
 }
 
-.a-upload  input {
-	width: 100%;
-    height: 100%;
-    position: absolute;
-    font-size: 100px;
-    right: 0;
-    top: 0;
-    opacity: 0;
-    filter: alpha(opacity=0);
-    cursor: pointer
-}
-.el-date-picker.timeBtn .el-picker-panel__footer {
-    border-top: 1px solid #72dcff;
-    padding: 4px;
-    text-align: right;
-    position: relative;
-    font-size: 0;
-	background: none;}
-	
 </style>
