@@ -41,7 +41,7 @@
                 :on-change="handlePreview">
                 <div class="text-left">
                   <el-button type="primary" size="small"><i class="el-icon-upload el-icon--right"/> 点击上传</el-button>
-                  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500KB</div>
+                  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过2MB</div>
                 </div>  
               </el-upload>
           </el-form-item>
@@ -112,7 +112,7 @@
       handlePreview(file) {
         console.log(file)
         const fileName = file.name
-        const isLimt = file.size / 1024 < 500 
+        const isLimt = file.size / 1024 < 2048 
         const regex = /(.jpg|.jpeg|.png)$/
         if (regex.test(fileName.toLowerCase())) {
           if (isLimt) {
@@ -123,7 +123,7 @@
               this.fromInfo = Object.assign({}, this.fromInfo)
             }
           }else{
-            this.$message.error('上传图片不能超过500KB')
+            this.$message.error('上传图片不能超过2MB')
           }
         }else{
           this.$message.error('只能上传jpg或png格式')
