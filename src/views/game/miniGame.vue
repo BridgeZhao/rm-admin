@@ -25,8 +25,8 @@
         <el-form-item label="游戏名称" :label-width="formLabelWidth" prop="name" >
           <el-input v-model="fromInfo.name" autocomplete="off" placeholder="请输入游戏名称"></el-input>
         </el-form-item>
-        <el-form-item label="h5链接" :label-width="formLabelWidth" prop="link" >
-          <el-input v-model="fromInfo.link" autocomplete="on"  placeholder="请输入h5链接"></el-input>
+        <el-form-item label="path" :label-width="formLabelWidth" prop="link" >
+          <el-input v-model="fromInfo.link" autocomplete="on"  placeholder="请输入path"></el-input>
         </el-form-item>
         <el-form-item label="" :label-width="formLabelWidth" prop="imgBase64" >
           <el-upload
