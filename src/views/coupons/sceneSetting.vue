@@ -3,10 +3,10 @@
     <div class="header">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="场景">
-          <el-input v-model="formInline.scene" placeholder="场景" />
+          <el-input v-model="formInline.scene" placeholder="场景" clearable/>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="getTableList">
+          <el-button type="primary" @click="search">
             查询
           </el-button>
         </el-form-item>
@@ -29,13 +29,13 @@
       />
       <el-table-column
         prop="dayLimit"
-        label="每日每人人领取上限"
+        label="每人每日领取上限"
         min-width="160"
         align="center"
       />
       <el-table-column
         prop="totalLimit"
-        label="每日总领取上限"
+        label="每人总领取上限"
         min-width="160"
         align="center"
       />
@@ -77,10 +77,10 @@
         <el-form-item label="场景名称" prop="name">
           <el-input v-model="ruleForm.name" />
         </el-form-item>
-        <el-form-item label="每日每人领取上线" prop="dayLimit">
+        <el-form-item label="每人每日领取上限" prop="dayLimit">
           <el-input-number v-model="ruleForm.dayLimit" :controls="false" :min="1" :max="10000" style="width: 100%;"></el-input-number>
         </el-form-item>
-        <el-form-item label="每日总领取上线" prop="totalLimit">
+        <el-form-item label="每人总领取上限" prop="totalLimit">
 					<el-input-number v-model="ruleForm.totalLimit" :controls="false" :min="1" :max="10000" style="width: 100%;"></el-input-number>
         </el-form-item>
       </el-form>
@@ -124,10 +124,10 @@
 						{required: true, message: '请输入场景名称', trigger: 'blur'}
 					],
 					dayLimit: [
-						{required: true, message: '每日每人领取上线', trigger: 'blur'}
+						{required: true, message: '每人每日领取上限', trigger: 'blur'}
 					],
 					totalLimit: [
-						{required: true, message: '每日总领取上线', trigger: 'blur'}
+						{required: true, message: '每人总领取上限', trigger: 'blur'}
 					]
 				},
 				tableData: [
@@ -158,7 +158,7 @@
 			},
 			cancle() {
 				this.dialogTableVisible = false
-				this.$refs['ruleForm'].resetFields();
+				this.$refs['ruleForm'].resetFields()
 				// this.getTableList()
 			},
 			edit(row) {
@@ -221,6 +221,10 @@
 			},
 			next() {
 				this.$emit('nextComponet', 2)
+			},
+			search(){
+				this.page.page = 1
+				this.getTableList()
 			},
 			getTableList() {
 				this.page.name = this.formInline.scene

@@ -28,11 +28,10 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="searchCouponsList()">查询</el-button>
+					<el-button type="primary" @click="searchData()">查询</el-button>
 				</el-form-item>
 			</el-form>
 		</div>
-<!--		<el-button type="primary" @click="addSence" style="float: right">导入优惠券</el-button>-->
 		<el-dropdown  @command="handleCommand" style="float: right;margin-bottom: 10px">
 			<el-button type="primary">
 				{{importCoupons}}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -132,7 +131,7 @@
 		<el-pagination
 			@size-change="handleSizeChange"
 			@current-change="handleCurrentChange"
-			:current-page="page.current"
+			:current-page="page.page"
 			:page-sizes="[20, 30, 40, 50]"
 			:page-size="page.size"
 			class="pagination"
@@ -267,7 +266,7 @@
 	import moment from "moment"
 	import axios from 'axios'
 	import { mapGetters } from 'vuex'
-	import {getScenarioData, getCouponsList, postCouponsData, changeCouponsStatus,deleteCouponsList } from '@/api/coupons'
+	import {getScenarioData, getCouponsList, postCouponsData, changeCouponsStatus,deleteCouponsList,searchScenarioData } from '@/api/coupons'
 	export default {
 		name: 'sceneLoad',
 		components:{
@@ -307,9 +306,9 @@
 				fileList:{},
 				sceneList:[],
 				page: {
-					total: 20,
+					total: null,
 					size: 10,
-					current: 1
+					page: 1
 				},
 				ruleForm: {
 					name: '',
@@ -476,15 +475,12 @@
 					this.dialogTableVisible = true
 				}
 			},
-			onSubmit() {
-
-			},
 			addSence() {
 				this.dialogTableVisible = true
 			},
 			cancle() {
-
 				this.dialogTableVisible = false
+				this.$refs['couponsFlag'].resetFields();
 			},
 			edit(row) {
 				console.log('row',row)
@@ -646,7 +642,7 @@
 				this.searchCouponsList()
 			},
 			handleCurrentChange(val) {
-				this.page.current = val
+				this.page.page = val
 				this.searchCouponsList()
 			},
 			next(val) {
@@ -662,12 +658,18 @@
 			},
 			// 获取场景列表 先用size方法查，后期优化
 			getSceneList() {
-				const size = 10000
-				getScenarioData(size).then(res =>{
+				const size = {
+					size:10000
+				}
+				 searchScenarioData(size).then(res =>{
+					 console.log('调用查询列表接口')
 					this.sceneList = res.data
 				})
 			},
-
+            searchData(){
+				this.page.page = 1
+				this.searchCouponsList()
+			},
 			// 优惠券列表查询
 			searchCouponsList(_storeId){
 				console.log('ididididi~',this.$store.state.app.storeId)

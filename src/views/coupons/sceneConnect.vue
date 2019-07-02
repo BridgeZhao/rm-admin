@@ -2,8 +2,8 @@
     <div class="config">
         <div class="header">
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
-                <el-form-item label="场景">
-                    <el-input v-model="formInline.scene" placeholder="场景"></el-input>
+                <el-form-item label="发放场景">
+                    <el-input v-model="formInline.scene" placeholder="输入发放场景"></el-input>
                 </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="search()">查询</el-button>
@@ -172,6 +172,7 @@
         this.$emit('nextComponet',2);
       },
 			loadData(){
+        alert('刷新')
 				let _name = this.formInline.scene
 				let obj = {
 					name: _name,
