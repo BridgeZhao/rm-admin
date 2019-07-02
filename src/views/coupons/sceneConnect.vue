@@ -54,7 +54,7 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page="page.current"
-                :page-sizes="[100, 200, 300, 400]"
+                :page-sizes="[10, 20, 30, 40]"
                 :page-size="page.size"
                 class="pagination"
                 layout="total, sizes, prev, pager, next, jumper"
@@ -172,7 +172,6 @@
         this.$emit('nextComponet',2);
       },
 			loadData(){
-        alert('刷新')
 				let _name = this.formInline.scene
 				let obj = {
 					name: _name,
