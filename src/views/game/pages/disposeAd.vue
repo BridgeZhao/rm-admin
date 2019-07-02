@@ -321,7 +321,8 @@ export default {
 				size: 10,
 				name: '',
 				storeId:0,
-				total: 0
+				total: 0,
+        status:-1
 			},
 			rules: {
 				name: [
@@ -350,7 +351,7 @@ export default {
         storeId:0
       },
       imgBase64Show:'',
-      adStatusList:[{ id: '',name: "全部"},{ id: 0,name: "待生效"},{ id: 1,name: "投放中"},{ id: 2,name: "已撤销"},{ id: 3,name: "已结束"},],
+      adStatusList:[{ id:-1, name: "全部"},{ id: 0,name: "待生效"},{ id: 1,name: "投放中"},{ id: 2,name: "已撤销"},{ id: 3,name: "已结束"},],
       adStatus:'',
       devicesList: [{ id: 0,name: "screen"},{ id: 1,name: "pad"}],
       areasList: [],
@@ -469,18 +470,18 @@ export default {
       })
     },
     async handleSelectStatus(key){
-      console.log('传入的status值',key)
-      console.log('广告列表',this.tableData)
+      this.pagination.page = 1
+      this.pagination.status = key
       await  this.adPage()
-      if( key !== ''){
-        const nameAry = []
-        for(let i = 0; i< this.tableData.length; i++){
-          if (this.tableData[i].status === key){
-            nameAry.push(this.tableData[i])
-          }
-        }
-        this.tableData = nameAry
-      }
+      // if( key !== ''){
+      //   const nameAry = []
+      //   for(let i = 0; i< this.tableData.length; i++){
+      //     if (this.tableData[i].status === key){
+      //       nameAry.push(this.tableData[i])
+      //     }
+      //   }
+      //   this.tableData = nameAry
+      // }
     },
     cancelRow(id) {
       console.log(this)
@@ -550,7 +551,6 @@ export default {
 		async pageChange(val){
 			this.pagination.page = val
       await  this.adPage()
-      this.adStatus = ''
 		},
     addAd(){
       this.dialogType = 'add'
