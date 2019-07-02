@@ -87,7 +87,7 @@
             </el-form-item>
             <el-form-item label="投放时间" prop="formTime" :label-width="formLabelWidth" >
               <el-date-picker
-                v-model="formTime"
+                v-model="form.formTime"
                 type="daterange"
                 range-separator="至"
                 start-placeholder="开始时间"
@@ -331,7 +331,7 @@ export default {
 					{min: 4, max: 10, message: '长度在 4 到 10 个字符', trigger: 'blur'}
 				],
 				deviceType:[{ required: true, message: '请选择所设备类型', trigger: 'change'}],
-				// formTime:[{ required: true, message: '请选择投放时间', trigger: 'change'}],
+				formTime:[{ required: true, message: '请选择投放时间', trigger: 'change'}],
         area:[{ required: true, message: '请选择区域', trigger: 'change'}]
 			},
       form: {
@@ -349,14 +349,15 @@ export default {
         status:0,
         createTime:'',
         areaIds:[],
-        storeId:0
+        storeId:0,
+        formTime:[]
       },
       imgBase64Show:'',
       adStatusList:[{ id:-1, name: "全部"},{ id: 0,name: "待生效"},{ id: 1,name: "投放中"},{ id: 2,name: "已撤销"},{ id: 3,name: "已结束"},],
       adStatus:'',
       devicesList: [{ id: 0,name: "screen"},{ id: 1,name: "pad"}],
       areasList: [],
-      formTime:[],
+      
       fileReader: new FileReader(),
       showImgBase64s:'',
       pickerOptions:{
@@ -465,8 +466,8 @@ export default {
           console.log('提交数据',this.form)
           this.loading = true
           this.form.areaIds = this.form.area
-          this.form.begin = this.dateToMs(this.formTime[0])
-          this.form.end = this.dateToMs(this.formTime[1])
+          this.form.begin = this.dateToMs(this.form.formTime[0])
+          this.form.end = this.dateToMs(this.form.formTime[1])
           if(this.dialogType === 'edit'){
             if(!this.form.bannerImgBase64){
               delete this.form.bannerImgBase64
@@ -504,7 +505,6 @@ export default {
       // }
     },
     cancelRow(id) {
-      console.log(this)
       let _status = {}
       _status.id = id
       _status.status = 2
@@ -524,14 +524,16 @@ export default {
     },
     editRow(data) {
       this.form = Object.assign({}, data)
+      console.log("编辑初数据",this.form)
       const areaId = []
       for(let i = 0; i<data.area.length; i++){
          areaId.push(data.area[i].id)
       }
       this.form.area = areaId
-      console.log("区域",this.form.area)
-      this.formTime[0] = this.timestampToTime(data.begin)
-      this.formTime[1] = this.timestampToTime(data.end)
+      this.form.formTime =[]
+      console.log("时间",this.form.formTime)
+      this.form.formTime[0] = this.timestampToTime(data.begin)
+      this.form.formTime[1] = this.timestampToTime(data.end)
       // this.form.bannerImgBase64 = data.bannerImg
       // this.form.imgBase64s = data.imgs
       this.form.imgBase64s = []
@@ -556,12 +558,17 @@ export default {
         deviceType:'',
         begin:'',
         end:'',
+        area:[],
         codeUrl:'',
         bannerImgBase64:'',
         imgBase64s:[],
+        bannerImg:'',
+        imgs:[],
+        status:0,
         createTime:'',
         areaIds:[],
-        area:[]
+        storeId:0,
+        formTime:[]
       }
     },
 		async pageChange(val){
@@ -570,7 +577,6 @@ export default {
 		},
     addAd(){
       this.dialogType = 'add'
-      this.formTime = []
       this.imgBase64Show = ''
       this.dialogVisible=true
     },
@@ -605,23 +611,16 @@ export default {
       this.dialogVisible=true
     },
     handleTime(str){
-      if(new Date() > str[1]){
-        this.formTime = []
-        this.$message.error('请选择大于现在的结束时间')
-      }
+      // if(new Date() > str[1]){
+      //   this.formTime = []
+      //   this.$message.error('请选择大于现在的结束时间')
+      // }
     },
-    // pickerOptions:{
-    //   disabledDate: time => {
-    //     console.log(new Date(), time)
-    //     return(
-    //       time < new Date(this.form.cooperationBegin + " 00:00:00") || time > new Date(this.form.cooperationEnd + " 00:00:00")
-    //     )
-    //   }
-    // }
   },
    watch:{
     StoreId : function(newVal,oldVal){
       this.pagination.storeId = newVal
+      this.pagination.page = 1
       this.adPage()
       this.getAreas(this.pagination.storeId)
     }
