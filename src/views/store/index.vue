@@ -317,7 +317,8 @@ export default {
 			})
 			const p_data = this.fromInfo.pointData.point || {}
 			for (const key in p_data) {
-				this.checkType[p_data[key].areaId] = p_data[key].checkType
+				const ck=p_data[key].checkType
+				this.checkType[p_data[key].areaId] =typeof(ck)==='boolean'?[~~ck]:ck
 			}
 			this.checkType = Object.assign({}, this.checkType)
 			console.log('this.checkType', this.checkType)
@@ -367,7 +368,8 @@ export default {
 			if (this.pointData) {
 				for (const key in this.pointData) {
 					if (value === this.pointData[key].areaId) {
-						this.checkType[value] = this.pointData[key].checkType
+						const ck=this.pointData[key].checkType
+						this.checkType[value] =typeof(ck)==='boolean'?[~~ck]:ck
 						this.selectedArea = this.pointData[key].areaId
 						this.areaText = this.pointData[key].areaText
 						break
@@ -425,11 +427,11 @@ export default {
 				this.cityAry = this.allRegion[this.regionVal]
 			}else{
 				await this.getAreasData()
-				// 设置复选框
-				this.setProintImg()
 			}
 			this.dialogVisible = true
 			if(this.steps === 2){
+				// 设置复选框
+				this.setProintImg()
 				this.$nextTick(()=>{
 					this.setAreasProintData()
 				})
