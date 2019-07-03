@@ -235,15 +235,16 @@ export const constantRoutes = [
 	  path: '/game',
 	  name: 'game',
 	  component: Layout,
+    redirect: '/game/storeContent',
 	  meta: {
-	    title: '游戏管理',
+	    title: '门店内容管理',
 	    icon: 'game'
 	  },
 	  children: [{
 	    path: 'storeContent',
 	    name: 'store-content',
 	    component: () => import('@/views/game/storeContent'),
-	    meta: { title: '门店内容维护'}
+	    meta: { title: '内容维护'}
 	  },{
 	    path: 'miniGame',
 	    name: 'mini-game',
