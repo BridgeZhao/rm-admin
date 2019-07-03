@@ -5,7 +5,7 @@ import { getToken } from '@/utils/auth'
 
 // create an axios instance
 const service = axios.create({
-  timeout: 5000 // request timeout
+  timeout: 10000 // request timeout
 })
 // request interceptor
 service.interceptors.request.use(
