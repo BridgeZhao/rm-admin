@@ -605,6 +605,10 @@
 						form.append("json", JSON.stringify(obj))
 						postCouponsData(form).then(res =>{
 							setTimeout(function(){
+								this.$message({
+								message: '恭喜你，保存成功！',
+								type: 'success'
+								});
 								that.dialogTableVisible = false
 								that.searchData()
 						    },1000) 
