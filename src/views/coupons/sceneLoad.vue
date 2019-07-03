@@ -599,7 +599,7 @@
 							delete obj.iconBase64
 						}
 						let form = new FormData()
-						if(!this.commandNumber && JSON.stringify(this.fileList) !== "{}"){
+						if(this.commandNumber && document.getElementById("uploadFile").value !== "" ){
 							form.append("cardNo", this.fileList)
 						}
 						form.append("json", JSON.stringify(obj))
