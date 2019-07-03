@@ -43,7 +43,7 @@ export default {
         },
         legend: {
           orient: "vertical",
-          right: '1%',
+          right: '0%',
           top: "middle",
           data: []
         },
@@ -52,7 +52,7 @@ export default {
           {
             name: "",
             type: "pie",
-            radius: "65%",
+            radius: "50%",
             center: ["50%", "50%"],
             data: [],
             itemStyle: {
