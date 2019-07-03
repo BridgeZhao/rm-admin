@@ -121,7 +121,7 @@
         <el-col :span="24">
           <div class="grid-content bg-purple report-line">
             <div class="report-gang">
-              <span>小时客流</span>
+              <span>区域小时客流汇总</span>
               <i class="el-icon-picture" @click="openFull('lineTimeChart',options2,'小时客流')"></i>
             </div>
             <div style="width:100%;height:100%;">

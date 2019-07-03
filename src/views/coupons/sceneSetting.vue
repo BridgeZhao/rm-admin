@@ -71,8 +71,8 @@
     </div>
     <el-dialog :title="dialogTitle" :visible.sync="dialogTableVisible">
       <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="140px" 
-	    style="width: 80%;
-		margin-left: 10%;
+	    style="width: 60%;
+		margin-left: 20%;
 		margin-top: 2%;"> 
         <el-form-item label="场景名称" prop="name">
           <el-input v-model="ruleForm.name" />
@@ -84,7 +84,7 @@
 					<el-input-number v-model="ruleForm.totalLimit" :controls="false" :min="1" :max="10000" style="width: 100%;"></el-input-number>
         </el-form-item>
       </el-form>
-      <div slot="footer" style="width: 90%;">
+      <div slot="footer" style="width: 80%;">
         <el-button @click="cancle">
           取 消
         </el-button>

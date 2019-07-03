@@ -284,7 +284,9 @@
 			},
 			// 获取场景列表 先用size方法查，后期优化
 			getSceneList() {
-				const size = 10000
+				const size ={
+					size:10000
+				}
 				getScenarioData(size).then(res => {
 					this.sceneList = res.data
 				})

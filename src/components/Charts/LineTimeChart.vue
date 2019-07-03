@@ -5,7 +5,6 @@
 
 <script>
   import echarts from 'echarts'
-
   const animationDuration = 3000
   export default {
     props: {
@@ -29,6 +28,7 @@
     },
     data() {
       return {
+        colors:['#71DCFF','#0176FF','#04ACE3','#1583DF','#11659B','#50E3C2','#B8E986','#F8E71C','#D8B003','#F5A623'],
         options: {
           tooltip: {
             trigger: 'axis'
@@ -57,7 +57,7 @@
             data: []
           },
           yAxis: {
-            name: '客流人数',
+            name: '人数',
             type: 'value',
             axisTick: {
               show: false
@@ -111,7 +111,7 @@
             },
             itemStyle: {
               normal: {
-                color: this.initColor(),
+                color: this.colors[idx],
                 borderWidth: 12
               }
             },

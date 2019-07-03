@@ -24,13 +24,13 @@
       },
       height: {
         type: String,
-        default: '300px'
+        default: '200px'
       },
 			grid:{
 				type:Object,
 				default(){
 					return {
-						top: '10%',
+						top: '16%',
 						left: '3%',
 						right: '5%',
 						bottom: '4%',
@@ -112,6 +112,7 @@
         xAxisData.map(item => {
           this.options.xAxis.push({
             type: 'category',
+             name: '时间',
             boundaryGap: false,
 						splitLine: {
 							show: true,
@@ -131,6 +132,11 @@
             symbol: 'circle',
             symbolSize: 5,
             showSymbol: false,
+            lineStyle: {
+              normal: {
+                width: 1
+              }
+            },
 						areaStyle:{
 							normal:{
 								//颜色渐变函数 前四个参数分别表示四个位置依次为左、下、右、上

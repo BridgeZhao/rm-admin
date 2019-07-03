@@ -265,7 +265,7 @@
          this.$set(this.viewDataList,'xAxisData',xData)
          this.$set(this.viewDataList,'barList',yData)
          this.$set(this.viewDataList,'xAxisName','小时')
-         this.$set(this.viewDataList,'yAxisName','客流人数')
+         this.$set(this.viewDataList,'yAxisName','人数')
         // 场景检测
         let _tableData = res.data.scenarioData
         this.tableData = _tableData
@@ -313,7 +313,7 @@
       this.$set(this.heampChartdataList,'xAxisData',xData)
       this.$set(this.heampChartdataList,'barList',yData)
       this.$set(this.heampChartdataList,'xAxisName','小时')
-      this.$set(this.heampChartdataList,'yAxisName','客流人数')
+      this.$set(this.heampChartdataList,'yAxisName','人数')
     },
     setHeampData(data){// 获取热力图数据
 				const _heatmap = data

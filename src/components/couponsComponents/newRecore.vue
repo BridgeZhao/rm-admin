@@ -121,14 +121,18 @@
 			},
 			// 获取场景列表 先用size方法查，后期优化
 			getSceneList() {
-				const size = 10000
+				const size ={
+					size:10000
+				}
 				getScenarioData(size).then(res =>{
 					this.sceneList = res.data
 				})
 			},
 			// 获取优惠券列表 先用size方法查 后期优化
 			getCouponsList(){
-				const size = 10000
+				const size ={
+					size:10000
+				}
 				getCouponsList(size).then(res =>{
 					console.log('res',res)
 					this.couponsList = res.data
@@ -173,7 +177,6 @@
 						}
 						obj = JSON.parse(JSON.stringify(obj))
 						sceneBind(obj).then(res =>{
-							alert('子组件保存事件')
 							if(res === 'OK'){
 								this.$message({
 									showClose: true,

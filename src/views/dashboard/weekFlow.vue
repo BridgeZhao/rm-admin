@@ -22,7 +22,7 @@
                                 disabledDate(time) {
                                             return time.getTime() > Date.now() - 8.64e7;
                                         },
-                                    firstDayOfWeek: 7
+                                    firstDayOfWeek: 1
                             }"
 									format="yyyy 第 WW 周"
 									placeholder="选择周">
@@ -233,8 +233,8 @@ export default {
         },
         init(storeId){
 					const weekOfday = moment(new Date()).format('E') // 计算今天是这周第几天
-					this.startWeekTime = moment(this.formInline.dateTimeDay).add(-weekOfday,'days').format('YYYY-MM-DD')
-					this.endWeekTime = moment(this.formInline.dateTimeDay).add(6-weekOfday,'days').format('YYYY-MM-DD')
+					this.startWeekTime = moment(this.formInline.dateTimeDay).add(-1,'days').format('YYYY-MM-DD')
+					this.endWeekTime = moment(this.formInline.dateTimeDay).add(7-weekOfday,'days').format('YYYY-MM-DD')
 					const _storeId = storeId || this.$store.state.app.storeId
 					const _params = {
                 store_id: _storeId,
@@ -246,8 +246,8 @@ export default {
         },
         searchData(){
             const weekOfday = moment(this.formInline.dateTimeDay).format('E') // 计算今天是这周第几天
-            this.startWeekTime = moment(this.formInline.dateTimeDay).add(-weekOfday,'days').format('YYYY-MM-DD')
-            this.endWeekTime = moment(this.formInline.dateTimeDay).add(6-weekOfday,'days').format('YYYY-MM-DD')
+            this.startWeekTime = moment(this.formInline.dateTimeDay).add(-1,'days').format('YYYY-MM-DD')
+            this.endWeekTime = moment(this.formInline.dateTimeDay).add(7-weekOfday,'days').format('YYYY-MM-DD')
             console.log(weekOfday,this.startWeekTime,this.endWeekTime)
 					   const _storeId = this.$store.state.app.storeId
 					   const _params = {

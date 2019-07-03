@@ -53,7 +53,7 @@
         <el-pagination
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
-                :current-page="page.current"
+                :current-page="page.page"
                 :page-sizes="[10, 20, 30, 40]"
                 :page-size="page.size"
                 class="pagination"
@@ -88,7 +88,7 @@
         page: {
           total: 20,
           size: 10,
-          current: 1
+          page: 1
         },
         ruleForm:{
 					scenarioId:'',
@@ -132,6 +132,7 @@
 		},
     methods: {
 			search(){
+        this.page.page = 1
         this.loadData()
 			},
       addSence() {
@@ -164,9 +165,11 @@
       },
       handleSizeChange(val) {
         this.page.size = val
+        this.loadData()
       },
       handleCurrentChange(val) {
-        this.page.current = val
+        this.page.page = val
+        this.loadData()
       },
       next(){
         this.$emit('nextComponet',2);
@@ -176,12 +179,12 @@
 				let obj = {
 					name: _name,
 					size: this.page.size,
-					page: this.page.current
+					page: this.page.page
 				}
 				searchConnection(obj).then(res =>{
 					console.log(res.data)
 					this.page.size = res.size
-					this.page.current = res.page
+					this.page.page = res.page
 					this.page.total = res.total
 					this.tableData = res.data
 				})
@@ -190,7 +193,9 @@
 			},
 			// 获取场景列表 先用size方法查，后期优化
 			getSceneList() {
-				const size = 10000
+				const size ={
+					size:10000
+				}
 				getScenarioData(size).then(res =>{
 					this.sceneList = res.data
 				})

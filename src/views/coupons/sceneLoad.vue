@@ -480,7 +480,9 @@
 				this.dialogTableVisible = true
 			},
 			beforeClose(){
-				document.getElementById("uploadFile").value = "";
+				if(this.commandNumber){
+					document.getElementById("uploadFile").value = ""
+				}
 				this.fileList = {}
 				this.couponData = []
 				this.dialog2Visible = false
@@ -560,7 +562,7 @@
 						message: '已修改成功',
 						type: 'success'
 					})
-					this.searchCouponsList()
+					this.searchData()
 				})
 			},
 			// 删除优惠券
@@ -574,7 +576,7 @@
 							message: '删除成功！',
 							type: 'success'
 						})
-						this.searchCouponsList()
+						this.searchData()
 					} else{
 						this.$message({
 							message: '删除失败！',
@@ -585,6 +587,7 @@
 			},
 			saveOne(){
 				console.log(this.couponsFlag)
+				const that = this
 				this.$refs['couponsFlag'].validate((valid) => {
 					if (valid) {
 						const times = this.couponsFlag.time
@@ -592,12 +595,19 @@
 						obj.begin = moment(times[0]).valueOf()
 						obj.end = moment(times[1]).valueOf()
 						delete obj.time
+						if(obj.iconBase64 === ''){
+							delete obj.iconBase64
+						}
 						let form = new FormData()
-						form.append("cardNo", this.fileList)
+						if(!this.commandNumber && JSON.stringify(this.fileList) !== "{}"){
+							form.append("cardNo", this.fileList)
+						}
 						form.append("json", JSON.stringify(obj))
 						postCouponsData(form).then(res =>{
-							this.dialogTableVisible = false
-							this.searchCouponsList()
+							setTimeout(function(){
+								that.dialogTableVisible = false
+								that.searchData()
+						    },1000) 
 						})
 					} else {
 						return false
@@ -655,9 +665,9 @@
 					this.sceneList = res.data
 				})
 			},
-            searchData(){
+            searchData(_storeId){
 				this.page.page = 1
-				this.searchCouponsList()
+				this.searchCouponsList(_storeId)
 			},
 			// 优惠券列表查询
 			searchCouponsList(_storeId){
@@ -707,20 +717,15 @@
 		},
 		watch: {
 			listenstage(newVal) {
-				this.searchCouponsList(newVal)
+				this.searchData(newVal)
 			}
 		},
 		mounted() {
-			console.log("!!!!!",this.storeList)
 			if (!window.FileReader) {
 				console.error('Your browser does not support FileReader API!')
 			}
 			this.fileReader = new FileReader()
 			this.init()
-			// this.getSceneList()
-			// for (let i = 0; i < 9; i++) {
-			// 	this.tableData.push(this.tableData[0])
-			// }
 		}
 	}
 </script>
