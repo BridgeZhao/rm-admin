@@ -482,10 +482,10 @@
 			beforeClose(){
 				if(this.commandNumber){
 					document.getElementById("uploadFile").value = ""
+					this.fileList = {}
+					this.couponData = []
+					this.dialog2Visible = false
 				}
-				this.fileList = {}
-				this.couponData = []
-				this.dialog2Visible = false
 				this.dialogTableVisible = false;
 			},
 			cancle() {
@@ -609,6 +609,7 @@
 								message: '恭喜你，保存成功！',
 								type: 'success'
 								});
+								that.beforeClose()
 								that.dialogTableVisible = false
 								that.searchData()
 						    },1000) 
