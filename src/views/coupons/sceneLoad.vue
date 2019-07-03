@@ -132,7 +132,7 @@
 			@size-change="handleSizeChange"
 			@current-change="handleCurrentChange"
 			:current-page="page.page"
-			:page-sizes="[20, 30, 40, 50]"
+			:page-sizes="[10, 20, 30, 40]"
 			:page-size="page.size"
 			class="pagination"
 			layout="total, sizes, prev, pager, next, jumper"
@@ -605,7 +605,7 @@
 						form.append("json", JSON.stringify(obj))
 						postCouponsData(form).then(res =>{
 							setTimeout(function(){
-								this.$message({
+								that.$message({
 								message: '恭喜你，保存成功！',
 								type: 'success'
 								});
