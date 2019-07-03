@@ -42,10 +42,10 @@ export default {
           formatter: "{a} <br/>{b} : {c}"
         },
         grid: {
-          top: "14%",
-          left: "3%",
-          right: "4%",
-          bottom: "0%",
+          top: '16%',
+            left: '2%',
+            right: '10%',
+            bottom: '2%',
           containLabel: true
         },
         xAxis: {

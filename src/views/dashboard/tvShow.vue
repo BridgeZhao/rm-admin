@@ -97,7 +97,7 @@
         <div class="right">
           <div class="box-card right-item">
             <div class="header">期间浏览人数</div>
-            <div class="right-item-main">
+            <div class="right-item-main" style="height:100%;">
               <bar-chart-new :data="viewDataList"/>
             </div>
           </div>
@@ -132,10 +132,10 @@
                 tooltip-effect="dark"
                 :height="maxHeight"
               >
-                <el-table-column prop="areaName" label="区域" width="80" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="view" label="观看人数" width="80"></el-table-column>
-                <el-table-column prop="interaction" label="互动人数" width="80"></el-table-column>
-                <el-table-column prop="couponCount" label="领券人数" width="80"></el-table-column>
+                <el-table-column prop="areaName" label="区域" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="view" label="观看人数"></el-table-column>
+                <el-table-column prop="interaction" label="互动人数"></el-table-column>
+                <el-table-column prop="couponCount" label="领券人数"></el-table-column>
               </el-table>
             </div>
           </div>
@@ -333,7 +333,7 @@
         }
         console.log("--------",heatmapData)
         this.$nextTick(() => {
-          this.tableHeight()
+          // this.tableHeight()
           this.heatmap.setData({
             min: 0,
             max: MAX_HEAT_VALUE,
