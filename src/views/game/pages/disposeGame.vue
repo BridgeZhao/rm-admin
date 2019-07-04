@@ -174,6 +174,8 @@
         this.fromInfo.gameId = ''
         this.fromInfo.areaId = ''
         this.fromInfo.checked = []
+        this.channelGamePage()
+        this.gamePage()
       },
       editChannelGame(val){
         this.addEditType = false
@@ -224,16 +226,13 @@
       delChannelGame(key){
         this.$confirm('确认要取消关联' + key.game.name + '吗？')  
         .then(() => {
-          delChannelGame(key.id).then(() => {
-            this.channelGamePage()
-            this.gamePage()
+          delChannelGame(key.id).then(() => { 
             this.$message.success('删除成功')
           })
         })
       },
       clearClose() {
         this.dialogVisible = false
-        this.gamePage()
         // this.$refs['myform'].resetFields()
       },
       handleCheckAllChange(){
@@ -252,9 +251,7 @@
     watch:{
       StoreId : function(newVal,oldVal){
         this.defaultStoreId = newVal
-        this.channelGamePage()
         this.getDevices ()
-        this.gamePage()
       }
       
     }
