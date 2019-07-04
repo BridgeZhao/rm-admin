@@ -109,19 +109,26 @@
     },
     created(){
     	this.defaultStoreId=this.storeId
-      this.gamePage()
       this.getScenarioData()
       this.getDevices()
       this.channelGamePage()
+      this.gamePage()
     },
     methods: {
-      // 关联游戏模块
       gamePage(){
         //console.log('门店列表',this.storeList,this.storeId)
         return new Promise(resolve => {
           gamePage().then(res => {
-            //console.log("总游戏",res.data)
-            this.gameList = res.data
+            let data = res.data
+            for(let i = 0; i<this.gameData.length; i++){
+              for(let j = 0; j<res.data.length; j++){
+                if(this.gameData[i].game.id === res.data[j].id){
+                  data.splice(j,1)
+                }
+              }
+            }
+            this.gameList = data
+            console.log("总游戏",this.gameList)
             resolve(res)
           })
         })
@@ -145,7 +152,7 @@
               }
             }
             this.fromInfo.checkList = resDevices
-            console.log("设备",resDevices )
+            // console.log("设备",resDevices )
             resolve(res)
           })
         })
@@ -154,7 +161,7 @@
         return new Promise(resolve => {
           channelGamePage(this.defaultStoreId).then(res => {  
             this.gameData =  res.data
-            //console.log("关联游戏",this.gameData)
+            console.log("关联游戏",this.gameData)
             resolve(res)
           })
         })
@@ -207,6 +214,7 @@
             //console.log(this.upFromInfo)
             channelGame(this.upFromInfo).then(() => {
               this.channelGamePage()
+              this.gamePage()
               this.clearClose('reload')
               this.$message.success('操作成功')
             })
@@ -214,16 +222,18 @@
         })
       },
       delChannelGame(key){
-        this.$confirm('确认要删除' + key.game.name + '吗？')  
+        this.$confirm('确认要取消关联' + key.game.name + '吗？')  
         .then(() => {
           delChannelGame(key.id).then(() => {
             this.channelGamePage()
+            this.gamePage()
             this.$message.success('删除成功')
           })
         })
       },
       clearClose() {
         this.dialogVisible = false
+        this.gamePage()
         // this.$refs['myform'].resetFields()
       },
       handleCheckAllChange(){
@@ -244,6 +254,7 @@
         this.defaultStoreId = newVal
         this.channelGamePage()
         this.getDevices ()
+        this.gamePage()
       }
       
     }
