@@ -43,14 +43,14 @@ export default {
         },
         grid: {
           top: '16%',
-            left: '2%',
-            right: '10%',
-            bottom: '2%',
+          left: '2%',
+          right: '10%',
+          bottom:1,
           containLabel: true
         },
         xAxis: {
           name: "",
-          nameGap: 3,
+          nameGap: 4,
           type: "category",
           splitLine: { show: false },
           data: []

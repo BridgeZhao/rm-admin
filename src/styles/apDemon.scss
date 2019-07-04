@@ -27,7 +27,7 @@
       padding: 5px;
       box-sizing: border-box;
       .legend {
-        height: 2.3rem;
+        // height: 2.3rem;
         width: 100%;
         display: flex;
         align-items: center;
@@ -128,12 +128,18 @@
     overflow: hidden;
     &-item {
       width: 100%;
-      height: calc(33.33% - 10px);
+      height: calc(33.33% - 13px);
       margin-top: 10px;
     }
     &-item-main {
       width: 100%;
       height: calc(100% - 20px);
+      position: relative;
+      .el-table{
+        position: absolute;
+        width: 100%;
+        height: 100% !important;
+      }
     }
   }
   .header {
@@ -161,7 +167,7 @@
   }
   .top-bar {
     width: 100%;
-    height: 80px;
+    height: 82px;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -189,7 +195,7 @@
   }
   .main-content {
     width: 100%;
-    height: calc(100vh - 270px);
+    height: calc(100vh - 227px);
     display: flex;
     min-height: 500px;
     align-items: flex-start;
@@ -302,10 +308,9 @@
     .panel-list {
       width: calc(54% - 20px);
       height: 100%;
-
       .main-bar {
         width: 100%;
-        height: 150px;
+        height: 200px;
         margin-top: 10px;
 
         .cum-number {
@@ -315,7 +320,7 @@
       }
       .main-map {
         margin-top: 10px;
-        height: calc(100% - 244px);
+        height: calc(100% - 300px);
         .heat-map-container {
           width: 100%;
           height: calc(100% - 40px);
@@ -368,4 +373,9 @@ li {
   background: #082849;
   padding: 10px;
   box-sizing: border-box;
+}
+.tableBox.el-table::before {
+  left: 0;
+  bottom: 0;
+  height: 0px !important;
 }

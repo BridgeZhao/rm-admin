@@ -383,6 +383,7 @@ export default {
         let containerRect = this.$refs.heatmapContainer.getBoundingClientRect()
         let xScale = containerRect.width / originalWidth
         let yScale = containerRect.height / originalHeight
+        console.log('xScale',xScale,'yScale',yScale,'containerRect',containerRect)
         // 进行坐标轴数据解析
         for (let item of _heatmap) {
             heatmapData.push({

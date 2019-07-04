@@ -73,7 +73,7 @@
         <div class="box-card main-bar">
           <div class="header">每小时客流数</div>
           <div class="cum-number">
-            <bar-chart-new :data="heampChartdataList"/>
+            <bar-chart-new :data="heampChartdataList" ref="hoursChart"/>
           </div>
         </div>
       </div>
@@ -107,10 +107,11 @@
               <el-table
                 :data="tableData"
                 stripe
-                style="width: 100%;background: #082849;"
+                style="width: 100%;background: #082849;height:100%;"
                 size="mini"
                 tooltip-effect="dark"
                 :height="maxHeight"
+                class="tableBox"
               >
                 <el-table-column prop="scenarioName" label="场景监控" width="80" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="deviceCount" label="播放设备数" width="80"></el-table-column>
@@ -131,6 +132,7 @@
                 size="mini"
                 tooltip-effect="dark"
                 :height="maxHeight"
+                class="tableBox"
               >
                 <el-table-column prop="areaName" label="区域" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="view" label="观看人数"></el-table-column>
@@ -170,12 +172,14 @@
 	import BarChartNew from '@/components/Charts/BarChartNew'
   import {getImageData, getLeftImg, getPinData} from '@/api/report'
   import {getStoresImg} from "@/api/store"
-	const MAX_HEAT_VALUE = 10;
+  const MAX_HEAT_VALUE = 10;
+  let loop_play_heatmap_timer_id;
 	export default {
   name: "aptitude-demonstration",
   components: { BarChartNew },
   data() {
     return {
+      playedHours:[],
 			timer: null,
       timeData:[moment(new Date()).add(-1,'days').format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')],
       maxHeight: 0,
@@ -236,15 +240,57 @@
     }
   },
   methods: {
+    playHeatMap(playIndex, lastPlayedIndex) {
+      let hoursChart = this.$refs.hoursChart;
+      let loop_func = () => {
+        hoursChart.dispatchAction({
+          type: "downplay",
+          seriesIndex: 0,
+          dataIndex: lastPlayedIndex
+        });
+        hoursChart.dispatchAction({
+          type: "highlight",
+          seriesIndex: 0,
+          dataIndex: playIndex
+        });
+        hoursChart.dispatchAction({
+          type: "showTip",
+          seriesIndex: 0,
+          dataIndex: playIndex
+        });
+        let hours = this.playedHours;
+        let queryHours = [hours[playIndex], hours[playIndex]];
+        // this.getHeatmapData(queryHours);
+      };
+      if (hoursChart) {
+        loop_func();
+      }
+    },
+    loopPlayHeatMap() {
+      let playIndex = 0,
+        lastPlayedIndex = 0;
+      clearInterval(loop_play_heatmap_timer_id);
+      loop_play_heatmap_timer_id = setInterval(() => {
+        let hours = this.playedHours;
+        let len = hours.length;
+        if (len === 0) {
+          return;
+        }
+        this.playHeatMap(playIndex, lastPlayedIndex);
+        lastPlayedIndex = playIndex;
+        playIndex = ++playIndex % len;
+      }, 6 * 1000);
+      loop_play_heatmap_timer_id = setInterval(this.intervalGetData, 60 * 1000);
+    },
   	setMoment(data){
   		return  moment(data).format('HH:mm:ss')
 		},
     tableHeight() {
       const { clientHeight } = this.$refs.table
       this.maxHeight = clientHeight
-      window.onresize = () => {
-        this.tableHeight()
-      }
+      // window.onresize = () => {
+      //   this.tableHeight()
+      // }
     },
     setBigDatas(storeId){
     	const _storeId = storeId
@@ -302,14 +348,14 @@
     },
 		// 设置每小时客流数
     setHeampChartData(data){
-    	console.log("-----",data)
       const _viewData = data
 			const xData = []
 			const yData = []
       for (let item of _viewData) {
-        xData.push(item.hour+":00")
+        xData.push(item.hh+":00")
         yData.push(item.customerNum)
       }
+      this.playedHours = xData
       this.$set(this.heampChartdataList,'xAxisData',xData)
       this.$set(this.heampChartdataList,'barList',yData)
       this.$set(this.heampChartdataList,'xAxisName','小时')
@@ -317,14 +363,15 @@
     },
     setHeampData(data){// 获取热力图数据
 				const _heatmap = data
-				const heatmapData = []
+        let heatmapData = []
         const originalWidth = 900
         const originalHeight = 300
-				const containerRect = this.$refs.heatmapContainer.getBoundingClientRect()
-				const xScale = containerRect.width / originalWidth
-				const yScale = containerRect.height / originalHeight
+        let containerRect = this.$refs.heatmapContainer.getBoundingClientRect()
+        let xScale = containerRect.width / originalWidth
+        let yScale = containerRect.height / originalHeight
+        console.log('xScale',xScale,'yScale',yScale,'containerRect',containerRect)
         // 进行坐标轴数据解析
-        for (const item in _heatmap) {
+        for (let item of _heatmap) {
           heatmapData.push({
             x: Number((item.field_x * xScale).toFixed(0)),
             y: containerRect.height - Number((item.field_y * yScale).toFixed(0)),
@@ -333,7 +380,6 @@
         }
         console.log("--------",heatmapData)
         this.$nextTick(() => {
-          // this.tableHeight()
           this.heatmap.setData({
             min: 0,
             max: MAX_HEAT_VALUE,
@@ -360,10 +406,11 @@
         hh: '08,22'
       }
       this.setStoreImg(storeId)
-      this.setHeampData(_params)
+      // this.setHeampData(_params)
       this.setImgData()
       this.setBigDatas(_storeId)
-			this.setLeftImg()
+      this.setLeftImg()
+      this.tableHeight()
     },
 		lunbo(){
   		this.setLeftImg()
@@ -425,6 +472,7 @@
     //   this.list2.push(obj)
     // }
     this.init()
+    // this.loopPlayHeatMap();
     this.timer = setInterval(() => {
       setTimeout(this.lunbo(), 0)
     }, 15000)
@@ -434,7 +482,8 @@
 		if(this.timer) { // 如果定时器还在运行 或者直接关闭，不用判断
 			clearInterval(this.timer) //关闭
 			this.timer = null
-		}
+    }
+    clearInterval(loop_play_heatmap_timer_id);
 	}
 }
 </script>
