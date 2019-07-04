@@ -291,15 +291,16 @@ export default {
         grid: {
           top: "20%",
           left: "15%",
-          right: "10%",
+          right: "15%",
           bottom: "15%"
         },
         xAxis: {
+          name:'区域',
           type: "category",
           data: xdata,
           nameTextStyle:{
-            color:'#2979cc',
-            fontSize: 14
+            color:'#ffffff',
+            fontSize: 12
           },
           axisLine:{
             show:true,
@@ -325,7 +326,7 @@ export default {
             }
           },
           splitLine:{
-            show:true,
+            show:false,
             lineStyle:{
               color:'#00B4D9',
               type: 'dashed',
@@ -490,5 +491,7 @@ export default {
 <style lang="scss" scoped>
 @import "@/styles/areaHeat.scss";
 @import "@/styles/report.scss";
-
+.report-small{
+    margin-bottom: 10px;
+}
 </style>
