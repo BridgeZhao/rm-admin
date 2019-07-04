@@ -113,7 +113,7 @@
 				label="状态"
 				align="center">
 				<template slot-scope="scope">
-					<el-tag :type="scope.row.status === 1 ? 'success' : 'info'">{{statusChange(scope.row.status)}}</el-tag>
+					<el-tag :type="scope.row.status === 1 ? 'success' : 'danger'">{{statusChange(scope.row.status)}}</el-tag>
 				</template>
 			</el-table-column>
 			<el-table-column

@@ -159,7 +159,7 @@
 					this.ruleForm.couponId.splice(num, 1)
 				})
 				rows.splice(index, 1)
-				console.log('this.ruleForm.couponId---',this.ruleForm.couponId)
+				console.log('this.ruleForm.rows---',this.newTableData)
 				
 			},
 			// 保存像后台传新增的场景关联的值
@@ -169,25 +169,28 @@
 						let _scenarioId = this.ruleForm.scenarioId
 						let arr = []
 						arr = this.newTableData.map((item,index) =>{
-							return 	{'couponId': item.id,'index':index + 1}
+							return 	{'couponId':item.id ? item.id : item.couponId,'index':index + 1}
 						})
 						let obj = {
 							scenarioId:_scenarioId,
 							coupons:arr
 						}
 						obj = JSON.parse(JSON.stringify(obj))
+						console.log('保存的东西',obj)
 						sceneBind(obj).then(res =>{
 							if(res === 'OK'){
 								this.$message({
 									showClose: true,
-									message: '新增成功！',
+									message: '新增或编辑成功！',
 									type: 'success'})
+									this.$emit('listenClose')
 								
 							}else{
 								this.$message({
 								showClose: true,
 								message: res.msg,
 								type: 'warning'})
+								this.$emit('listenClose')
 							}
 						})
 					} else {

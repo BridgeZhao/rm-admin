@@ -64,7 +64,7 @@
             <el-button type="primary" size="mini" style="width: 100px;" @click="next">上一步</el-button>
         </div>
         <el-dialog title="新增场景" :visible.sync="dialogTableVisible">
-            <new-recore ref="newRecord" v-if="dialogTableVisible" :rows="childRow"></new-recore>
+            <new-recore ref="newRecord" v-if="dialogTableVisible" :rows="childRow" @listenClose='listenMethod'></new-recore>
             <div slot="footer">
                 <el-button @click="cancle">取 消</el-button>
                 <el-button type="primary" @click="submit">保存</el-button>
@@ -76,6 +76,7 @@
 	import newRecore from "@/components/couponsComponents/newRecore";
 	// import Sortable from 'sortablejs'
 	import {searchConnection, getScenarioData,delSceneData} from '@/api/coupons'
+import { setTimeout } from 'timers';
   export default {
     name: 'sceneConnect',
     data() {
@@ -155,13 +156,18 @@
 						type: 'success'})
 					this.loadData()
 				})
-			},
+      },
+      listenMethod(){
+        const that = this
+         setTimeout(function(){
+          that.dialogTableVisible = false;
+          that.loadData()
+        },1000)
+      },
       submit(){ // 保存
-				this.$refs.newRecord.postData();
-				this.dialogTableVisible = false;
-				this.formInline.scene = ''
-				this.childRow = {}
-				this.loadData()
+        this.$refs.newRecord.postData();
+        this.formInline.scene = ''
+        this.childRow = {}
       },
       handleSizeChange(val) {
         this.page.size = val
