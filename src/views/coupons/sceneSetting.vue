@@ -45,10 +45,10 @@
         align="center"
       >
         <template slot-scope="scope">
-          <el-button type="text"  style="margin-right: 10px;" @click="edit(scope.row)">
+          <el-button size="small"  style="margin-right: 10px;" @click="edit(scope.row)">
             编辑
           </el-button>
-          <el-button type="text" @click="deleteData(scope.row)">
+          <el-button type="danger" size="small" @click="deleteData(scope.row)">
             删除
           </el-button>
         </template>

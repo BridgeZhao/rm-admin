@@ -102,8 +102,8 @@
 			<el-pagination
 				@size-change="handleSizeChange"
 				@current-change="handleCurrentChange"
-				:current-page="page.current"
-				:page-sizes="[20, 30, 40, 50]"
+				:current-page="page.page"
+				:page-sizes="[10, 20, 30, 40]"
 				:page-size="page.size"
 				class="pagination"
 				layout="total, sizes, prev, pager, next, jumper"
@@ -192,7 +192,7 @@
 				page: {
 					total: 20,
 					size: 10,
-					current: 1
+					page: 1
 				},
 				sceneList: []
 			}
@@ -213,9 +213,6 @@
 		},
 
 		methods: {
-			search() {
-				console.log('查询')
-			},
 			resetForm(formName) {
 				this.$refs[formName].resetFields()
 			},
@@ -234,7 +231,7 @@
 				console.log('11～～～', row)
 			},
 			handleCurrentChange(val) {
-				this.page.current = val
+				this.page.page = val
 				this.searchData()
 			},
 			handleSizeChange(val) {
@@ -246,7 +243,7 @@
 				this.ID = id
 				const _parmas = {
 					couponId: id,
-					page: this.page.current,
+					page: this.page.page,
 					size: this.page.size
 				}
 				this.loadData(_parmas)
@@ -254,7 +251,7 @@
 			searchData(data) {
 				const _id = data || this.$store.state.app.storeId
 				let pages = {
-					page: this.page.current,
+					page: this.page.page,
 					size: this.page.size
 				}
 				const obj = Object.assign({}, pages, this.ruleForm)
@@ -270,7 +267,7 @@
 			loadData(data) {
 				searchRecord(data).then(res => {
 					console.log('laodData')
-					this.page.current = res.page
+					this.page.page = res.page
 					this.page.size = res.size
 					this.page.total = res.total
 					// this.tableData = res.data

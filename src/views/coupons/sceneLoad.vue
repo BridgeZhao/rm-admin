@@ -55,7 +55,7 @@
 				label="类型"
 				align="center">
 				<template slot-scope="scope">
-					<span>{{typeChange(scope.row.couponType)}}</span>
+					<el-tag :type="scope.row.couponType === 1 ? 'success' : 'warning'">{{typeChange(scope.row.couponType)}}</el-tag>
 				</template>
 			</el-table-column>
 			<el-table-column
@@ -113,18 +113,18 @@
 				label="状态"
 				align="center">
 				<template slot-scope="scope">
-					<span>{{statusChange(scope.row.status)}}</span>
+					<el-tag :type="scope.row.status === 1 ? 'success' : 'info'">{{statusChange(scope.row.status)}}</el-tag>
 				</template>
 			</el-table-column>
 			<el-table-column
 				label="操作"
 				align="center"
 				width="250">
-				<template slot-scope="scope">
-					<el-button type="text" size="mini" @click="lookRecord(scope.row)">发放记录</el-button>
-					<el-button type="text" size="mini" style="margin-right: 10px;" @click="edit(scope.row)">详情</el-button>
-					<el-button type="text" size="mini" @click="changeStatus(scope.row)">{{scope.row.status === 1 ? "禁用" : "启用"}} </el-button>
-					<el-button type="text" size="mini" @click="deleteCoupon(scope.row)">删除</el-button>
+				<template slot-scope="scope" class="elBox">
+					<el-tag size="small" @click="lookRecord(scope.row)">发放记录</el-tag >
+					<el-tag type="warning" size="small"  @click="edit(scope.row)">详情</el-tag>
+					<el-tag :type="scope.row.status === 1 ? 'info' : 'success'" size="small" @click="changeStatus(scope.row)">{{scope.row.status === 1 ? "禁用" : "启用"}} </el-tag>
+					<el-tag type="danger" size="small" @click="deleteCoupon(scope.row)">删除</el-tag>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -207,7 +207,7 @@
 						<el-form-item v-if="!commandNumber" label="积分数量" prop="creditNum">
 							<el-input-number v-model="couponsFlag.creditNum" :controls="false" :min="0" :max="100000000" style="width: 244px;"></el-input-number>
 						</el-form-item>
-						<el-form-item v-if="commandNumber" label="导入优惠券" style="margin-bottom:0px;" prop=''>
+						<el-form-item v-if="commandNumber" label="导入优惠券" style="margin-bottom:0px;">
 							<!-- <el-upload
 								class="upload-demo"
 								action=""
@@ -219,15 +219,20 @@
 								>
 								<el-button size="small" type="primary">点击上传</el-button>
 							</el-upload> -->
-							<!-- <a href="javascript:;" class="a-upload">
-								<input type="file" id="uploadFile" class="file" accept="text/plain" @change="fileChange" style="opacity: 0;">点击这里上传文件
-							</a>
-							<i class="icon='el-icon-upload'"></i> -->
-							<input type="file" id="uploadFile" class="file" accept="text/plain" @change="fileChange">
+							<el-button type="primary" size="small" style="min-width:120px;position: relative;">{{upLoadName}}<i class="el-icon-upload el-icon--right"></i>
+							   <input type="file" id="uploadFile" class="file" accept="text/plain" @change="fileChange" 
+							        style="opacity: 0;
+									width: 100%;
+									position: absolute;
+									left: 0;
+									top: 0;
+									height: 100%;">
+							</el-button>
+							<!-- <input type="file" id="uploadFile" class="file" accept="text/plain" @change="fileChange"> -->
 
 						</el-form-item>
 						<div  v-show="dialog2Visible">
-							<span style="size:12px;color: #a00c0c;">*支持预览前50个</span>
+							<span style="font-size:12px;color: #791505;">*支持预览前50个</span>
 							<el-table
 								:data="couponData"
 								border
@@ -274,6 +279,7 @@
 		},
 		data() {
 			return {
+				upLoadName:'上传文件',
 				dialog2Visible:false,
 				couponData:[],
 				actionUrl: `${process.env.VUE_APP_HTTP_MG}/mg/coupons`,
@@ -387,6 +393,7 @@
 			fileChange() {
 				let file = document.getElementById("uploadFile").files[0];
 				this.fileList = file
+				this.upLoadName = file.name
 				console.log('^^^^^',file)
 				let vm = this;
 				this.readFile(file).then(res => {
@@ -482,6 +489,7 @@
 			beforeClose(){
 				if(this.commandNumber){
 					document.getElementById("uploadFile").value = ""
+					this.upLoadName = '上传文件'
 					this.fileList = {}
 					this.couponData = []
 					this.dialog2Visible = false
@@ -775,5 +783,7 @@
 		*display: inline;
 		*zoom: 1
 }
-
+.cell .el-tag{
+	cursor: pointer;
+}
 </style>

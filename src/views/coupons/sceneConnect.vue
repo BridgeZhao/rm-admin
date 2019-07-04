@@ -14,7 +14,7 @@
         <el-table
                 :data="tableData"
                 border
-                style="width: 100%">
+                style="width: 100%;margin-bottom:10px;">
             <el-table-column
                     prop="id"
                     label="ID"
@@ -45,7 +45,7 @@
                     label="操作"
                     align="center">
                 <template slot-scope="scope">
-                    <el-button type="text" style="margin-right: 10px;" @click="edit(scope.row)">编辑</el-button>
+                    <el-button size="small" style="margin-right: 10px;" @click="edit(scope.row)">编辑</el-button>
                     <!-- <el-button type="text" size="mini" @click="deleteData(scope.row)">删除</el-button> -->
                 </template>
             </el-table-column>
