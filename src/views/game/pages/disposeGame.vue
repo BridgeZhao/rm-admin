@@ -132,7 +132,7 @@
         return new Promise(resolve => {
           gamePage().then(res => {
             this.gameList = res.data
-            console.log("总游戏",this.gameList)
+            //console.log("总游戏",this.gameList)
             resolve(res)
           })
         })
@@ -165,7 +165,7 @@
         return new Promise(resolve => {
           channelGamePage(this.defaultStoreId).then(res => {  
             this.gameData =  res.data
-            console.log("关联游戏",this.gameData)
+            //console.log("关联游戏",this.gameData)
             resolve(res)
           })
         })
