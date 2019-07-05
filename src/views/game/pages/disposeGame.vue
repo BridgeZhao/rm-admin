@@ -21,7 +21,7 @@
         <el-form-item v-if="addEditType" label="选择游戏" prop="gameId" :label-width="formLabelWidth"  >
            <el-select v-model="fromInfo.gameId" placeholder="请选择">
             <el-option
-              v-for="item in gameList"
+              v-for="item in gameListAll"
               :key="item.id"
               :label="item.name"
               :value="item.id">
@@ -105,7 +105,19 @@
       ...mapGetters([
         'storeList',
         'storeId'
-      ])
+      ]),
+      gameListAll: function () {
+        let _this = this
+        let alls = JSON.parse(JSON.stringify(_this.gameList))
+        for(let i = 0; i<_this.gameData.length; i++){
+          for(let j = 0; j<alls.length; j++){
+            if(_this.gameData[i].game.id === alls[j].id){
+               alls.splice(j,1)
+            }
+          }
+        }
+        return alls
+      }
     },
     created(){
     	this.defaultStoreId=this.storeId
@@ -119,15 +131,7 @@
         //console.log('门店列表',this.storeList,this.storeId)
         return new Promise(resolve => {
           gamePage().then(res => {
-            let data = res.data
-            for(let i = 0; i<this.gameData.length; i++){
-              for(let j = 0; j<res.data.length; j++){
-                if(this.gameData[i].game.id === res.data[j].id){
-                  data.splice(j,1)
-                }
-              }
-            }
-            this.gameList = data
+            this.gameList = res.data
             console.log("总游戏",this.gameList)
             resolve(res)
           })
@@ -227,7 +231,8 @@
         this.$confirm('确认要取消关联' + key.game.name + '吗？')  
         .then(() => {
           delChannelGame(key.id).then(() => { 
-            this.$message.success('删除成功')
+            this.$message.success('取消成功')
+            this.channelGamePage()
           })
         })
       },
