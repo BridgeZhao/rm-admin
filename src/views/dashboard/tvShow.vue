@@ -455,7 +455,7 @@
           store_id: _storeId,
           starttime: startTime,
           endtime: endTime,
-          hh: data[0] + ',' + Number(data[0])+1
+          hh: data[0] + ',' + (Number(data[0])+1)
         }
        getAreaHotData(_params).then(res => {
         let _heatmap = res.data.heatmap
