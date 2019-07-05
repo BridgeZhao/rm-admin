@@ -135,7 +135,7 @@
       },
       getScenarioData(){
         return new Promise(resolve => {
-          getScenarioData().then(res => {
+          getScenarioData({size:50}).then(res => {
             //console.log("场景总列表",res.data)
             this.ScenarioList = res.data
             resolve(res)
@@ -252,6 +252,7 @@
       StoreId : function(newVal,oldVal){
         this.defaultStoreId = newVal
         this.getDevices ()
+        this.gamePage()
       }
       
     }
