@@ -256,6 +256,7 @@
     watch:{
       StoreId : function(newVal,oldVal){
         this.defaultStoreId = newVal
+        this.channelGamePage()
         this.getDevices ()
         this.gamePage()
       }
