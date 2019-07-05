@@ -297,6 +297,7 @@ export default {
         xAxis: {
           name:'区域',
           type: "category",
+          splitLine: { show: true },
           data: xdata,
           nameTextStyle:{
             color:'#ffffff',
@@ -336,13 +337,24 @@ export default {
         },
         series: [
           {
-            barWidth: 20, // 柱图宽度
-            itemStyle: {
-              barBorderRadius: [10, 10, 0, 0]
-            },
+            barWidth: 12, // 柱图宽度
+            label: {
+                normal: {
+                  show: true,
+                  color:"#fff",
+                  position: "top"
+                },
+              },
+              itemStyle: {
+                    normal: {
+                        barBorderRadius: [10, 10, 0, 0],
+                        color:'#71DCFF',
+                        opacity: 0.85
+                    }
+                },
             data: s_data,
             type: "bar",
-            barWidth: "10"
+            
           }
         ]
       })

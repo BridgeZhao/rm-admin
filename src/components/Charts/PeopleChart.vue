@@ -118,7 +118,7 @@ export default {
               normal: {
                 show: false,
                 textStyle: {
-                  color: "#fff "
+                  color: "#fff"
                 }
               }
             }
@@ -127,6 +127,14 @@ export default {
             name: "总客流",
             type: "line",
             yAxisIndex: 1,
+            label: {
+              normal: {
+                show: true,
+                textStyle: {
+                  color: "#fff"
+                }
+              }
+            },
             data: []
           }
         ]
