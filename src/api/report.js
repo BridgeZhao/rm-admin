@@ -62,6 +62,14 @@ export function getPinData(params) {
     params
   })
 }
+// 展示专用
+export function superDemo(params) {
+  return request({
+    url: '/mg/dashboard/superDemo',
+    method: 'get',
+    params
+  })
+}
 // 左侧轮播
 export function getLeftImg(params) {
 	return request({
@@ -70,6 +78,13 @@ export function getLeftImg(params) {
 		params
 	})
 }
-
+// 左侧轮播展示专用
+export function getLeftImg2(params) {
+	return request({
+		url: '/backend/face/entries',
+		method: 'get',
+		params
+	})
+}
 // http://172.16.2.182:8000/api/mg/dashboard/supermonitor?store_id=test0523
 

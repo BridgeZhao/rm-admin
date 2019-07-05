@@ -2,29 +2,31 @@
   <div class="app-container" style="margin-top: 0px;">
     <div data-v-1f5afd21 class="top-bar">
       <h2 data-v-1f5afd21 class="sub-title">智能会员管理</h2>
-      <h1 data-v-1f5afd21 class="main-title">KANKAN 智能客流分析</h1>
+      <h1 data-v-1f5afd21 class="main-title"> 智慧客流监控大屏</h1>
       <h2 data-v-1f5afd21 class="sub-title">人脸识别互动效果</h2>
     </div>
     <div class="main-content">
       <div class="member-list-warp">
         <div class="wrapper-item" v-for="item in list2" :key="item.id">
           <div class="box-card list-item">
-            <img :src="item.avatar" alt>
+            <img :src="item.img" alt>
             <div class="content">
-              <div class="title">优惠券名称</div>
-              <div class="value" v-if="item.avgWeekCount < 3">{{item.couponName}}</div>
-              <div class="area-start" v-else>
-                <div class="value-area-left">{{item.tags[0]}}</div>
-                <div class="value-area-right">{{item.tags[1]}}</div>
+              <div class="sub-title" style="margin-top:5%;">客群标签</div>
+              <!-- <div class="value-area-left">{{item.category > 0 ? 'VIP' : '新客户'}}</div> -->
+               <!-- <div class="value-area-left">新客户</div> -->
+              <div class="area-start">
+                <div class="value-area-left" :style="{color:item.category > 0 ? '#f8e71c' : '#00e7c0'}">{{item.category > 0 ? 'VIP' : '新客户'}}</div>
+                <!-- <div class="value-area-left" v-for="y in item.tags" :key="y.id">{{y}}</div> -->
+                <!-- <div class="value-area-right">{{item.tags[1]}}</div> -->
+                  <div class="value-area-left" v-show="Array.isArray(item.tags) && item.tags.length !== 0">{{item.tags[0]}}</div>
+                  <div class="value-area-left" v-show="Array.isArray(item.tags) && item.tags.length !== 0">{{item.tags[1]}}</div>
               </div>
               <div class="area-between">
                 <div>
-                  <div class="title">领取场景:{{item.scenarioName}}</div>
-                  <div class="sub-title">客单价{{item.accCount}}</div>
+                  <div class="sub-title">到店次数:{{item.entryTimes}}次</div>
                 </div>
                 <div>
-                  <div class="title">最近到店时间</div>
-                  <div class="sub-title">{{setMoment(item.time)}}</div>
+                  <div class="sub-title">到店时间:{{setMoment(item.lastTime)}}</div>
                 </div>
               </div>
             </div>
@@ -73,7 +75,8 @@
         <div class="box-card main-bar">
           <div class="header">每小时客流数</div>
           <div class="cum-number">
-            <bar-chart-new :data="heampChartdataList" ref="hoursChart"/>
+            <!-- <bar-chart-new :data="heampChartdataList" ref="hoursChart"/> -->
+            <v-chart ref="hoursChart" class="charts" :options="hoursCustomerFlowChartOptions" style="width:100%;height:100%;"></v-chart>
           </div>
         </div>
       </div>
@@ -82,15 +85,15 @@
           <ul class="summary">
             <li class="summary-list" style="width:33%;">
               <h1 class="summary-title">实时游戏互动人数</h1>
-              <span class="summary-value">{{summary.realTimeScenarioInteraction}}</span>
+              <span class="summary-value">{{summary.realTimeScenarioInteraction || 0}}</span>
             </li>
             <li class="summary-list" style="width:33%;">
-              <h1 class="summary-title">实时互动人数</h1>
-              <span class="summary-value">{{summary.realTimeCount}}</span>
+              <h1 class="summary-title">实时区域互动人数</h1>
+              <span class="summary-value">{{summary.realTimeCount || 0}}</span>
             </li>
             <li class="summary-list" style="width:33%;">
               <h1 class="summary-title">实时广告观看人数</h1>
-              <span class="summary-value">{{summary.realTimeAdInteraction}}</span>
+              <span class="summary-value">{{summary.realTimeAdInteraction ||0}}</span>
             </li>
           </ul>
         </div>
@@ -112,13 +115,14 @@
                 tooltip-effect="dark"
                 :height="maxHeight"
                 class="tableBox"
+                :header-cell-style="{height:'30px'}"
               >
-                <el-table-column prop="scenarioName" label="场景监控" width="80" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="deviceCount" label="播放设备数" width="80"></el-table-column>
-                <el-table-column prop="view" label="观看观众数" width="80"></el-table-column>
-                <el-table-column prop="interaction" label="互动顾客数" width="80"></el-table-column>
-                <el-table-column prop="couponCount" label="领劵顾客数" width="80"></el-table-column>
-                <el-table-column prop="avgInteractionDevice" label="平均顾客数"></el-table-column>
+                <el-table-column prop="scenarioName" label="场景监控" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="deviceCount" label="播放设备数"></el-table-column>
+                <el-table-column prop="view" label="观看观众数"></el-table-column>
+                <el-table-column prop="interaction" label="互动顾客数"></el-table-column>
+                <!-- <el-table-column prop="couponCount" label="领劵顾客数" width="70"></el-table-column>
+                <el-table-column prop="avgInteractionDevice" label="平均顾客数" width="70"></el-table-column> -->
               </el-table>
             </div>
           </div>
@@ -159,7 +163,7 @@
             v-for="(item,index) in list3"
             :src="item.imgBase64"
             :key="'img'+index"
-            :class="{'color1':item.similarity < 30,'color2':item.similarity >= 30 && item.similarity <= 60,'color3':item.similarity > 60}"
+            :class="{'color3':item.similarity < 30,'color2':item.similarity >= 30 && item.similarity <= 60,'color1':item.similarity > 60}"
           >
         </div>
       </div>
@@ -170,7 +174,7 @@
 	import moment from 'moment'
 	import h337 from 'heatmap.js'
 	import BarChartNew from '@/components/Charts/BarChartNew'
-  import {getImageData, getLeftImg, getPinData} from '@/api/report'
+  import {getImageData, getLeftImg,getLeftImg2, getPinData,getAreaHotData,superDemo} from '@/api/report'
   import {getStoresImg} from "@/api/store"
   const MAX_HEAT_VALUE = 10;
   let loop_play_heatmap_timer_id;
@@ -179,6 +183,7 @@
   components: { BarChartNew },
   data() {
     return {
+      hoursCustomerFlowChartOptions: null,
       playedHours:[],
 			timer: null,
       timeData:[moment(new Date()).add(-1,'days').format('YYYY-MM-DD'),moment(new Date()).format('YYYY-MM-DD')],
@@ -260,7 +265,8 @@
         });
         let hours = this.playedHours;
         let queryHours = [hours[playIndex], hours[playIndex]];
-        // this.getHeatmapData(queryHours);
+        console.log('hours',hours,'queryHours',queryHours)
+        this.setHeampData(queryHours);
       };
       if (hoursChart) {
         loop_func();
@@ -297,7 +303,8 @@
       const _store_id = {
         store_id:_storeId
       }
-      getPinData(_store_id).then(res =>{
+      // getPinData(_store_id).then(res =>{
+         superDemo(_store_id).then(res =>{
         // 设置summary
 				this.summary = res.data.summary === [] ? this.summary : res.data.summary[0]
         // 设置期间浏览人数
@@ -319,20 +326,175 @@
         let _areaDataList = res.data.areaData
         this.areaDataList = _areaDataList
 				// 热力图
-				const _heatmap = res.data.heatmap
-				this.setHeampData(_heatmap)
+				// const _heatmap = res.data.heatmap
+				// this.setHeampData(_heatmap)
 				// 设置小时客流
 				const _flowHourData = res.data.flowHourData
-				this.setHeampChartData(_flowHourData)
+        // this.setHeampChartData(_flowHourData)
+        this.generateHoursChartOptions(_flowHourData)
+      })
+    },
+    // -----------------------------------
+    generateHoursChartOptions(data) {
+      const that = this
+      let composeSourceData = function(data) {
+        let indexMap = {}
+        let cursor = 0
+        let composedData = []
+        let hours = []
+        for (let item of data) {
+          if (indexMap[item.hh] === undefined) {
+            composedData.push(item.customerNum);
+            hours.push(item.hh);
+            indexMap[item.hh] = cursor;
+            cursor++;
+          } else {
+            composedData[indexMap[item.hh]] += item.customerNum;
+          }
+        }
+        return {
+          composedData: composedData,
+          hours
+        };
+      };
+      let { composedData, hours } = composeSourceData(data)
+      this.playedHours = hours
+        let charOption = {
+          name: "客流人数",
+          tooltip: {
+          trigger: 'axis',
+           tooltip: {
+            formatter(params) {
+              return `区域： ${params.name}<br>区域人数：${params.value}人`;
+            }
+          }
+        },
+           xAxis: {
+            type:"category",
+            name:"小时",
+            axisLine: {
+              lineStyle: {
+                  width: 1,
+                  color:'#00B4D9',
+                  opacity: 0.8
+              },
+              show: true,
+            },
+            axisLabel: {
+              margin:8
+            },
+            axisTick: {
+              show: false
+            },
+            data: hours,
+            nameGap: 8
+          },
+          yAxis: [{
+             type: "value",
+             name:"人数",
+             minInterval: 1,
+             splitLine: {
+               lineStyle: {
+                  width: 1,
+                  color: "rgba(113,220,255,0.30)",
+              }
+             },
+             axisLine: {
+              lineStyle: {
+                  width: 1,
+                  color:'#00B4D9',
+                  opacity: 0.8
+              },
+              show: true,
+            },
+            axisLabel: {
+              margin:8,
+              formatter: val => {
+                return val >= 1000 ? (val / 1000).toFixed(0) + "k" : val;
+              }
+            },
+             z: 0,
+          }],
+        series: [
+          {
+            type: "bar",
+            data: composedData,
+            barMaxWidth:8,
+            emphasis: {
+              itemStyle: {
+                color: "#f8e71c"
+              }
+            },
+            itemStyle: {
+                normal: {
+                  barBorderRadius: [10, 10, 0, 0],
+                  color:'#71DCFF',
+                  opacity: 0.85
+                }
+            },
+          }
+        ],
+        grid: {
+          top: "22%",
+          left: "5%",
+          right: "5%",
+          bottom: "18%"
+        }
+       }
+       console.log('charOption',charOption)
+      this.$nextTick(function(){
+        this.hoursCustomerFlowChartOptions = charOption
+      })
+    },
+    setHeampData(data){// 获取热力图数据
+      	const _storeId = this.$store.state.app.storeId
+        const startTime = moment(new Date()).format('YYYY-MM-DD')
+        const endTime = moment(new Date()).format('YYYY-MM-DD')
+        const _params = {
+          filter: this.radio2,
+          store_id: _storeId,
+          starttime: startTime,
+          endtime: endTime,
+          hh: data[0] + ',' + Number(data[0])+1
+        }
+       getAreaHotData(_params).then(res => {
+        let _heatmap = res.data.heatmap
+        let heatmapData = []
+        const originalWidth = 900
+        const originalHeight = 300
+        let containerRect = this.$refs.heatmapContainer.getBoundingClientRect()
+        let xScale = containerRect.width / originalWidth
+        let yScale = containerRect.height / originalHeight
+        console.log('xScale',xScale,'yScale',yScale,'containerRect',containerRect)
+        // 进行坐标轴数据解析
+        for (let item of _heatmap) {
+            heatmapData.push({
+              x: Number((item.field_x * xScale).toFixed(0)),
+              y: containerRect.height - Number((item.field_y * yScale).toFixed(0)),
+              value: item.heat_map_value
+            })
+        }
+        this.$nextTick(() => {
+          this.heatmap.setData({
+            min: 0,
+            max: MAX_HEAT_VALUE,
+            data: heatmapData
+          })
+        })
+        this.bigLaoding = false
+        console.log(console.log("热点arr", heatmapData));
       })
     },
 		setLeftImg(){
     	const size = {
-    		size: 20
+    		size: 40
 			}
-			getLeftImg(size).then(res =>{
-				console.log("0000000---",res)
-				this.list2 = res
+			// getLeftImg(size).then(res =>{
+			// 	this.list2 = res.data
+      // })
+      getLeftImg2(size).then(res =>{
+        // this.list2.push(res.data)
+        this.list2 = res.data
 			})
 		},
     setImgData(){//获取下方抓去图片
@@ -343,25 +505,26 @@
         console.log("tututu",res)
         this.$nextTick(()=>{
           this.list3 = res.splice(0,20)
+          // this.list3.push(res.splice(0,20))
         })
       })
     },
 		// 设置每小时客流数
-    setHeampChartData(data){
-      const _viewData = data
-			const xData = []
-			const yData = []
-      for (let item of _viewData) {
-        xData.push(item.hh+":00")
-        yData.push(item.customerNum)
-      }
-      this.playedHours = xData
-      this.$set(this.heampChartdataList,'xAxisData',xData)
-      this.$set(this.heampChartdataList,'barList',yData)
-      this.$set(this.heampChartdataList,'xAxisName','小时')
-      this.$set(this.heampChartdataList,'yAxisName','人数')
-    },
-    setHeampData(data){// 获取热力图数据
+    // setHeampChartData(data){
+    //   const _viewData = data
+		// 	const xData = []
+		// 	const yData = []
+    //   for (let item of _viewData) {
+    //     xData.push(item.hh+":00")
+    //     yData.push(item.customerNum)
+    //   }
+    //   this.playedHours = xData
+    //   this.$set(this.heampChartdataList,'xAxisData',xData)
+    //   this.$set(this.heampChartdataList,'barList',yData)
+    //   this.$set(this.heampChartdataList,'xAxisName','小时')
+    //   this.$set(this.heampChartdataList,'yAxisName','人数')
+    // },
+    setHeampData1(data){// 获取热力图数据
 				const _heatmap = data
         let heatmapData = []
         const originalWidth = 900
@@ -472,7 +635,7 @@
     //   this.list2.push(obj)
     // }
     this.init()
-    // this.loopPlayHeatMap();
+    this.loopPlayHeatMap();
     this.timer = setInterval(() => {
       setTimeout(this.lunbo(), 0)
     }, 15000)
@@ -489,7 +652,11 @@
 </script>
 <style lang="scss" scoped>
 	body{
-		overflow: hidden !important;
+    overflow: hidden !important;
+    .tip-str{ max-width: 20px;}
+  .tip-str h1{ display: block; width: 100%;color: #9fe7ff;background: #000000; padding:2px 0 0 5px}
+  .tip-str span{ display:inline-block; min-width: 20px; padding: 2px 5px; float: left;background: #333333; margin:5px 0 0 5px;color: #cccccc; font-size: 13px;}
+  .tip-str span b{ color: yellow;}
 	}
 @import "@/styles/apDemon.scss";
 </style>
