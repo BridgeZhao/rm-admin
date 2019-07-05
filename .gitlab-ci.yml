@@ -2,7 +2,6 @@ image: 172.16.2.182:5000/docker:stable
 
 stages:
   - build
-  - deploy
 
 variables:
   DOCKER_HOST: tcp://docker:2375/
@@ -24,16 +23,5 @@ build:
       -w /opt/frontend-admin-retail "172.16.2.182:5000/cnpm:6.1.0"
       /bin/bash -c "cnpm install; npm run build:prod"
     - docker build -t frontend-admin-retail .
-    - docker tag "frontend-admin-retail" "172.16.2.182:5000/frontend-admin-retail:latest"
-    - docker push "172.16.2.182:5000/frontend-admin-retail:latest"
-
-deploy_test:
-  stage: deploy
-  script:
-    - export DOCKER_HOST=tcp://172.16.2.182:2375/
-    - docker stop frontend-admin-retail || true
-    - docker image rm "172.16.2.182:5000/frontend-admin-retail:latest" || true
-    - docker pull "172.16.2.182:5000/frontend-admin-retail:latest"
-    - docker run --rm --detach --name frontend-admin-retail -p 8080:80 "172.16.2.182:5000/frontend-admin-retail:latest"
-  only:
-    - master
+    - docker tag "frontend-admin-retail" "172.16.2.182:5000/frontend-admin-retail:stage"
+    - docker push "172.16.2.182:5000/frontend-admin-retail:stage"
