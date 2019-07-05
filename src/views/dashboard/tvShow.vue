@@ -174,7 +174,7 @@
 	import moment from 'moment'
 	import h337 from 'heatmap.js'
 	import BarChartNew from '@/components/Charts/BarChartNew'
-  import {getImageData, getLeftImg,getLeftImg2, getPinData,getAreaHotData,superDemo} from '@/api/report'
+  import {getImageData, getLeftImg,getLeftImg2, getPinData,getAreaHotData,superDemo,heatDemo} from '@/api/report'
   import {getStoresImg} from "@/api/store"
   const MAX_HEAT_VALUE = 10;
   let loop_play_heatmap_timer_id;
@@ -457,7 +457,8 @@
           endtime: endTime,
           hh: data[0] + ',' + (Number(data[0])+1)
         }
-       getAreaHotData(_params).then(res => {
+      //  getAreaHotData(_params).then(res => {
+        heatDemo(_params).then(res => {
         let _heatmap = res.data.heatmap
         let heatmapData = []
         const originalWidth = 900

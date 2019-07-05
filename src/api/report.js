@@ -70,6 +70,14 @@ export function superDemo(params) {
     params
   })
 }
+// 热力图
+export function heatDemo(params) {
+  return request({
+    url: '/mg/dashboard/heatDemo',
+    method: 'get',
+    params
+  })
+}
 // 左侧轮播
 export function getLeftImg(params) {
 	return request({
