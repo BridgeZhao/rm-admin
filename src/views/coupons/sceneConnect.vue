@@ -144,7 +144,6 @@ import { setTimeout } from 'timers';
         this.dialogTableVisible = false;
       },
       edit(row){
-      	console.log('this row,',row)
         this.dialogTableVisible = true
 				this.childRow = row
       },
@@ -165,7 +164,7 @@ import { setTimeout } from 'timers';
         },1000)
       },
       submit(){ // 保存
-        this.$refs.newRecord.postData();
+        this.$refs.newRecord.postData()
         this.formInline.scene = ''
         this.childRow = {}
       },
@@ -178,7 +177,7 @@ import { setTimeout } from 'timers';
         this.loadData()
       },
       next(){
-        this.$emit('nextComponet',2);
+        this.$emit('nextComponet',2)
       },
 			loadData(){
 				let _name = this.formInline.scene
