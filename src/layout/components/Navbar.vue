@@ -100,6 +100,11 @@ export default {
       this.$store.dispatch('app/toggleLang')
       this.$i18n.locale = this.lang
     },
+		updateStoreList(){
+			this.$store.dispatch('app/getStoreId').then(res=>{
+				console.log('getStoreId',res)
+			})
+		},
     async logout() {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)

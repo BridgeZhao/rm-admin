@@ -75,14 +75,24 @@ div:focus {
     height: 0;
   }
 }
+
 .flex{
   display: flex;
-  .col{
+	&.space-between{
+		align-content: space-between;
+	}
+  .col:not(:last-child){
     margin-right: 10px;
   }
+	.col-1{
+		flex: 1;
+	}
 }
 .mg-bot20{
   margin-bottom: 20px;
+}
+.mg-top10{
+	margin-top: 10px;
 }
 .perview-warp{
   background-color: $bgColor;
@@ -94,6 +104,9 @@ div:focus {
 }
 .text-center{
   text-align: center;
+}
+.text-right{
+	text-align: right;
 }
 .text-left{
   text-align: left;

@@ -4,9 +4,9 @@
     <sidebar class="sidebar-container"/>
     <div class="main-container">
       <div :class="{'fixed-header':fixedHeader}">
-        <navbar @storeIdChange="emitChildData" />
+        <navbar @storeIdChange="emitChildData" ref="refbar"/>
       </div>
-      <app-main ref="childs"/>
+      <app-main ref="childs" @updateStoreList="emitUpdateStoreList" />
     </div>
   </div>
 </template>
@@ -57,12 +57,20 @@ export default {
       this.$store.dispatch('app/closeSideBar', {withoutAnimation: false})
     },
     emitChildData(storeId) {
-      const refs = this.$refs.childs.$children
-      if (refs.length > 0 && refs[0].$storeIdChanged) {
+			console.log()
+      const refs = this.$refs.childs.storeIdChanged
+      if (refs) {
         console.warn('头部storeId更改')
-        this.$refs.childs.$children[0].$storeIdChanged(storeId)
+				refs(storeId)
       }
-    }
+    },
+		emitUpdateStoreList(){
+			const refs = this.$refs.refbar.updateStoreList
+			if (refs) {
+				console.warn('头部StoreList更改')
+				refs()
+			}
+		}
   }
 }
 </script>
