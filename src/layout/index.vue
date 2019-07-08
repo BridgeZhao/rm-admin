@@ -57,11 +57,10 @@ export default {
       this.$store.dispatch('app/closeSideBar', {withoutAnimation: false})
     },
     emitChildData(storeId) {
-			console.log()
-      const refs = this.$refs.childs.storeIdChanged
-      if (refs) {
+      const refs = this.$refs.childs.$children
+      if (refs.length > 0 && refs[0].$storeIdChanged) {
         console.warn('头部storeId更改')
-				refs(storeId)
+        this.$refs.childs.$children[0].$storeIdChanged(storeId)
       }
     },
 		emitUpdateStoreList(){
