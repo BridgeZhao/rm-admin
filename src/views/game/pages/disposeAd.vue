@@ -114,7 +114,7 @@
                 </el-table-column>
                 <el-table-column label="操作"  width='50px'>
                   <template slot-scope="scope">
-                    <!-- <svg-icon icon-class="edit" class="svg-icon" ></svg-icon> -->
+                    <svg-icon icon-class="drag" class="svg-icon"/>
                     <svg-icon icon-class="trash" class="delete-icon hover-cursor" @click='delImgRow(scope.$index)'/>
                   </template>
                 </el-table-column>
@@ -221,7 +221,6 @@
         dialogVisible: false,
         tableData: [],
         imgsTableData:[],
-        // imgsTableData:[{imgBase64: '12',imgsName: '1234.jpg'},{imgBase64: "d",imgsName: "test-img1.jpg"}],
         pagination: {
           page: 1,
           size: 10,
@@ -511,9 +510,9 @@
         img.crossOrigin = 'Anonymous'
         img.src = url
         img.onload = (res) => {
-          canvas.width = img.width //指定画板的宽度，自定义
-          canvas.height = img.height //指定画板的高度,自定义
-          ctx.drawImage(img, 0, 0, img.width, img.height) //参数可自定义
+          canvas.width = img.width 
+          canvas.height = img.height 
+          ctx.drawImage(img, 0, 0, img.width, img.height)
           let dataURL = canvas.toDataURL('image/jpeg')
           callback(dataURL) //回掉函数获取Base64编码
           canvas = null
