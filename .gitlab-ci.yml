@@ -44,5 +44,19 @@ deploy_stage:
     - docker stop frontend-admin-retail || true
     - docker image rm "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME" || true
     - docker run --rm --detach --name frontend-admin-retail -p 8080:80 "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME"
+  tags:
+    - stage
   only:
     - stage
+    
+deploy_4k:
+  stage: deploy
+  script:
+    - export DOCKER_HOST=tcp://172.16.2.182:2375/
+    - docker stop frontend-admin-retail || true
+    - docker image rm "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME" || true
+    - docker run --rm --detach --name frontend-admin-retail -p 8080:80 "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME"
+  tags:
+    - stage
+  only:
+    - chy4K
