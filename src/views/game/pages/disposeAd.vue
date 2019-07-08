@@ -5,11 +5,11 @@
       :width="'860px'"  :visible.sync="dialogVisible" :close-on-click-modal="false" @close="clearClose">
       <el-form v-loading="loading" :model="form" :rules="rules" ref="myform">
         <el-row v-if='dialogType==="detail"' :gutter="24" class="detail-item">
-          <el-col :span="10" :push='2' class="">
-            <div class="detail-img-banner">
-              <img class="game_img" :src="form.bannerImg">
+          <el-col :span="10" :push='2' class="" >
+            <div class="detail-img-banner" v-if='form.deviceType !== "pad"'>
+              <img class="game_img" :src="bannerImgBase64Show">
             </div>
-            <div class="detail-img" v-if='form.deviceType !== "pad"'>
+            <div class="detail-img">
               <img class="game_img" :src="imgBase64Show">
             </div>
           </el-col>
@@ -75,7 +75,7 @@
                 <el-row :gutter="24" class="">
                   <el-col :span="12">
                     <div class="imgshow-banner">
-                      <img class="game_img" :src="form.bannerImg">
+                      <img class="game_img" :src="bannerImgBase64Show">
                     </div>
                   </el-col>
                   <el-col :span="12">
@@ -276,6 +276,7 @@
           storeId: 0,
           formTime: []
         },
+        bannerImgBase64Show: '',
         imgBase64Show: '',
         adStatusList: [{
           id: -1,
@@ -393,7 +394,8 @@
             this.fileReader.onload = (res) => {
               if (key === '1') {
                 this.form.bannerImgBase64 = res.currentTarget.result
-                this.form.bannerImg = res.currentTarget.result
+                // this.form.bannerImg = res.currentTarget.result
+                this.bannerImgBase64Show = res.currentTarget.result
               } else {
                 this.form.imgBase64s.push(res.currentTarget.result)
                 this.imgsTableData.push({'imgsName':fileName,'imgBase64':res.currentTarget.result})
@@ -433,11 +435,11 @@
             this.form.storeId = this.pagination.storeId
             const _data = this.form
             addAd(_data).then(() => {
-              this.clearClose('reload')
               this.$message.success('操作成功')
             }).finally(() => {
               this.loading = false
-              this.dialogVisible = false
+              this.clearClose('reload')
+              // this.dialogVisible = false
             })
           }
         })
@@ -468,7 +470,7 @@
         }).then(() => {
           console.log(_status)
           statusAd(_status).then(() => {
-            this.clearClose('reload')
+            // this.clearClose('reload')
             this.$message.success('操作成功')
             this.adPage()
           })
@@ -488,11 +490,11 @@
         this.form.imgBase64s = []
         if (data.imgs) {
           this.imgBase64Show = data.imgs[0]
+          this.bannerImgBase64Show = data.bannerImg
           for(let i = 0; i<data.imgs.length;i++){
             this.getBase64(data.imgs[i], (base64) =>{
               this.imgsTableData.push({'imgsName':'name','imgBase64':base64})
               this.form.imgBase64s.push(base64)
-              // console.log('提交的img',this.imgsTableData)
             })
           }
           this.$nextTick(function () {//获取弹窗table
@@ -518,31 +520,35 @@
           canvas = null
         } 
       },
-      clearClose(reload) {
+      async clearClose(reload) {
         this.dialogVisible = false
         if (reload === 'reload') {
-          this.adPage()
+          await this.adPage()
         }
-        // this.$refs['myform'].resetFields()
-        this.form = {
-          id: '',
-          name: '',
-          deviceType: '',
-          begin: '',
-          end: '',
-          area: [],
-          codeUrl: '',
-          bannerImgBase64: '',
-          imgBase64s: [],
-          bannerImg: '',
-          imgs: [],
-          status: 0,
-          createTime: '',
-          areaIds: [],
-          storeId: 0,
-          formTime: []
-        },
-        this.imgsTableData =[]
+        let _self = this;
+        setTimeout(function(){
+          _self.form = {
+            id: '',
+            name: '',
+            deviceType: '',
+            begin: '',
+            end: '',
+            area: [],
+            codeUrl: '',
+            bannerImgBase64: '',
+            imgBase64s: [],
+            bannerImg: '',
+            imgs: [],
+            status: 0,
+            createTime: '',
+            areaIds: [],
+            storeId: 0,
+            formTime: []
+          },
+          _self.imgsTableData =[],
+          _self.bannerImgBase64Show =''
+        },200)
+        // this.$refs['myform'].resetFields() 
       },
       async pageChange(val) {
         this.pagination.page = val
