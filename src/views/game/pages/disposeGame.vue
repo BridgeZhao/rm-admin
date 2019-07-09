@@ -1,21 +1,27 @@
 <template>
    <div class="second_item">
-    <ul  class="data-list game-list">
-      <li class="game-list-li" draggable="false" v-for='(item, key) in gameData' :key='key'>
-        <div  class="name-warp">
-          <span  class="name">{{item.game.name}}</span>
-          <svg-icon icon-class="edit" class="svg-icon" @click="editChannelGame(item)"></svg-icon>
-        </div>
-        <div class="img">
-          <img :src="item.game.img"/>
-        </div>
-        <el-button class="default" @click="delChannelGame(item)" size="small">取消关联</el-button>
-      </li>
-      <li  class="add" @click="addChannelGame('add')">
-        <svg-icon icon-class="plus" class="svg-plus"></svg-icon>
-         <span class="font-red" >添加关联游戏</span>
-      </li>
-    </ul>
+    <div>
+      <el-row :gutter="20" class="data-list game-list">
+        <el-col :span="4" v-for='(item, key) in gameData' :key='key'>
+          <div class="data-list-item">
+            <div  class="name-warp">
+              <span  class="name">{{item.game.name}}</span>
+              <svg-icon icon-class="edit" class="svg-icon" @click="editChannelGame(item)"></svg-icon>
+            </div>
+            <div class="img">
+              <img :src="item.game.img"/>
+            </div>
+            <el-button class="default" @click="delChannelGame(item)" size="small">取消关联</el-button>
+          </div>
+        </el-col>
+        <el-col :span="4">
+          <div class="add data-list-item"  @click="addChannelGame('add')">
+             <svg-icon icon-class="plus" class="svg-plus"></svg-icon>
+             <span class="font-red" >添加关联游戏</span>
+          </div>
+        </el-col>
+      </el-row>
+    </div>
     <el-dialog :title="addEditType === true ? '添 加': '编辑'" :width="'720px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="()=>{clearClose()}">
       <el-form  v-loading="dgLoading" :model="fromInfo" :rules="rules"  ref="myform">
         <el-form-item v-if="addEditType" label="选择游戏" prop="gameId" :label-width="formLabelWidth"  >
@@ -269,9 +275,6 @@
    @import '@/styles/variables.scss';
     //common
     #store_content{
-      ul {
-        list-style: none;
-      }
       .svg-icon{
         cursor: pointer;
       }
@@ -279,7 +282,7 @@
         color: #fe0000;
       }
       .data-list{
-          >li.add {
+          .data-list-item.add {
             border: 1px dashed red;
             box-sizing: border-box;
             cursor: pointer;
@@ -304,14 +307,13 @@
         display: flex;
         flex-wrap: wrap;
         padding-inline-start: 0;
-        >li {
+        .data-list-item {
           width: 13.2rem;
           height: 26rem;
           background:$menuBg;
           border:1px solid $borderColor;
           border-radius: 4px;
           margin-top:1.2rem;
-          margin-right: 1.2rem;
           margin-bottom: 1.2rem;
           padding: 0 1.2rem;
           box-sizing: border-box;
@@ -319,18 +321,20 @@
           flex-direction:column;
           .name-warp {
             display: flex;
-            margin-bottom: 1rem;
-            margin-top: 1.2rem;
+            margin: 1rem 0;
             align-items: center;
             justify-content: space-between;
+            .name{
+              width: 8rem;
+              text-overflow: ellipsis;
+              white-space:nowrap;
+              overflow:hidden;
+            }
           }
           .img {
-             width: 10.8rem;
-             height: 19.2rem;
              position: relative;
              >img{
                width: 100%;
-               height: 100%;
              }
              // >.error{
              //   width: auto;
