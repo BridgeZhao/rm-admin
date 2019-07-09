@@ -2,6 +2,7 @@ image: 172.16.2.182:5000/docker:stable
 
 stages:
   - build
+  - deploy
 
 variables:
   DOCKER_HOST: tcp://docker:2375/
@@ -22,6 +23,39 @@ build:
       -v "$PWD":/opt/frontend-admin-retail
       -w /opt/frontend-admin-retail "172.16.2.182:5000/cnpm:6.1.0"
       /bin/bash -c "cnpm install; npm run build:prod"
-    - docker build -t frontend-admin-retail .
-    - docker tag "frontend-admin-retail" "172.16.2.182:5000/frontend-admin-retail:chy4K"
-    - docker push "172.16.2.182:5000/frontend-admin-retail:chy4K"
+    - docker build -t "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME" .
+    - docker push "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME"
+  
+deploy_dev:
+  stage: deploy
+  script:
+    - export DOCKER_HOST=tcp://172.16.2.182:2375/
+    - docker rm -f frontend-admin-retail || true
+    - docker rmi "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME" || true
+    - docker run --rm --detach --name frontend-admin-retail -p 8080:80 "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME"
+  only:
+    - dev
+
+deploy_stage:
+  stage: deploy
+  script:
+    - export DOCKER_HOST=tcp://172.16.2.33:2375/
+    - docker rm -f frontend-admin-retail || true
+    - docker rmi "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME" || true
+    - docker run --rm --detach --name frontend-admin-retail -p 8080:80 "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME"
+  tags:
+    - stage
+  only:
+    - stage
+    
+deploy_4k:
+  stage: deploy
+  script:
+    - export DOCKER_HOST=tcp://172.16.2.33:2375/
+    - docker rm -f frontend-admin-retail-4k || true
+    - docker rmi "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME" || true
+    - docker run --rm --detach --name frontend-admin-retail-4k -p 8083:80 "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME"
+  tags:
+    - stage
+  only:
+    - chy4K

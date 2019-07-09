@@ -102,7 +102,7 @@ export default {
             this.$store.dispatch('user/getMenus').then(()=>{
             	// 获取门店
 							this.$store.dispatch('app/getStoreId').then(()=>{
-								this.$router.push({ path: '/welcome' })
+								this.$router.push({ path:this.redirect||'/welcome' })
 								this.loading = false
 							})
             })
