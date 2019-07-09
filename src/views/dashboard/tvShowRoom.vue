@@ -176,8 +176,8 @@
 	import BarChartNew from '@/components/Charts/BarChartNew'
   import {getImageData, getLeftImg,getLeftImg2, getPinData,getAreaHotData,superDemo,heatDemo} from '@/api/report'
   import {getStoresImg} from "@/api/store"
-  const MAX_HEAT_VALUE = 10;
-  let loop_play_heatmap_timer_id;
+  const MAX_HEAT_VALUE = 10
+  let loop_play_heatmap_timer_id
 export default {
     name: "aptitude-demonstration",
     components: { BarChartNew },
@@ -201,43 +201,7 @@ export default {
       list2: [],
       tableData: [],
       areaDataList:[],
-      list: [
-        {
-          name: "进店新顾客",
-          number: 709
-        },
-        {
-          name: "进店老顾客",
-          number: 6
-        },
-        {
-          name: "今日累计客流",
-          number: 1417
-        },
-        {
-          name: "今日累计互动数",
-          number: 0
-        },
-        {
-          name: "今日累计发券数",
-          number: 0
-        }
-      ],
       list3: [],
-      list1: [
-        {
-          name: "最新游戏互动人数",
-          number: 709
-        },
-        {
-          name: "最新互动人数",
-          number: 6
-        },
-        {
-          name: "最新广告人数",
-          number: 1417
-        }
-      ],
       heatmapBackImage: '',
       heatmap: null,
       heampChartdataList: {},
@@ -246,25 +210,25 @@ export default {
   },
   methods: {
     playHeatMap(playIndex, lastPlayedIndex) {
-      let hoursChart = this.$refs.hoursChart;
+      const hoursChart = this.$refs.hoursChart
       let loop_func = () => {
         hoursChart.dispatchAction({
-          type: "downplay",
+          type: 'downplay',
           seriesIndex: 0,
           dataIndex: lastPlayedIndex
         });
         hoursChart.dispatchAction({
-          type: "highlight",
+          type: 'highlight',
           seriesIndex: 0,
           dataIndex: playIndex
         });
         hoursChart.dispatchAction({
-          type: "showTip",
+          type: 'showTip',
           seriesIndex: 0,
           dataIndex: playIndex
         });
-        let hours = this.playedHours;
-        let queryHours = [hours[playIndex], hours[playIndex]];
+        const hours = this.playedHours
+        let queryHours = [hours[playIndex], hours[playIndex]]
         console.log('hours',hours,'queryHours',queryHours)
         this.setHeampData(queryHours);
       };
@@ -277,16 +241,16 @@ export default {
         lastPlayedIndex = 0;
       clearInterval(loop_play_heatmap_timer_id);
       loop_play_heatmap_timer_id = setInterval(() => {
-        let hours = this.playedHours;
-        let len = hours.length;
+        const hours = this.playedHours
+        let len = hours.length
         if (len === 0) {
-          return;
+          return
         }
-        this.playHeatMap(playIndex, lastPlayedIndex);
-        lastPlayedIndex = playIndex;
-        playIndex = ++playIndex % len;
-      }, 6 * 1000);
-      loop_play_heatmap_timer_id = setInterval(this.intervalGetData, 60 * 1000);
+        this.playHeatMap(playIndex, lastPlayedIndex)
+        lastPlayedIndex = playIndex
+        playIndex = ++playIndex % len
+      }, 6 * 1000)
+      loop_play_heatmap_timer_id = setInterval(this.intervalGetData, 60 * 1000)
     },
   	setMoment(data){
   		return  moment(data).format('HH:mm:ss')
@@ -370,8 +334,8 @@ export default {
           }
         },
            xAxis: {
-            type:"category",
-            name:"小时",
+            type:'category',
+            name:'小时',
             axisLine: {
               lineStyle: {
                   width: 1,
@@ -390,7 +354,7 @@ export default {
             nameGap: 8
           },
           yAxis: [{
-             type: "value",
+             type: 'value',
              name:"人数",
              minInterval: 1,
              splitLine: {
@@ -417,7 +381,7 @@ export default {
           }],
         series: [
           {
-            type: "bar",
+            type: 'bar',
             data: composedData,
             barMaxWidth:8,
             emphasis: {
@@ -483,7 +447,6 @@ export default {
           })
         })
         this.bigLaoding = false
-        console.log(console.log("热点arr", heatmapData));
       })
     },
 		setLeftImg(){
@@ -510,21 +473,6 @@ export default {
         })
       })
     },
-		// 设置每小时客流数
-    // setHeampChartData(data){
-    //   const _viewData = data
-		// 	const xData = []
-		// 	const yData = []
-    //   for (let item of _viewData) {
-    //     xData.push(item.hh+":00")
-    //     yData.push(item.customerNum)
-    //   }
-    //   this.playedHours = xData
-    //   this.$set(this.heampChartdataList,'xAxisData',xData)
-    //   this.$set(this.heampChartdataList,'barList',yData)
-    //   this.$set(this.heampChartdataList,'xAxisName','小时')
-    //   this.$set(this.heampChartdataList,'yAxisName','人数')
-    // },
     setHeampData1(data){// 获取热力图数据
 				const _heatmap = data
         let heatmapData = []
@@ -542,7 +490,7 @@ export default {
             value: item.heat_map_value
           })
         }
-        console.log("--------",heatmapData)
+       
         this.$nextTick(() => {
           this.heatmap.setData({
             min: 0,
@@ -556,8 +504,7 @@ export default {
     	const _storeId = storeId || this.$store.state.app.storeId
 			getStoresImg(_storeId).then(res =>{
 				const img = res.floorGraph
-				this.heatmapBackImage = img;
-				 console.log('热力图片～～',img)
+				this.heatmapBackImage = img
 			})
 		},
     init(storeId) {
@@ -577,7 +524,7 @@ export default {
       this.tableHeight()
     },
 		lunbo(){
-  		this.setLeftImg()
+  		    this.setLeftImg()
 			this.setImgData()
 		}
   },
@@ -636,18 +583,17 @@ export default {
     //   this.list2.push(obj)
     // }
     this.init()
-    this.loopPlayHeatMap();
+    this.loopPlayHeatMap()
     this.timer = setInterval(() => {
       setTimeout(this.lunbo(), 0)
     }, 15000)
   },
 	beforeDestroy() {
-  	console.log("取消取消取消")
 		if(this.timer) { // 如果定时器还在运行 或者直接关闭，不用判断
-			clearInterval(this.timer) //关闭
+			clearInterval(this.timer) 
 			this.timer = null
     }
-    clearInterval(loop_play_heatmap_timer_id);
+    clearInterval(loop_play_heatmap_timer_id)
 	}
 }
 </script>

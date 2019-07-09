@@ -171,10 +171,10 @@
 	import moment from 'moment'
 	import h337 from 'heatmap.js'
 	import BarChartNew from '@/components/Charts/BarChartNew'
-  import {getImageData, getLeftImg,getLeftImg2, getPinData,getAreaHotData,superDemo,heatDemo} from '@/api/report'
+  import {getImageData, getLeftImg, getLeftImg2, getPinData, getAreaHotData, superDemo, heatDemo} from '@/api/report'
   import {getStoresImg} from "@/api/store"
-  const MAX_HEAT_VALUE = 10;
-  let loop_play_heatmap_timer_id;
+  const MAX_HEAT_VALUE = 10
+  let loop_play_heatmap_timer_id
 	export default {
   name: "aptitude-demonstration",
   components: { BarChartNew },
@@ -221,20 +221,6 @@
         }
       ],
       list3: [],
-      list1: [
-        {
-          name: "最新游戏互动人数",
-          number: 709
-        },
-        {
-          name: "最新互动人数",
-          number: 6
-        },
-        {
-          name: "最新广告人数",
-          number: 1417
-        }
-      ],
       heatmapBackImage: '',
       heatmap: null,
       heampChartdataList: {},
@@ -246,17 +232,17 @@
       let hoursChart = this.$refs.hoursChart;
       let loop_func = () => {
         hoursChart.dispatchAction({
-          type: "downplay",
+          type: 'downplay',
           seriesIndex: 0,
           dataIndex: lastPlayedIndex
         });
         hoursChart.dispatchAction({
-          type: "highlight",
+          type: 'highlight',
           seriesIndex: 0,
           dataIndex: playIndex
         });
         hoursChart.dispatchAction({
-          type: "showTip",
+          type: 'showTip',
           seriesIndex: 0,
           dataIndex: playIndex
         });
@@ -355,7 +341,7 @@
       let { composedData, hours } = composeSourceData(data)
       this.playedHours = hours
         let charOption = {
-          name: "客流人数",
+          name: '客流人数',
           tooltip: {
           trigger: 'axis',
            tooltip: {
@@ -365,7 +351,7 @@
           }
         },
            xAxis: {
-            type:"category",
+            type:'category',
             name:"小时",
             axisLine: {
               lineStyle: {
@@ -385,7 +371,7 @@
             nameGap: 8
           },
           yAxis: [{
-             type: "value",
+             type: 'value',
              name:"人数",
              minInterval: 1,
              splitLine: {
@@ -430,10 +416,10 @@
           }
         ],
         grid: {
-          top: "22%",
-          left: "5%",
-          right: "5%",
-          bottom: "18%"
+          top: '22%',
+          left: '5%',
+          right: '5%',
+          bottom: '18%'
         }
        }
       this.$nextTick(function(){
@@ -485,7 +471,7 @@
     		size: 40
 			}
 			getLeftImg(size).then(res =>{
-				this.list2 = res
+				this.list2 = res.reverse()
       })
       // getLeftImg2(size).then(res =>{ //展厅专用
       //   this.list2 = res.data

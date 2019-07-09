@@ -176,12 +176,11 @@
 							coupons:arr
 						}
 						obj = JSON.parse(JSON.stringify(obj))
-						console.log('保存的东西',obj)
 						sceneBind(obj).then(res =>{
 							if(res === 'OK'){
 								this.$message({
 									showClose: true,
-									message: '新增或编辑成功！',
+									message: '操作成功！',
 									type: 'success'})
 									this.$emit('listenClose')
 								
