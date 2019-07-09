@@ -34,7 +34,7 @@
         </div>
         <el-dropdown-menu class="user-dropdown">
 					<el-dropdown-item>
-            <span style="display:block;" @click="logout">
+            <span style="display:block;" @click="changePassword">
 							{{ $t("menus.password") }}</span>
 					</el-dropdown-item>
           <el-dropdown-item>
@@ -108,6 +108,9 @@ export default {
     async logout() {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    },
+    changePassword() {
+      this.$router.push(`/changePassword`)
     }
   }
 }

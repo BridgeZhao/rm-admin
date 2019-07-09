@@ -223,11 +223,6 @@ export const constantRoutes = [
 			name: 'coupons-manage',
 			component: () => import('@/views/coupons/config'),
 			meta: {title: '优惠券管理'}
-		},{
-			path: 'record',
-			name: 'manage-record',
-			hidden: true ,
-			component: () => import('@/views/coupons/record')
 		}]
 	},
 	// 游戏管理
@@ -251,15 +246,24 @@ export const constantRoutes = [
 	    component: () => import('@/views/game/miniGame'),
 	    meta: { title: '小游戏'}
 	  }]
-	}
+	},
+    {
+    path: '/changePassword',
+    name: 'change-password',
+    component: () => import('@/views/changePassword/index'),
+    meta: {
+    	title: '密码修改',
+    },
+    hidden: true
+  }
 ]
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
+  routes: constantRoutes,
 })
-
+console.log("asdadfsdfsggs",constantRoutes)
 const router = createRouter()
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465

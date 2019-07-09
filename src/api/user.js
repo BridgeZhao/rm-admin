@@ -43,3 +43,21 @@ export function logout() {
 		method: 'get'
   })
 }
+
+export function changePassword(data) {
+  return request({
+		url: `/auth/user/:${data.id}`,
+		method: 'put',
+    data
+  })
+}
+
+export function detailUser(params) {
+  return request({
+		url: '/auth/user/profile',
+		method: 'get',
+    params
+  })
+}
+
+
