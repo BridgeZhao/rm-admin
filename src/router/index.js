@@ -70,12 +70,12 @@ export const constantRoutes = [
       path: 'list',
       name: 'store-list',
       component: () => import('@/views/store/index'),
-      meta: { title: '门店列表', icon: 'list' }
+      meta: { title: '门店列表'}
     },{
       path: 'device',
       name: 'store-device',
       component: () => import('@/views/store/device'),
-      meta: { title: '设备管理', icon: 'tree-table'}
+      meta: { title: '设备管理'}
     }]
   },
   {
@@ -205,6 +205,15 @@ export const constantRoutes = [
 		component: () => import('@/views/dashboard/tvShow'),
 		meta: {
 			title: '4K屏演示',
+			icon: 'tv'
+		}
+	},
+	{
+		path: '/tv-show-room',
+		name: 'tvShowRoom',
+		component: () => import('@/views/dashboard/tvShowRoom'),
+		meta: {
+			title: '4K屏展厅',
 			icon: 'tv'
 		}
 	},
