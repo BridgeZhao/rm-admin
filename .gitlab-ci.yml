@@ -1,0 +1,27 @@
+image: 172.16.2.182:5000/docker:stable
+
+stages:
+  - build
+
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+
+services:
+  - name: 172.16.2.182:5000/docker:dind
+    command: ["--insecure-registry=172.16.2.182:5000"]
+    alias: docker
+
+build:
+  stage: build
+  cache:
+    paths:
+      - node_modules/
+  script:
+    - docker run --rm 
+      -v "$PWD":/opt/frontend-admin-retail
+      -w /opt/frontend-admin-retail "172.16.2.182:5000/cnpm:6.1.0"
+      /bin/bash -c "cnpm install; npm run build:prod"
+    - docker build -t frontend-admin-retail .
+    - docker tag "frontend-admin-retail" "172.16.2.182:5000/frontend-admin-retail:chy4K"
+    - docker push "172.16.2.182:5000/frontend-admin-retail:chy4K"
