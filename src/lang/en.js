@@ -37,6 +37,7 @@ module.exports = {
 		'dashboard-couponAnalysis':'CouponAnalysis',
 		'dashboard-screen':'Screen',
 		'tvShow':'tvShow',
+		'tvShowRoom':'tvShowRoom',
 		'coupons':'Coupons',
 		'coupons-manage':'Coupons',
 		'coupons-record':'Record',
