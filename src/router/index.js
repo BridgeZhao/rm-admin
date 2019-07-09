@@ -208,6 +208,15 @@ export const constantRoutes = [
 			icon: 'tv'
 		}
 	},
+	{
+		path: '/tv-show-room',
+		name: 'tvShowRoom',
+		component: () => import('@/views/dashboard/tvShowRoom'),
+		meta: {
+			title: '4K屏展厅',
+			icon: 'tv'
+		}
+	},
 	// 优惠券管理 chy
 	{
 		path: '/coupons',
