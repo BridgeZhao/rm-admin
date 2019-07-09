@@ -272,6 +272,7 @@
 	import axios from 'axios'
 	import { mapGetters } from 'vuex'
 	import {getScenarioData, getCouponsList, postCouponsData, changeCouponsStatus,deleteCouponsList,searchScenarioData } from '@/api/coupons'
+import { debuglog } from 'util';
 	export default {
 		name: 'sceneLoad',
 		components:{
@@ -279,6 +280,7 @@
 		},
 		data() {
 			return {
+				rowIcon:'',
 				upLoadName:'上传文件',
 				dialog2Visible:false,
 				couponData:[],
@@ -499,7 +501,8 @@
 				this.dialogTableVisible = false
 			},
 			edit(row) {
-				console.log('row',row)
+				this.rowIcon = row.icon
+				console.log('row',row.icon)
 				const couponsFlag2 = {
 					id:'',
 					storeId:[],
@@ -602,7 +605,7 @@
 						obj.begin = moment(times[0]).valueOf()
 						obj.end = moment(times[1]).valueOf()
 						delete obj.time
-						if(obj.iconBase64 === ''){
+						if(obj.iconBase64 === '' || obj.iconBase64 === this.rowIcon){
 							delete obj.iconBase64
 						}
 						let form = new FormData()
