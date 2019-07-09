@@ -46,7 +46,7 @@ export function logout() {
 
 export function changePassword(data) {
   return request({
-		url: `/auth/user/:${data.id}`,
+		url: `/auth/user/password/${data.id}`,
 		method: 'put',
     data
   })

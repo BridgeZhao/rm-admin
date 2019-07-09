@@ -8,7 +8,7 @@
       </div>
       <el-form-item label="原密码" prop="pass" :label-width="formLabelWidth">
         <el-col >
-          <el-input v-model="ruleForm.pass" placeholder="请输入原密码" :type="passwordType"></el-input>
+          <el-input v-model="ruleForm.pass" placeholder="请输入原密码" ref="oldPassInput"  :type="passwordType"></el-input>
           <span class="show-pwd" @click="showPwd">
             <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
           </span>
@@ -101,13 +101,20 @@
             this.submitF.newPassword = this.ruleForm.newpass
             return new Promise(resolve => {
               changePassword(this.submitF).then(res => {
-                console.log(res)
- 
-                this.$store.dispatch('user/logout')
+                 if(res === "ok"){
+                   this.$message.success('密码修改成功,3秒后跳转登录页面')
+                   this.$store.dispatch('user/logout')
+                   setTimeout(() => {
+                     this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+                   },3000) 
+                 }else{
+                  this.$nextTick(() => {
+                    this.$refs.oldPassInput.focus()
+                  })
+                 }
                 resolve(res)
               }).finally(() => {
                 this.loading = false
-                this.$router.push(`/login?redirect=${this.$route.fullPath}`)
               })
             })
           }
