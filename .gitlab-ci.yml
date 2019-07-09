@@ -26,7 +26,7 @@ build:
     - docker build -t "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME" .
     - docker push "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME"
   
-deploy_test:
+deploy_dev:
   stage: deploy
   script:
     - export DOCKER_HOST=tcp://172.16.2.182:2375/
@@ -34,7 +34,7 @@ deploy_test:
     - docker rmi "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME" || true
     - docker run --rm --detach --name frontend-admin-retail -p 8080:80 "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME"
   only:
-    - master
+    - dev
 
 deploy_stage:
   stage: deploy
