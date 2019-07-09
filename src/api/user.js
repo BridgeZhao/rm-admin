@@ -52,12 +52,12 @@ export function changePassword(data) {
   })
 }
 
-export function detailUser(params) {
-  return request({
-		url: '/auth/user/profile',
-		method: 'get',
-    params
-  })
-}
+// export function detailUser(params) {
+//   return request({
+// 		url: '/auth/user/profile',
+// 		method: 'get',
+//     params
+//   })
+// }
 
 

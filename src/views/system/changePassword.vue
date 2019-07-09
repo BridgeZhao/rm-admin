@@ -1,35 +1,32 @@
 <template>
-  <div class="change-password">
+  <div class="change-password app-container">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="form">
-      <div class="title-container">
-        <h3 class="title">KANKAN AI
-          <h2>change - password</h2>
-        </h3>
-      </div>
       <el-form-item label="原密码" prop="pass" :label-width="formLabelWidth">
         <el-col >
-          <el-input v-model="ruleForm.pass" placeholder="请输入原密码" ref="oldPassInput"  :type="passwordType"></el-input>
-          <span class="show-pwd" @click="showPwd">
-            <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+          <el-input v-model="ruleForm.pass" placeholder="请输入原密码" ref="oldPassInput"  :type="passwordType.pass"></el-input>
+          <span class="show-pwd" @click="showPwd(1)">
+            <svg-icon :icon-class="passwordType.pass === 'password' ? 'eye' : 'eye-open'" />
           </span>
         </el-col>
       </el-form-item>
       <el-form-item label="新密码" prop="newpass" :label-width="formLabelWidth">
         <el-col >
-          <el-input v-model="ruleForm.newpass" placeholder="请输入新密码"  :type="passwordType"></el-input>
+          <el-input v-model="ruleForm.newpass" placeholder="请输入新密码"  :type="passwordType.newpass"></el-input>
+          <span class="show-pwd" @click="showPwd(2)">
+            <svg-icon :icon-class="passwordType.newpass === 'password' ? 'eye' : 'eye-open'" />
+          </span>
         </el-col>
       </el-form-item>
       <el-form-item label="重复新密码" prop="checknewpass" :label-width="formLabelWidth">
         <el-col >
-          <el-input v-model="ruleForm.checknewpass" placeholder="请再次输入新密码" :type="passwordType"></el-input>
+          <el-input v-model="ruleForm.checknewpass" placeholder="请再次输入新密码" :type="passwordType.checknewpass"></el-input>
+          <span class="show-pwd" @click="showPwd(3)">
+            <svg-icon :icon-class="passwordType.checknewpass === 'password' ? 'eye' : 'eye-open'" />
+          </span>
         </el-col>
       </el-form-item>
       <div>
         <el-button :loading="loading" type="primary" class="button" @click="submitForm('ruleForm')">保存</el-button>
-      </div>
-      <div class="tips">
-        <span>Copyright© 2016 - 2019 Ruima.All Right Reserved.</span>
-        <span>蜀ICP备16009239号-12 成都睿码科技有限责任公司 版权所有</span>
       </div>
     </el-form>
 
@@ -38,7 +35,7 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import { changePassword, detailUser} from '@/api/user'
+  import { changePassword} from '@/api/user'
   
   export default {
     name: 'changePassword',
@@ -57,15 +54,33 @@
           pass: [{
             required: true,
             message: "请输入密码"
+          },
+          {
+            min: 6,
+            max: 20,
+            message: '长度在 6 到 20 个字符',
+            trigger: 'blur'
           }],
           newpass: [{
             required: true,
             message: "请输入密码"
+          },
+          {
+            min: 6,
+            max: 20,
+            message: '长度在 6 到 20 个字符',
+            trigger: 'blur'
           }],
           checknewpass: [{
             required: true,
             validator: validatePass2,
             trigger: "blur"
+          },
+          {
+            min: 6,
+            max: 20,
+            message: '长度在 6 到 20 个字符',
+            trigger: 'blur'
           }]
         },
         ruleForm: {
@@ -79,21 +94,24 @@
           id:''
         },
         formLabelWidth : '100px',
-        passwordType :'password',
+        passwordType :{
+          pass: 'password',
+          newpass: 'password',
+          checknewpass: 'password'
+        },
         loading: false,
       }
     },
     computed: {
     	...mapGetters([
     		'token',
-        'storeId'
+        'userId'
     	])
     },
     watch: {},
     mounted() {},
     methods: {
       submitForm(formName){
-        console.log(this.submitF.id)
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.loading = true 
@@ -102,11 +120,12 @@
             return new Promise(resolve => {
               changePassword(this.submitF).then(res => {
                  if(res === "ok"){
-                   this.$message.success('密码修改成功,3秒后跳转登录页面')
+                   // this.$message.success('密码修改成功,3秒后跳转登录页面')
                    this.$store.dispatch('user/logout')
-                   setTimeout(() => {
-                     this.$router.push(`/login?redirect=${this.$route.fullPath}`)
-                   },3000) 
+                   this.$confirm('密码修改成功,请重新登录账号') 
+                   .then(() => {
+                       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+                   })
                  }else{
                   this.$nextTick(() => {
                     this.$refs.oldPassInput.focus()
@@ -120,59 +139,38 @@
           }
         })
       },
-      showPwd() {
-        if (this.passwordType === 'password') {
-          this.passwordType = ''
-        } else {
-          this.passwordType = 'password'
+      showPwd(type) {
+        if(type === 1){
+          this.passwordType.pass === 'password'?this.passwordType.pass = '':this.passwordType.pass = 'password'
+        }else if(type === 2){
+          this.passwordType.newpass === 'password'?this.passwordType.newpass = '':this.passwordType.newpass = 'password'
+        }else{
+          this.passwordType.checknewpass === 'password'?this.passwordType.checknewpass = '':this.passwordType.checknewpass = 'password'
         }
-      },
+      }
     },
     created(){
-      detailUser(this.token).then(res => {
-        console.log(res.id)
-        this.submitF.id = res.id
-      })
+      // detailUser(this.token).then(res => {
+      //   console.log(res.id)
+      //   this.submitF.id = res.id
+      // })
+      this.submitF.id = this.userId
       }
     }
 </script>
 
 <style lang="scss" scoped>
  .change-password{
-   background-size:100%;
-   min-height: 100%;
-   width: 100%;
-   background-color: #2d3a4b;
-   overflow: hidden;
-    .title-container {
-     position: relative;
-     .title {
-       font-size: 26px;
-       margin: 0px auto 40px auto;
-       text-align: center;
-       font-weight: bold;
-       h2{
-         color: #71dcff;
-         margin: 10px;
-       }
-     }
-   }
    .form {
      position: relative;
      width: 520px;
      max-width: 100%;
-     padding: 160px 35px 0;
+     padding: 100px 35px;
      margin: 0 auto;
      overflow: hidden;
      .button{
        width:100%;
        margin-bottom:30px;
-     }
-      .tips {
-       font-size: 13px;
-       color: #819196;
-        text-align: center;
-       span{display: block;margin-top: 10px;}
      }
    }
    .el-input {

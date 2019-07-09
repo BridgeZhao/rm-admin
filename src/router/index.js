@@ -102,6 +102,14 @@ export const constantRoutes = [
       name: 'system-user',
       component: () => import('@/views/system/user'),
       meta: { title: '管理员管理'}
+    },{
+      path: 'changePassword',
+      name: 'change-password',
+      component: () => import('@/views/system/changePassword'),
+      meta: {
+      	title: '密码修改',
+      },
+      hidden: true
     }]
   },
   {
@@ -256,15 +264,6 @@ export const constantRoutes = [
 	    meta: { title: '小游戏'}
 	  }]
 	},
-    {
-    path: '/changePassword',
-    name: 'change-password',
-    component: () => import('@/views/changePassword/index'),
-    meta: {
-    	title: '密码修改',
-    },
-    hidden: true
-  }
 ]
 
 const createRouter = () => new Router({
@@ -272,7 +271,6 @@ const createRouter = () => new Router({
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes,
 })
-console.log("asdadfsdfsggs",constantRoutes)
 const router = createRouter()
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465

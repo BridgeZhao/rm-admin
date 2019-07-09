@@ -110,7 +110,7 @@ export default {
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     },
     changePassword() {
-      this.$router.push(`/changePassword`)
+      this.$router.push(`/system/changePassword`)
     }
   }
 }
