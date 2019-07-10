@@ -240,6 +240,11 @@ export const constantRoutes = [
 			name: 'coupons-manage',
 			component: () => import('@/views/coupons/config'),
 			meta: {title: '优惠券管理'}
+		},{
+			path: 'record',
+			name: 'manage-record',
+			hidden:true,
+			component: () => import('@/views/coupons/record')
 		}]
 	},
 	// 游戏管理
