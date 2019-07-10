@@ -160,6 +160,7 @@
             v-for="(item,index) in list3"
             :src="item.imgBase64"
             :key="'img'+index"
+            :title="setMoment(item.time)"
             :class="{'color3':item.similarity < 30,'color2':item.similarity >= 30 && item.similarity <= 60,'color1':item.similarity > 60}"
           >
         </div>
