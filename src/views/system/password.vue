@@ -3,25 +3,25 @@
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="form">
       <el-form-item label="原密码" prop="oldPassword" :label-width="formLabelWidth">
         <el-col >
-          <el-input v-model="ruleForm.oldPassword" placeholder="请输入原密码" ref="oldPassInput"  :type="pwt.pass === true?'':'password'"></el-input>
-          <span class="show-pwd" @click="pwt.pass = pwt.pass === true? false :true">
-            <svg-icon :icon-class="pwt.pass === false ? 'eye' : 'eye-open'" />
+          <el-input v-model="ruleForm.oldPassword" placeholder="请输入原密码" ref="oldPassInput"  :type="!pwt.pass?'':'password'"></el-input>
+          <span class="show-pwd" @click="pwt.pass = !pwt.pass">
+            <svg-icon :icon-class="pwt.pass? 'eye' : 'eye-open'" />
           </span>
         </el-col>
       </el-form-item>
       <el-form-item label="新密码" prop="newPassword" :label-width="formLabelWidth">
         <el-col >
-          <el-input v-model="ruleForm.newPassword" placeholder="请输入新密码"  :type="pwt.nPass === true?'':'password'"></el-input>
-          <span class="show-pwd" @click="pwt.nPass = pwt.nPass === true?false :true">
-            <svg-icon :icon-class="pwt.nPass === false ? 'eye' : 'eye-open'" />
+          <el-input v-model="ruleForm.newPassword" placeholder="请输入新密码"  :type="!pwt.nPass?'':'password'"></el-input>
+          <span class="show-pwd" @click="pwt.nPass = !pwt.nPass">
+            <svg-icon :icon-class="pwt.nPass? 'eye' : 'eye-open'" />
           </span>
         </el-col>
       </el-form-item>
       <el-form-item label="重复新密码" prop="cnPass" :label-width="formLabelWidth">
         <el-col >
-          <el-input v-model="ruleForm.cnPass" placeholder="请再次输入新密码" :type="pwt.cnPass === true?'':'password'"></el-input>
-          <span class="show-pwd" @click="pwt.cnPass = pwt.cnPass === true?false :true">
-            <svg-icon :icon-class="pwt.cnPass === false ? 'eye' : 'eye-open'" />
+          <el-input v-model="ruleForm.cnPass" placeholder="请再次输入新密码" :type="!pwt.cnPass?'':'password'"></el-input>
+          <span class="show-pwd" @click="pwt.cnPass = !pwt.cnPass">
+            <svg-icon :icon-class="pwt.cnPass? 'eye' : 'eye-open'" />
           </span>
         </el-col>
       </el-form-item>
@@ -108,16 +108,18 @@
             this.loading = true
             return new Promise(resolve => {
               changePassword(this.ruleForm).then(res => {
-								this.$store.dispatch('user/logout')
-								this.$confirm('密码修改成功,请重新登录账号')
-									.then(() => {
-										this.$router.push(`/login?redirect=${this.$route.fullPath}`)
-									})
+                 this.$alert('密码修改成功', {
+                  confirmButtonText: '确定',
+                  callback: action => {
+                    this.$store.dispatch('user/logout')
+                    .then(() => {
+                        this.$router.push(`/login`)	
+                    })	
+                  }
+                })
                 resolve(res)
               }).catch(()=>{
-								this.$nextTick(() => {
-									this.$refs.oldPassInput.focus()
-								})
+								this.$refs.oldPassInput.focus()
 							}).finally(() => {
                 this.loading = false
               })
