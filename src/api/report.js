@@ -96,3 +96,12 @@ export function getLeftImg2(params) {
 }
 // http://172.16.2.182:8000/api/mg/dashboard/supermonitor?store_id=test0523
 
+// 实时监控页面
+ export function getScreenData(params) {
+  return request({
+    url: '/mg/dashboard/interaction',
+    method: 'get',
+    params
+  })
+}
+
