@@ -3,23 +3,23 @@
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="form">
       <el-form-item label="原密码" prop="oldPassword" :label-width="formLabelWidth">
         <el-col >
-          <el-input v-model="ruleForm.oldPassword" placeholder="请输入原密码" ref="oldPassInput"  :type="pwt.pass === true?'':'password'"></el-input>
-          <span class="show-pwd" @click="pwt.pass = !pwt.pass? false :true">
+          <el-input v-model="ruleForm.oldPassword" placeholder="请输入原密码" ref="oldPassInput"  :type="!pwt.pass?'':'password'"></el-input>
+          <span class="show-pwd" @click="pwt.pass = !pwt.pass">
             <svg-icon :icon-class="pwt.pass? 'eye' : 'eye-open'" />
           </span>
         </el-col>
       </el-form-item>
       <el-form-item label="新密码" prop="newPassword" :label-width="formLabelWidth">
         <el-col >
-          <el-input v-model="ruleForm.newPassword" placeholder="请输入新密码"  :type="pwt.nPass === true?'':'password'"></el-input>
-          <span class="show-pwd" @click="pwt.nPass = !pwt.nPass?false :true">
+          <el-input v-model="ruleForm.newPassword" placeholder="请输入新密码"  :type="!pwt.nPass?'':'password'"></el-input>
+          <span class="show-pwd" @click="pwt.nPass = !pwt.nPass">
             <svg-icon :icon-class="pwt.nPass? 'eye' : 'eye-open'" />
           </span>
         </el-col>
       </el-form-item>
       <el-form-item label="重复新密码" prop="cnPass" :label-width="formLabelWidth">
         <el-col >
-          <el-input v-model="ruleForm.cnPass" placeholder="请再次输入新密码" :type="pwt.cnPass === true?'':'password'"></el-input>
+          <el-input v-model="ruleForm.cnPass" placeholder="请再次输入新密码" :type="!pwt.cnPass?'':'password'"></el-input>
           <span class="show-pwd" @click="pwt.cnPass = !pwt.cnPass">
             <svg-icon :icon-class="pwt.cnPass? 'eye' : 'eye-open'" />
           </span>
@@ -112,7 +112,9 @@
                   confirmButtonText: '确定',
                   callback: action => {
                     this.$store.dispatch('user/logout')
-                    this.$router.push(`/login`)			
+                    .then(() => {
+                        this.$router.push(`/login`)	
+                    })	
                   }
                 })
                 resolve(res)
