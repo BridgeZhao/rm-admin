@@ -1,27 +1,27 @@
 <template>
   <div class="change-password app-container">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="form">
-      <el-form-item label="原密码" prop="pass" :label-width="formLabelWidth">
+      <el-form-item label="原密码" prop="oldPassword" :label-width="formLabelWidth">
         <el-col >
-          <el-input v-model="ruleForm.pass" placeholder="请输入原密码" ref="oldPassInput"  :type="passwordType.pass"></el-input>
-          <span class="show-pwd" @click="showPwd(1)">
-            <svg-icon :icon-class="passwordType.pass === 'password' ? 'eye' : 'eye-open'" />
+          <el-input v-model="ruleForm.oldPassword" placeholder="请输入原密码" ref="oldPassInput"  :type="pwt.pass === true?'':'password'"></el-input>
+          <span class="show-pwd" @click="pwt.pass = pwt.pass === true? false :true">
+            <svg-icon :icon-class="pwt.pass === false ? 'eye' : 'eye-open'" />
           </span>
         </el-col>
       </el-form-item>
-      <el-form-item label="新密码" prop="newpass" :label-width="formLabelWidth">
+      <el-form-item label="新密码" prop="newPassword" :label-width="formLabelWidth">
         <el-col >
-          <el-input v-model="ruleForm.newpass" placeholder="请输入新密码"  :type="passwordType.newpass"></el-input>
-          <span class="show-pwd" @click="showPwd(2)">
-            <svg-icon :icon-class="passwordType.newpass === 'password' ? 'eye' : 'eye-open'" />
+          <el-input v-model="ruleForm.newPassword" placeholder="请输入新密码"  :type="pwt.nPass === true?'':'password'"></el-input>
+          <span class="show-pwd" @click="pwt.nPass = pwt.nPass === true?false :true">
+            <svg-icon :icon-class="pwt.nPass === false ? 'eye' : 'eye-open'" />
           </span>
         </el-col>
       </el-form-item>
-      <el-form-item label="重复新密码" prop="checknewpass" :label-width="formLabelWidth">
+      <el-form-item label="重复新密码" prop="cnPass" :label-width="formLabelWidth">
         <el-col >
-          <el-input v-model="ruleForm.checknewpass" placeholder="请再次输入新密码" :type="passwordType.checknewpass"></el-input>
-          <span class="show-pwd" @click="passwordType.checknewpass=!passwordType.checknewpass">
-            <svg-icon :icon-class="passwordType.checknewpass === 'password' ? 'eye' : 'eye-open'" />
+          <el-input v-model="ruleForm.cnPass" placeholder="请再次输入新密码" :type="pwt.cnPass === true?'':'password'"></el-input>
+          <span class="show-pwd" @click="pwt.cnPass = pwt.cnPass === true?false :true">
+            <svg-icon :icon-class="pwt.cnPass === false ? 'eye' : 'eye-open'" />
           </span>
         </el-col>
       </el-form-item>
@@ -40,16 +40,16 @@
     data() {
       let validatePass2 = (rule, value, callback) => {
         if (value === "") {
-          callback(new Error("请再次输入密码"));
-        } else if (value !== this.ruleForm.newpass) {
-          callback(new Error("两次输入密码不一致!"));
+          callback(new Error("请再次输入密码"))
+        } else if (value !== this.ruleForm.newPassword) {
+          callback(new Error("两次输入密码不一致!"))
         } else {
-          callback();
+          callback()
         }
       }
       return {
         rules: {
-          pass: [{
+          oldPassword: [{
             required: true,
             message: "请输入密码"
           },
@@ -59,7 +59,7 @@
             message: '长度在 6 到 20 个字符',
             trigger: 'blur'
           }],
-          newpass: [{
+          newPassword: [{
             required: true,
             message: "请输入密码"
           },
@@ -69,7 +69,7 @@
             message: '长度在 6 到 20 个字符',
             trigger: 'blur'
           }],
-          checknewpass: [{
+          cnPass: [{
             required: true,
             validator: validatePass2,
             trigger: "blur"
@@ -82,22 +82,18 @@
           }]
         },
         ruleForm: {
-          pass: '',
-          newpass: '',
-          checknewpass: ''
-        },
-        submitF:{
-          oldPassword:'',
-          newPassword:'',
+          oldPassword: '',
+          newPassword: '',
+          cnPass: '',
           id:''
         },
         formLabelWidth : '100px',
-        passwordType :{
-          pass: 'password',
-          newpass: 'password',
-          checknewpass: 'password'
+        pwt :{
+          pass: false,
+          nPass: false,
+          cnPass: false
         },
-        loading: false,
+        loading: false
       }
     },
     computed: {
@@ -105,17 +101,13 @@
         'userId'
     	])
     },
-    watch: {},
-    mounted() {},
     methods: {
       submitForm(formName){
         this.$refs[formName].validate((valid) => {
           if (valid) {
             this.loading = true
-            this.submitF.oldPassword = this.ruleForm.pass
-            this.submitF.newPassword = this.ruleForm.newpass
             return new Promise(resolve => {
-              changePassword(this.submitF).then(res => {
+              changePassword(this.ruleForm).then(res => {
 								this.$store.dispatch('user/logout')
 								this.$confirm('密码修改成功,请重新登录账号')
 									.then(() => {
@@ -133,22 +125,9 @@
           }
         })
       },
-      showPwd(type) {
-        if(type === 1){
-          this.passwordType.pass === 'password'?this.passwordType.pass = '':this.passwordType.pass = 'password'
-        }else if(type === 2){
-          this.passwordType.newpass === 'password'?this.passwordType.newpass = '':this.passwordType.newpass = 'password'
-        }else{
-          this.passwordType.checknewpass === 'password'?this.passwordType.checknewpass = '':this.passwordType.checknewpass = 'password'
-        }
-      }
     },
     created(){
-      // detailUser(this.token).then(res => {
-      //   console.log(res.id)
-      //   this.submitF.id = res.id
-      // })
-      this.submitF.id = this.userId
+      this.ruleForm.id = this.userId
       }
     }
 </script>
@@ -158,6 +137,7 @@
 	 .form {
 		 position: relative;
 		 width: 520px;
+		 padding: 100px 35px;
 		 margin: 0 auto;
 		 overflow: hidden;
 		 .footer-btn{
@@ -166,6 +146,7 @@
 	 }
 	 .show-pwd {
 		 position: absolute;
+     top: 0;
 		 right: 18px;
 		 font-size: 16px;
 		 color: #889aa4;
