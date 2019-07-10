@@ -1,7 +1,7 @@
 <template>
 	<div class="app-container">
 		<div class="box-header">
-			<span style="font-size: 1.8rem">总部广告成效分析</span>
+			<span style="font-size: 1.2rem">总部广告成效分析</span>
 			<div class="search" style="margin-top: 25px;">
 				<el-form
 					:inline="true"
