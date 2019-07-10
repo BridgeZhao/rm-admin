@@ -283,7 +283,7 @@ export default {
         s_female = [],
         s_all = [];
       this.hourData.map(item => {
-        xData.push(item.hh + ":00")
+        xData.push(item.hh)
         s_male.push(item.maleFlow)
         s_female.push(item.femaleFlow)
         s_all.push(item.totalFlow)
