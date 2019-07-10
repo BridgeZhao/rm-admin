@@ -103,9 +103,9 @@ export const constantRoutes = [
       component: () => import('@/views/system/user'),
       meta: { title: '管理员管理'}
     },{
-      path: 'changePassword',
-      name: 'change-password',
-      component: () => import('@/views/system/changePassword'),
+      path: 'password',
+      name: 'system-password',
+      component: () => import('@/views/system/password'),
       meta: {
       	title: '密码修改',
       },
