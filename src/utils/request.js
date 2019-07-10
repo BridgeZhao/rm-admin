@@ -51,7 +51,7 @@ service.interceptors.response.use(
 	},
   error => {
 		console.log(error.response)
-		const {msg,status} =error.response?error.response.data:{msg:'服务器故障错误',status:500}
+		const {msg,status} =error.response.data.hasOwnProperty('msg')?error.response.data:{msg:'服务器故障错误',status:500}
 		switch (status) {
 			case 401:
 				MessageBox.confirm('登陆超时,请重新登录!', '重新登录', {

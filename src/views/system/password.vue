@@ -20,7 +20,7 @@
       <el-form-item label="重复新密码" prop="checknewpass" :label-width="formLabelWidth">
         <el-col >
           <el-input v-model="ruleForm.checknewpass" placeholder="请再次输入新密码" :type="passwordType.checknewpass"></el-input>
-          <span class="show-pwd" @click="showPwd(3)">
+          <span class="show-pwd" @click="passwordType.checknewpass=!passwordType.checknewpass">
             <svg-icon :icon-class="passwordType.checknewpass === 'password' ? 'eye' : 'eye-open'" />
           </span>
         </el-col>
@@ -158,7 +158,6 @@
 	 .form {
 		 position: relative;
 		 width: 520px;
-		 padding: 100px 35px;
 		 margin: 0 auto;
 		 overflow: hidden;
 		 .footer-btn{

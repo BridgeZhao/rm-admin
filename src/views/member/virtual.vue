@@ -6,7 +6,7 @@
 				<el-form :inline="true">
 					<el-form-item label="FaceId">
 						<el-input
-							style="width: 300px;margin-right: 10px"
+							style="width: 200px;margin-right: 10px"
 							placeholder="请输入FaceID"
 							v-model="pagination.faceId"/>
 					</el-form-item>
