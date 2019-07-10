@@ -1,9 +1,15 @@
 <template>
 	<div class="app-container">
 		<el-row class="table-head-btns">
-			<el-col :span="12">
+			<el-col :span="14">
 				<!--头部按钮-->
 				<el-form :inline="true">
+					<el-form-item label="FaceId">
+						<el-input
+							style="width: 200px;margin-right: 10px"
+							placeholder="请输入FaceID"
+							v-model="pagination.faceId"/>
+					</el-form-item>
 					<el-form-item label="注册时间">
 						<el-date-picker
 							style="width: 270px"
@@ -25,7 +31,7 @@
 					</el-form-item>
 				</el-form>
 			</el-col>
-			<el-col :span="12" style="text-align: right">
+			<el-col :span="10" style="text-align: right">
 				<el-button class="active" @click="showType=!showType">
 					<svg-icon :icon-class="showType?'table':'menus'"/>
 					{{showType?'网格':'列表'}}显示
@@ -93,8 +99,11 @@
 				<div class="user-box">
 					<p class="avatar"><img :src="item.avatar"/></p>
 					<p style="text-align: center"><el-tag type="info">{{ storeList.find(s_item => { return s_item.id === item.storeId }).name }}</el-tag></p>
-					<p class="inline"><label>性别：</label><span>{{ item.gender==='m'?'男':item.gender==='w'?'女':'未知' }}</span></p>
-					<p class="inline"><label>年龄：</label><span>{{ item.age }}</span></p>
+					<!--<p class="inline"><el-tag>FaceID：{{ item.faceId }}</el-tag></p>-->
+					<div class="flex space-between mg-top10">
+						<div class="col-1"><label>年龄：</label><span>{{ item.age }}</span></div>
+						<div class="col-1 text-right"><label>性别：</label><span>{{ item.gender==='m'?'男':item.gender==='w'?'女':'未知' }}</span></div>
+					</div>
 					<p><span>{{ item.createTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span></p>
 					<p class="button"><el-button @click="getInStoreData(item)">进店记录</el-button></p>
 				</div>
@@ -197,6 +206,7 @@ export default {
       pagination: {
         page: 1,
         size: 24,
+				faceId:'',
         name: '',
         total: 0
       },

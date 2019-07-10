@@ -38,6 +38,7 @@ module.exports = {
 		'dashboard-couponAnalysis': '优惠券效果分析',
 		'dashboard-screen': '互动屏实时监控',
 		'tvShow': '4K屏展示',
+		'tvShowRoom': '4K屏展厅',
 		'coupons': '优惠券',
 		'coupons-manage': '优惠券管理',
 		'coupons-record': '发放记录',

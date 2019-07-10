@@ -91,13 +91,13 @@
 						<span>{{timeChange(scope.row.time)}}</span>
 					</template>
 				</el-table-column>
-				<el-table-column
+				<!-- <el-table-column
 					label="操作"
 					width="100">
 					<template slot-scope="scope">
 						<el-button type="text" size="mini" @click="lookDetail(scope.row)">详情</el-button>
 					</template>
-				</el-table-column>
+				</el-table-column> -->
 			</el-table>
 			<el-pagination
 				@size-change="handleSizeChange"
@@ -162,6 +162,7 @@
 				dialogTableVisible: false,
 				title: '券号：',
 				ID: null,
+				storeID: null,
 				ruleForm: {
 					couponNo: null,
 					name: '',
@@ -170,15 +171,15 @@
 					couponType: null
 				},
 				tableData: [
-					{
-						'couponName': '积分券3',
-						'id': 4,
-						'scenarioName': '测试门店',
-						'cardNo': '201906241106251',
-						'couponType': 2,
-						'storeName': '测试门店',
-						'time': 1561345706000
-					}
+					// {
+					// 	'couponName': '积分券3',
+					// 	'id': 4,
+					// 	'scenarioName': '测试门店',
+					// 	'cardNo': '201906241106251',
+					// 	'couponType': 2,
+					// 	'storeName': '测试门店',
+					// 	'time': 1561345706000
+					// }
 				],
 				rowsData: {
 					cardNo: '',
@@ -202,11 +203,11 @@
 				return this.$store.state.app.storeId
 			}
 		},
-		watch: {
-			listenstage(newVal) {
-				this.searchData(newVal)
-			}
-		},
+		// watch: {
+		// 	listenstage(newVal) {
+		// 		this.searchData(newVal)
+		// 	}
+		// },
 		mounted() {
 			this.getSceneList()
 			this.init()
@@ -228,7 +229,6 @@
 			lookDetail(row) {
 				this.dialogTableVisible = true
 				this.rowsData = row
-				console.log('11～～～', row)
 			},
 			handleCurrentChange(val) {
 				this.page.page = val
@@ -240,7 +240,9 @@
 			},
 			init() {
 				const id = this.$route.query.id
+				const storeId = this.$route.query.storeID
 				this.ID = id
+				this.storeID = storeId
 				const _parmas = {
 					couponId: id,
 					page: this.page.page,
@@ -249,28 +251,30 @@
 				this.loadData(_parmas)
 			},
 			searchData(data) {
-				const _id = data || this.$store.state.app.storeId
+				const _id = this.storeID
 				let pages = {
 					page: this.page.page,
 					size: this.page.size
 				}
+				this.ruleForm.time = this.ruleForm.time === null ? [] : this.ruleForm.time
 				const obj = Object.assign({}, pages, this.ruleForm)
 				let _startTime = moment(obj.time[0]).valueOf()
 				let _endTime = moment(obj.time[1]).valueOf()
-				delete obj.time
-				obj.begin = _startTime
-				obj.end = _endTime
 				obj.storeId = _id
-				console.log('查询条件', obj)
+				obj.couponId = this.ID
+				if(obj.time.length !== 0){
+					obj.begin = _startTime
+				    obj.end = _endTime
+				}
+				delete obj.time
 				this.loadData(obj)
 			},
 			loadData(data) {
 				searchRecord(data).then(res => {
-					console.log('laodData')
 					this.page.page = res.page
 					this.page.size = res.size
 					this.page.total = res.total
-					// this.tableData = res.data
+					this.tableData = res.data
 				})
 			},
 			timeChange(data) {
@@ -299,7 +303,6 @@
 		.record-bottom .el-button--text {
 			border-color: transparent !important;
 		}
-
 		.dialogBox {
 			.el-row {
 				width: 80%;

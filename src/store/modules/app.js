@@ -70,8 +70,10 @@ const actions = {
 				if (data.length) {
 					commit('SET_STOREID',  data[0].id)
 					commit('STORELIST',  data)
-					resolve(data)
 				}
+				resolve(data)
+			}).catch((error)=>{
+				reject(error)
 			})
 		})
 	},

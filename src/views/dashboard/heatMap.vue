@@ -354,7 +354,6 @@ export default {
                 },
             data: s_data,
             type: "bar",
-            
           }
         ]
       })

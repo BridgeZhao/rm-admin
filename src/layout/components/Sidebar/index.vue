@@ -20,6 +20,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+import { Message } from 'element-ui'
 import Logo from './Logo'
 import SidebarItem from './SidebarItem'
 import {  checkPermission } from '@/utils/auth'
@@ -59,6 +60,11 @@ export default {
     this.authRoutes = checkPermission('menus')
 		console.log('~~~this.authRoutes~~~',this.authRoutes)
     if(!this.authRoutes.length){
+			Message({
+				message: '未分配菜单，请联系管理员',
+				type: 'error',
+				duration: 5 * 1000
+			})
 			this.$store.dispatch('user/logout').then(()=>{
 				this.$router.push('/login')
 			})

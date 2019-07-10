@@ -187,6 +187,9 @@ export default {
         value:'camera',
         label:'摄像头'
       },{
+        value:'ispad',
+        label:'手持Pad'
+      },{
         value:'screen',
         label:'互动屏'
       },{
@@ -309,7 +312,7 @@ export default {
       })
       const p_data=this.fromInfo.pointData.point||{}
       for (const key in p_data) {
-        this.checkType[p_data[key].areaId] = p_data[key].checkType
+        this.checkType[p_data[key].areaId] = p_data[key].checkType||[]
       }
       this.checkType=Object.assign({},this.checkType)
       console.log('this.checkType',this.checkType)

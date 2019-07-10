@@ -85,7 +85,7 @@
       </el-row>
     </div>
     <div class="hourFLow report-margin">
-      <el-row :gutter="24">
+      <el-row :gutter="24" v-if="showPeopleChart">
         <el-col :span="24">
           <div class="grid-content bg-purple report-line">
             <div class="report-gang">
@@ -201,6 +201,7 @@
     components: {labelView, LineTimeChart, BarChartAge, PieChart, LineChart},
     data() {
       return {
+        showPeopleChart:false,
         chartHeight:'222px',
         height: '300px',
         mockdata: {
@@ -367,8 +368,18 @@
 				const startTime = moment(this.formInline.date[0]).format('YYYY-MM-DD')
 				const endTime = moment(this.formInline.date[1]).format('YYYY-MM-DD')
 				const _storeId = this.$store.state.app.storeId
-				const _params = {store_id:_storeId,starttime:startTime,endtime:endTime,hh: '08,22'}
-				this.loadData(_params)
+        const _params = {store_id:_storeId,starttime:startTime,endtime:endTime,hh: '08,22'}
+        if(startTime !== endTime){
+          this.$nextTick(() => {
+            this.showPeopleChart = true
+          })
+        }else{
+          this.$nextTick(() => {
+            this.showPeopleChart = false
+          })
+        }
+        this.loadData(_params)
+        
 			},
       loadData(params) {
         getStoreFlowData(params).then(res => {

@@ -42,6 +42,9 @@ export default {
             },
             formatter: "{a} <br/>{b} : {c}"
           },
+          legend:{
+            data:[]
+          },
           grid: {
             left: "3%",
             right: "9%",
@@ -105,34 +108,36 @@ export default {
   },
   methods: {
   	loadData(_data){
-  		const {xAxisData, xAxisName, data} = _data
+      let arrData = []
+      const {xAxisData, xAxisName, data} = _data
 			this.options.xAxis.data = xAxisData
-			this.options.xAxis.name = xAxisName
+      this.options.xAxis.name = xAxisName
 			this.options.series[0].data = data
-
-			// data.map((index)=> {
-			// 	this.options.series.push({
-			// 		name: "人数",
-			// 		type: "bar",
-			// 		barWidth:12,
-			// 		itemStyle: {
-			// 			normal: {
-			// 				barBorderRadius: [10, 10, 0, 0],
-			// 				color:'#71DCFF',
-			// 				opacity: 0.85
-			// 			}
-			// 		},
-			// 		label: {
-			// 			normal: {
-			// 				show: true,
-			// 				color:"#fff",
-			// 				position: "top"
-			// 			},
-			// 		},
-			// 		data: data[index],
-			// 		animationDuration
-			// 	})
-			// })
+			// data.forEach((value, index) => {
+      //   console.log('!!!!~~~',arrData[index])
+      //   this.options.series.push(
+			// 		{
+      //         name: "人数",
+      //         type: "bar",
+      //         barWidth:12,
+      //         itemStyle: {
+      //               normal: {
+      //                   barBorderRadius: [10, 10, 0, 0],
+      //                   color:'#71DCFF',
+      //                   opacity: 0.85
+      //               }
+      //           },
+      //         label: {
+      //           normal: {
+      //             show: true,
+      //             color:"#fff",
+      //             position: "top"
+      //           },
+      //         },
+      //         data: arrData[index]
+      //       }
+			// 	)
+      // })
 		},
     base64ToBlob(code) {
       let parts = code.split(";base64,")

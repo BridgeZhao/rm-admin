@@ -9,19 +9,21 @@
       <div class="member-list-warp">
         <div class="wrapper-item" v-for="item in list2" :key="item.id">
           <div class="box-card list-item">
-            <img :src="item.avatar" alt>
+            <img :src="item.img" alt>
             <div class="content">
-              <div class="sub-title" style="margin-top:2%;">{{Array.isArray(item.tags) && item.tags.length !== 0 ? '客群标签' : '优惠券名称'}}</div>
-              <div class="area-start" v-if="Array.isArray(item.tags) && item.tags.length !== 0">
-                <div class="value-area-left" v-for="y in item.tags" :key="y.id">{{y}}</div>
-              </div>
-               <div class="area-start" v-else>
-                <div class="value-area-left">{{item.couponName}}</div>
+              <div class="sub-title" style="margin-top:5%;">客群标签</div>
+              <!-- <div class="value-area-left">{{item.category > 0 ? 'VIP' : '新客户'}}</div> -->
+               <!-- <div class="value-area-left">新客户</div> -->
+              <div class="area-start">
+                <div class="value-area-left" :style="{color:item.category > 0 ? '#f8e71c' : '#00e7c0'}">{{item.category > 0 ? 'VIP' : '新客户'}}</div>
+                <!-- <div class="value-area-left" v-for="y in item.tags" :key="y.id">{{y}}</div> -->
+                <!-- <div class="value-area-right">{{item.tags[1]}}</div> -->
+                  <div class="value-area-left" v-show="Array.isArray(item.tags) && item.tags.length !== 0">{{item.tags[0]}}</div>
+                  <div class="value-area-left" v-show="Array.isArray(item.tags) && item.tags.length !== 0">{{item.tags[1]}}</div>
               </div>
               <div class="area-between">
                 <div>
-                  <div class="sub-title">累计次数:{{item.accCount}}</div>
-                  <div class="sub-title">客单价:{{item.avgWeekCount}}</div>
+                  <div class="sub-title">到店次数:{{item.entryTimes}}次</div>
                 </div>
                 <div>
                   <div class="sub-title">到店时间:{{setMoment(item.lastTime)}}</div>
@@ -73,6 +75,7 @@
         <div class="box-card main-bar">
           <div class="header">每小时客流数</div>
           <div class="cum-number">
+            <!-- <bar-chart-new :data="heampChartdataList" ref="hoursChart"/> -->
             <v-chart ref="hoursChart" class="charts" :options="hoursCustomerFlowChartOptions" style="width:100%;height:100%;"></v-chart>
           </div>
         </div>
@@ -171,14 +174,14 @@
 	import moment from 'moment'
 	import h337 from 'heatmap.js'
 	import BarChartNew from '@/components/Charts/BarChartNew'
-  import {getImageData, getLeftImg, getLeftImg2, getPinData, getAreaHotData, superDemo, heatDemo} from '@/api/report'
+  import {getImageData, getLeftImg,getLeftImg2, getPinData,getAreaHotData,superDemo,heatDemo} from '@/api/report'
   import {getStoresImg} from "@/api/store"
   const MAX_HEAT_VALUE = 10
   let loop_play_heatmap_timer_id
-	export default {
-  name: "aptitude-demonstration",
-  components: { BarChartNew },
-  data() {
+export default {
+    name: "aptitude-demonstration",
+    components: { BarChartNew },
+    data() {
     return {
       hoursCustomerFlowChartOptions: null,
       playedHours:[],
@@ -198,28 +201,6 @@
       list2: [],
       tableData: [],
       areaDataList:[],
-      list: [
-        {
-          name: "进店新顾客",
-          number: 709
-        },
-        {
-          name: "进店老顾客",
-          number: 6
-        },
-        {
-          name: "今日累计客流",
-          number: 1417
-        },
-        {
-          name: "今日累计互动数",
-          number: 0
-        },
-        {
-          name: "今日累计发券数",
-          number: 0
-        }
-      ],
       list3: [],
       heatmapBackImage: '',
       heatmap: null,
@@ -229,7 +210,7 @@
   },
   methods: {
     playHeatMap(playIndex, lastPlayedIndex) {
-      let hoursChart = this.$refs.hoursChart;
+      const hoursChart = this.$refs.hoursChart
       let loop_func = () => {
         hoursChart.dispatchAction({
           type: 'downplay',
@@ -246,8 +227,9 @@
           seriesIndex: 0,
           dataIndex: playIndex
         });
-        let hours = this.playedHours;
+        const hours = this.playedHours
         let queryHours = [hours[playIndex], hours[playIndex]]
+        console.log('hours',hours,'queryHours',queryHours)
         this.setHeampData(queryHours);
       };
       if (hoursChart) {
@@ -259,16 +241,16 @@
         lastPlayedIndex = 0;
       clearInterval(loop_play_heatmap_timer_id);
       loop_play_heatmap_timer_id = setInterval(() => {
-        let hours = this.playedHours;
-        let len = hours.length;
+        const hours = this.playedHours
+        let len = hours.length
         if (len === 0) {
-          return;
+          return
         }
-        this.playHeatMap(playIndex, lastPlayedIndex);
-        lastPlayedIndex = playIndex;
-        playIndex = ++playIndex % len;
-      }, 6 * 1000);
-      loop_play_heatmap_timer_id = setInterval(this.intervalGetData, 60 * 1000);
+        this.playHeatMap(playIndex, lastPlayedIndex)
+        lastPlayedIndex = playIndex
+        playIndex = ++playIndex % len
+      }, 6 * 1000)
+      loop_play_heatmap_timer_id = setInterval(this.intervalGetData, 60 * 1000)
     },
   	setMoment(data){
   		return  moment(data).format('HH:mm:ss')
@@ -285,8 +267,8 @@
       const _store_id = {
         store_id:_storeId
       }
-      getPinData(_store_id).then(res =>{
-        //  superDemo(_store_id).then(res =>{  // 展厅mock数据接口
+      // getPinData(_store_id).then(res =>{
+         superDemo(_store_id).then(res =>{
         // 设置summary
 				this.summary = res.data.summary === [] ? this.summary : res.data.summary[0]
         // 设置期间浏览人数
@@ -308,10 +290,11 @@
         let _areaDataList = res.data.areaData
         this.areaDataList = _areaDataList
 				// 热力图
-				const _heatmap = res.data.heatmap
-				this.setHeampData1(_heatmap)
+				// const _heatmap = res.data.heatmap
+				// this.setHeampData(_heatmap)
 				// 设置小时客流
 				const _flowHourData = res.data.flowHourData
+        // this.setHeampChartData(_flowHourData)
         this.generateHoursChartOptions(_flowHourData)
       })
     },
@@ -341,7 +324,7 @@
       let { composedData, hours } = composeSourceData(data)
       this.playedHours = hours
         let charOption = {
-          name: '客流人数',
+          name: "客流人数",
           tooltip: {
           trigger: 'axis',
            tooltip: {
@@ -352,7 +335,7 @@
         },
            xAxis: {
             type:'category',
-            name:"小时",
+            name:'小时',
             axisLine: {
               lineStyle: {
                   width: 1,
@@ -398,7 +381,7 @@
           }],
         series: [
           {
-            type: "bar",
+            type: 'bar',
             data: composedData,
             barMaxWidth:8,
             emphasis: {
@@ -416,12 +399,13 @@
           }
         ],
         grid: {
-          top: '22%',
-          left: '5%',
-          right: '5%',
-          bottom: '18%'
+          top: "22%",
+          left: "5%",
+          right: "5%",
+          bottom: "18%"
         }
        }
+       console.log('charOption',charOption)
       this.$nextTick(function(){
         this.hoursCustomerFlowChartOptions = charOption
       })
@@ -437,8 +421,8 @@
           endtime: endTime,
           hh: data[0] + ',' + (Number(data[0])+1)
         }
-       getAreaHotData(_params).then(res => {
-        // heatDemo(_params).then(res => { // 展厅专用
+      //  getAreaHotData(_params).then(res => {
+        heatDemo(_params).then(res => {
         let _heatmap = res.data.heatmap
         let heatmapData = []
         const originalWidth = 900
@@ -463,27 +447,29 @@
           })
         })
         this.bigLaoding = false
-        console.log(console.log("热点arr", heatmapData));
       })
     },
 		setLeftImg(){
     	const size = {
     		size: 40
 			}
-			getLeftImg(size).then(res =>{
-				this.list2 = res.reverse()
-      })
-      // getLeftImg2(size).then(res =>{ //展厅专用
-      //   this.list2 = res.data
-			// })
+			// getLeftImg(size).then(res =>{
+			// 	this.list2 = res.data
+      // })
+      getLeftImg2(size).then(res =>{
+        // this.list2.push(res.data)
+        this.list2 = res.data
+			})
 		},
     setImgData(){//获取下方抓去图片
 			const _size = {
         size:40
       }
       getImageData(_size).then(res =>{
+        console.log("tututu",res)
         this.$nextTick(()=>{
           this.list3 = res.splice(0,20)
+          // this.list3.push(res.splice(0,20))
         })
       })
     },
@@ -504,6 +490,7 @@
             value: item.heat_map_value
           })
         }
+       
         this.$nextTick(() => {
           this.heatmap.setData({
             min: 0,
@@ -512,7 +499,7 @@
           })
         })
     },
-    // 获取热力平面图
+    // 获取平面图
     setStoreImg(storeId){
     	const _storeId = storeId || this.$store.state.app.storeId
 			getStoresImg(_storeId).then(res =>{
@@ -537,7 +524,7 @@
       this.tableHeight()
     },
 		lunbo(){
-  		this.setLeftImg()
+  		    this.setLeftImg()
 			this.setImgData()
 		}
   },
@@ -567,19 +554,46 @@
       opacity: 0.6,
       blur: 1
     })
+    // for (let i = 0; i < 5; i++) {
+    //   let obj = {
+    //     id: 0,
+    //     title: "优惠卷名称",
+    //     name: "9.99全场满减",
+    //     code1: "价格敏感",
+    //     code2: "高价值",
+    //     status: true,
+    //     code3: "领取场景",
+    //     code4: "红包雨",
+    //     code5: "领取时间",
+    //     code6: "2019-10-22 18:20",
+    //     href: ""
+    //   }
+    //   let status = [true, false, true, false, true]
+    //   let hrefs = [
+    //     "http://img5.imgtn.bdimg.com/it/u=2181714473,2247286204&fm=26&gp=0.jpg",
+    //     "http://img3.imgtn.bdimg.com/it/u=1828058422,2306320811&fm=26&gp=0.jpg",
+    //     "http://img1.imgtn.bdimg.com/it/u=201117052,1461216129&fm=26&gp=0.jpg",
+    //     "http://img4.imgtn.bdimg.com/it/u=2504015697,685651741&fm=26&gp=0.jpg",
+    //     "http://img2.imgtn.bdimg.com/it/u=922677876,3751376574&fm=26&gp=0.jpg",
+    //     "http://img2.imgtn.bdimg.com/it/u=1216645486,410358322&fm=11&gp=0.jpg"
+    //   ]
+    //   obj.id = i
+    //   obj.status = status[i]
+    //   obj.href = hrefs[i]
+    //   this.list2.push(obj)
+    // }
     this.init()
-    this.loopPlayHeatMap();
+    this.loopPlayHeatMap()
     this.timer = setInterval(() => {
       setTimeout(this.lunbo(), 0)
     }, 15000)
   },
 	beforeDestroy() {
-  	console.log("取消取消取消")
 		if(this.timer) { // 如果定时器还在运行 或者直接关闭，不用判断
-			clearInterval(this.timer) //关闭
+			clearInterval(this.timer) 
 			this.timer = null
     }
-    clearInterval(loop_play_heatmap_timer_id);
+    clearInterval(loop_play_heatmap_timer_id)
 	}
 }
 </script>
@@ -592,7 +606,4 @@
   .tip-str span b{ color: yellow;}
 	}
 @import "@/styles/apDemon.scss";
-.app-container .main-content .wrapper-item .list-item .content .area-start{
-  margin: 4% 0;
-}
 </style>

@@ -18,9 +18,9 @@ body {
   font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
 }
 input:-webkit-autofill , textarea:-webkit-autofill, select:-webkit-autofill {
-	-webkit-box-shadow: 0 0 0 1000px $bgColor inset;
+	box-shadow: 0 0 0 1000px transparent inset;
 	border: 1px solid $menuBg!important;
-	color: $menuText;
+	color: $menuActiveText!important;
 }
 label {
   font-weight: 700;
@@ -75,14 +75,24 @@ div:focus {
     height: 0;
   }
 }
+
 .flex{
   display: flex;
-  .col{
+	&.space-between{
+		align-content: space-between;
+	}
+  .col:not(:last-child){
     margin-right: 10px;
   }
+	.col-1{
+		flex: 1;
+	}
 }
 .mg-bot20{
   margin-bottom: 20px;
+}
+.mg-top10{
+	margin-top: 10px;
 }
 .perview-warp{
   background-color: $bgColor;
@@ -94,6 +104,9 @@ div:focus {
 }
 .text-center{
   text-align: center;
+}
+.text-right{
+	text-align: right;
 }
 .text-left{
   text-align: left;

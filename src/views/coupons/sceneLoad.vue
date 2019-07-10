@@ -272,6 +272,7 @@
 	import axios from 'axios'
 	import { mapGetters } from 'vuex'
 	import {getScenarioData, getCouponsList, postCouponsData, changeCouponsStatus,deleteCouponsList,searchScenarioData } from '@/api/coupons'
+import { debuglog } from 'util';
 	export default {
 		name: 'sceneLoad',
 		components:{
@@ -279,6 +280,7 @@
 		},
 		data() {
 			return {
+				rowIcon:'',
 				upLoadName:'上传文件',
 				dialog2Visible:false,
 				couponData:[],
@@ -389,23 +391,21 @@
 					}
 				})
 			},
-			
 			fileChange() {
-				let file = document.getElementById("uploadFile").files[0];
+				let file = document.getElementById("uploadFile").files[0]
 				this.fileList = file
 				this.upLoadName = file.name
-				console.log('^^^^^',file)
-				let vm = this;
+				let vm = this
 				this.readFile(file).then(res => {
-					let arr = res.split(/[\n]/);
+					let arr = res.split(/[\n]/)
 					let newArr = arr.slice(0,50)
 					newArr.forEach((item, index) => {
 					let obj = {
 						couponNum: item
-					};
-					vm.$set(vm.couponData, index, obj);  //这里一定要用Vue.set(),不然视图不会更新
+					}
+					vm.$set(vm.couponData, index, obj)  //这里一定要用Vue.set(),不然视图不会更新
 					})
-					vm.dialog2Visible = true;   //显示一个dialog里面放一个table，将this.fileData的数据与之绑定即可
+					vm.dialog2Visible = true  //显示一个dialog里面放一个table，将this.fileData的数据与之绑定即可
 				});
 				},
 			getBase64(file) {
@@ -429,10 +429,9 @@
 			// 	this.fileList.push(file.raw)
 			// },
 			getFile(file) {
-				console.log('#####',file)
 				const isLt2M = file.size / 1024 / 1024 / 1024 < 500;
 				if (!isLt2M) {
-				    this.$message.error('上传头像图片大小不能超过 500KB!');
+				    this.$message.error('上传头像图片大小不能超过 500KB!')
 				}else{
 					this.getBase64(file.raw).then(res => {
 					this.couponsFlag.iconBase64 = res
@@ -502,7 +501,8 @@
 				this.dialogTableVisible = false
 			},
 			edit(row) {
-				console.log('row',row)
+				this.rowIcon = row.icon
+				console.log('row',row.icon)
 				const couponsFlag2 = {
 					id:'',
 					storeId:[],
@@ -519,11 +519,11 @@
 				}
 				this.dialogTableVisible = true
 				this.fileList = JSON.parse(JSON.stringify(row.scenarios))
-				let data = JSON.parse(JSON.stringify(row));
+				let data = JSON.parse(JSON.stringify(row))
 				let arr = []
 				if(data.hasOwnProperty('stores')){
 					arr = data.stores.map(item =>{
-						return item.id;
+						return item.id
 					})
 				}
 				let _time = []
@@ -551,10 +551,12 @@
 			// 查看记录
 			lookRecord(row){
 				const _id = row.id
+				const storeId = this.$store.state.app.storeId
 				this.$router.push({
 					path: "/coupons/record",
 					query: {
-						id: _id
+						id: _id,
+						storeID:storeId
 					}
 				})
 			},
@@ -603,7 +605,7 @@
 						obj.begin = moment(times[0]).valueOf()
 						obj.end = moment(times[1]).valueOf()
 						delete obj.time
-						if(obj.iconBase64 === ''){
+						if(obj.iconBase64 === '' || obj.iconBase64 === this.rowIcon){
 							delete obj.iconBase64
 						}
 						let form = new FormData()

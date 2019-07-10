@@ -70,12 +70,12 @@ export const constantRoutes = [
       path: 'list',
       name: 'store-list',
       component: () => import('@/views/store/index'),
-      meta: { title: '门店列表', icon: 'list' }
+      meta: { title: '门店列表'}
     },{
       path: 'device',
       name: 'store-device',
       component: () => import('@/views/store/device'),
-      meta: { title: '设备管理', icon: 'tree-table'}
+      meta: { title: '设备管理'}
     }]
   },
   {
@@ -102,6 +102,14 @@ export const constantRoutes = [
       name: 'system-user',
       component: () => import('@/views/system/user'),
       meta: { title: '管理员管理'}
+    },{
+      path: 'password',
+      name: 'system-password',
+      component: () => import('@/views/system/password'),
+      meta: {
+      	title: '密码修改',
+      },
+      hidden: true
     }]
   },
   {
@@ -208,6 +216,15 @@ export const constantRoutes = [
 			icon: 'tv'
 		}
 	},
+	{
+		path: '/tv-show-room',
+		name: 'tvShowRoom',
+		component: () => import('@/views/dashboard/tvShowRoom'),
+		meta: {
+			title: '4K屏展厅',
+			icon: 'tv'
+		}
+	},
 	// 优惠券管理 chy
 	{
 		path: '/coupons',
@@ -226,7 +243,7 @@ export const constantRoutes = [
 		},{
 			path: 'record',
 			name: 'manage-record',
-			hidden: true ,
+			hidden:true,
 			component: () => import('@/views/coupons/record')
 		}]
 	},
@@ -251,15 +268,14 @@ export const constantRoutes = [
 	    component: () => import('@/views/game/miniGame'),
 	    meta: { title: '小游戏'}
 	  }]
-	}
+	},
 ]
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
+  routes: constantRoutes,
 })
-
 const router = createRouter()
 
 // Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465

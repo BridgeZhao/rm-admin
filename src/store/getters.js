@@ -6,6 +6,7 @@ const getters = {
   token: state => state.user.token,
   menus: state => state.user.menus,
   storeList: state => state.app.storeList,
-  name: state => state.user.name
+  name: state => state.user.name,
+  userId: state => state.user.userId
 }
 export default getters

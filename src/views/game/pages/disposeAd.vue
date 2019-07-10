@@ -2,14 +2,14 @@
   <div class="dispose-ad">
     <!--添加用户-->
     <el-dialog v-drag-dialog :title="dialogType==='add'?'创建广告':dialogType === 'detail'?'广告详情':'广告编辑'" append-to-body
-      :width="'860px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="clearClose">
+      :width="'860px'"  :visible.sync="dialogVisible" :close-on-click-modal="false" @close="clearClose">
       <el-form v-loading="loading" :model="form" :rules="rules" ref="myform">
         <el-row v-if='dialogType==="detail"' :gutter="24" class="detail-item">
-          <el-col :span="10" :push='2' class="">
-            <div class="detail-img-banner">
-              <img class="game_img" :src="form.bannerImg">
+          <el-col :span="10" :push='2' class="" >
+            <div class="detail-img-banner" v-if='form.deviceType !== "pad"'>
+              <img class="game_img" :src="bannerImgBase64Show">
             </div>
-            <div class="detail-img" v-if='form.deviceType !== "pad"'>
+            <div class="detail-img">
               <img class="game_img" :src="imgBase64Show">
             </div>
           </el-col>
@@ -69,13 +69,13 @@
             </el-form-item>
           </el-col>
           <el-col :span="13" class="">
-            <el-form-item label="" prop="bannerImgBase64">
+            <el-form-item label="" v-if='form.deviceType !== "pad"' prop="bannerImgBase64">
               <el-upload class="upload-img" action="" ref="upload" name="bannerImgBase64" :auto-upload="false"
                 :show-file-list="false" :on-change="handleBannnerImg">
                 <el-row :gutter="24" class="">
                   <el-col :span="12">
                     <div class="imgshow-banner">
-                      <img class="game_img" :src="form.bannerImg">
+                      <img class="game_img" :src="bannerImgBase64Show">
                     </div>
                   </el-col>
                   <el-col :span="12">
@@ -87,7 +87,7 @@
                 </el-row>
               </el-upload>
             </el-form-item>
-            <el-form-item label="" v-if='form.deviceType !== "pad"' prop="imgBase64s">
+            <el-form-item label="" :class="form.deviceType === 'pad'?'padImgHeight':''"  prop="imgBase64s">
               <el-upload class="upload-img" action="" ref="upload1" name="imgBase64s" :auto-upload="false"
                 :show-file-list="false" :on-change="handleImg">
                 <el-row :gutter="24" class="">
@@ -105,20 +105,20 @@
                 </el-row>
               </el-upload>
                <!-- 多张图片 -->
-              <!-- <el-table :data="imgsTableData" stripe  size="mini" class='imgsTable' height="200px" :header-cell-style="{lineHeight:'1.5em'}">
+              <el-table :data="imgsTableData"  stripe  size="mini" class='imgsTable' height="160px" :header-cell-style="{lineHeight:'1.5em'}">
                 <el-table-column label="序号" type="index" width='50px'> </el-table-column>
-                <el-table-column label="图片名称">
-                  <template slot-scope="scope">
-                    <span>{{ scope.row.imgsName }}</span>
+                <el-table-column label="图片名称" :show-overflow-tooltip="true" >
+                  <template slot-scope="scope" >
+                    <span @click="handleImgListShow(scope.row)"  class="hover-cursor">{{ scope.row.imgsName }}</span>
                   </template>
                 </el-table-column>
                 <el-table-column label="操作"  width='50px'>
                   <template slot-scope="scope">
-                    <svg-icon icon-class="edit" class="svg-icon" ></svg-icon>
-                    <svg-icon icon-class="trash" class="delete-icon" @click.native.prevent='delImgRow(scope.row)'/>
+                    <svg-icon icon-class="drag" class="svg-icon"/>
+                    <svg-icon icon-class="trash" class="delete-icon hover-cursor" @click='delImgRow(scope.$index)'/>
                   </template>
                 </el-table-column>
-              </el-table> -->
+              </el-table>
             </el-form-item>
           </el-col>
         </el-row>
@@ -203,28 +203,11 @@
 </template>
 
 <script>
-  import {
-    mapGetters
-  } from 'vuex'
-  import {
-    userQuery,
-    addUser,
-    delUser,
-    updateUser
-  } from '@/api/user'
-  import {
-    menuTransTree
-  } from '@/utils'
+  import { mapGetters} from 'vuex'
 
-  import {
-    addAd,
-    statusAd,
-    delAd,
-    adPage
-  } from '@/api/ads'
-  import {
-    getAreas
-  } from '@/api/area'
+  import { addAd, statusAd,  delAd,  adPage} from '@/api/ads'
+  import {  getAreas } from '@/api/area'
+  import Sortable from 'sortablejs'
   export default {
     name: 'disposeAd',
     props: [
@@ -293,6 +276,7 @@
           storeId: 0,
           formTime: []
         },
+        bannerImgBase64Show: '',
         imgBase64Show: '',
         adStatusList: [{
           id: -1,
@@ -410,12 +394,16 @@
             this.fileReader.onload = (res) => {
               if (key === '1') {
                 this.form.bannerImgBase64 = res.currentTarget.result
-                this.form.bannerImg = res.currentTarget.result
+                // this.form.bannerImg = res.currentTarget.result
+                this.bannerImgBase64Show = res.currentTarget.result
               } else {
-                // this.form.imgBase64s.push(res.currentTarget.result)
-                // this.imgsTableData.push({'imgsName':fileName,'imgBase64':res.currentTarget.result,'sort':this.imgsTableData.length})
-                this.form.imgBase64s[0] = res.currentTarget.result
+                this.form.imgBase64s.push(res.currentTarget.result)
+                this.imgsTableData.push({'imgsName':fileName,'imgBase64':res.currentTarget.result})
+                // this.form.imgBase64s[0] = res.currentTarget.result
                 this.imgBase64Show = this.form.imgBase64s[this.form.imgBase64s.length - 1]
+                this.$nextTick(function () {//获取弹窗table
+                  this.rowDrop()
+                })
               }
               this.form = Object.assign({}, this.form)
             }
@@ -447,11 +435,11 @@
             this.form.storeId = this.pagination.storeId
             const _data = this.form
             addAd(_data).then(() => {
-              this.clearClose('reload')
               this.$message.success('操作成功')
             }).finally(() => {
               this.loading = false
-              this.dialogVisible = false
+              this.clearClose('reload')
+              // this.dialogVisible = false
             })
           }
         })
@@ -482,7 +470,7 @@
         }).then(() => {
           console.log(_status)
           statusAd(_status).then(() => {
-            this.clearClose('reload')
+            // this.clearClose('reload')
             this.$message.success('操作成功')
             this.adPage()
           })
@@ -497,45 +485,70 @@
         }
         this.form.area = areaId
         this.form.formTime = []
-        console.log("时间", this.form.formTime)
         this.form.formTime[0] = this.timestampToTime(data.begin)
         this.form.formTime[1] = this.timestampToTime(data.end)
-        // this.form.bannerImgBase64 = data.bannerImg
-        // this.form.imgBase64s = data.imgs
         this.form.imgBase64s = []
         if (data.imgs) {
           this.imgBase64Show = data.imgs[0]
+          this.bannerImgBase64Show = data.bannerImg
+          for(let i = 0; i<data.imgs.length;i++){
+            this.getBase64(data.imgs[i], (base64) =>{
+              this.imgsTableData.push({'imgsName':'name','imgBase64':base64})
+              this.form.imgBase64s.push(base64)
+            })
+          }
+          this.$nextTick(function () {//获取弹窗table
+            this.rowDrop()
+          }) 
         }
         console.log('编辑', this.form)
         this.dialogType = 'edit'
-        this.dialogVisible = true
+        this.dialogVisible = true 
       },
-
-      clearClose(reload) {
-        // debugger
+      getBase64(url, callback) {
+        let canvas = document.createElement("canvas")   //创建canvas DOM元素
+        let ctx = canvas.getContext("2d")
+        let img = new Image
+        img.crossOrigin = 'Anonymous'
+        img.src = url
+        img.onload = (res) => {
+          canvas.width = img.width 
+          canvas.height = img.height 
+          ctx.drawImage(img, 0, 0, img.width, img.height)
+          let dataURL = canvas.toDataURL('image/jpeg')
+          callback(dataURL) //回掉函数获取Base64编码
+          canvas = null
+        } 
+      },
+      async clearClose(reload) {
         this.dialogVisible = false
         if (reload === 'reload') {
-          this.adPage()
+          await this.adPage()
         }
-        // this.$refs['myform'].resetFields()
-        this.form = {
-          id: '',
-          name: '',
-          deviceType: '',
-          begin: '',
-          end: '',
-          area: [],
-          codeUrl: '',
-          bannerImgBase64: '',
-          imgBase64s: [],
-          bannerImg: '',
-          imgs: [],
-          status: 0,
-          createTime: '',
-          areaIds: [],
-          storeId: 0,
-          formTime: []
-        }
+        let _self = this;
+        setTimeout(function(){
+          _self.form = {
+            id: '',
+            name: '',
+            deviceType: '',
+            begin: '',
+            end: '',
+            area: [],
+            codeUrl: '',
+            bannerImgBase64: '',
+            imgBase64s: [],
+            bannerImg: '',
+            imgs: [],
+            status: 0,
+            createTime: '',
+            areaIds: [],
+            storeId: 0,
+            formTime: []
+          },
+          _self.imgsTableData =[],
+          _self.bannerImgBase64Show =''
+        },200)
+        // this.$refs['myform'].resetFields() 
       },
       async pageChange(val) {
         this.pagination.page = val
@@ -545,9 +558,12 @@
         this.dialogType = 'add'
         this.imgBase64Show = ''
         this.dialogVisible = true
+        this.$nextTick(function () {//获取弹窗table
+          this.rowDrop()
+        })
       },
-      timestampToTime(cjsj) {
-        let date = new Date(cjsj)
+      timestampToTime(val) {
+        let date = new Date(val)
         let Y = date.getFullYear() + '-'
         let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-'
         let D = date.getDate() + ' '
@@ -561,9 +577,6 @@
         data.end = this.timestampToTime(data.end)
         data.createTime = this.timestampToTime(data.createTime)
         this.form = Object.assign({}, data)
-        if (data.area[0]) {
-          console.log('详情区域length', data.area.length, this.form.imgs.length, )
-        }
         const areaId = []
         for (let i = 0; i < data.area.length; i++) {
           areaId.push(data.area[i].id)
@@ -576,11 +589,42 @@
         this.dialogType = 'detail'
         this.dialogVisible = true
       },
-      delImgRow(rowData){
-        console.log(rowData.sort)
-        this.form.imgBase64s.splice(rowData.sort,1)
-        this.imgsTableData.splice(rowData.sort,1)
-        console.log(this.form.imgBase64s ,this.imgsTableData)
+      handleImgListShow(rowData){
+        console.log('showImg',rowData)
+        this.imgBase64Show= rowData.imgBase64
+      },
+      delImgRow(rowIndex){
+        console.log('delImg',rowIndex)
+        this.form.imgBase64s.splice(rowIndex,1)
+        this.imgsTableData.splice(rowIndex,1)
+        this.imgBase64Show = this.form.imgBase64s[0]
+        this.$nextTick(function () {//获取弹窗table
+          this.rowDrop()
+        })
+      },
+      //行拖拽
+      rowDrop() {
+        const tbody = document.querySelector('.imgsTable tbody')
+        const _this = this
+        if(tbody){
+          Sortable.create(tbody, {
+            onEnd({ newIndex, oldIndex }) {     
+              _this.imgsTableData.splice(newIndex, 0, _this.imgsTableData.splice(oldIndex, 1)[0]);
+              let newArray = _this.imgsTableData.slice(0);
+              _this.imgsTableData = [];
+              _this.$nextTick(function () {
+                _this.imgsTableData = newArray;
+                let newImgBase64 = []
+                for (let i = 0 ; i<newArray.length; i++) {
+                   newImgBase64.push(newArray[i].imgBase64)
+                }
+                this.form.imgBase64s = newImgBase64
+                // console.log('拖拽',newArray,this.form.imgBase64s)
+              });
+              
+            }
+          })
+        } 
       }
     },
     watch: {
@@ -606,9 +650,13 @@
 
   .imgshow {
     width: 188px;
-    height: 300px;
+    height:260px;
   }
-
+  .padImgHeight{
+    .imgshow {
+      height:120px;
+    }
+  }
   img {
     width: 100%;
     height: 100%;
@@ -623,7 +671,7 @@
     .detail-img {
       margin-top: 20px;
       width: 220px;
-      height: 350px;
+      height: 260px;
     }
   }
   #imgs-dev{
@@ -638,5 +686,11 @@
       top: 100px;
       width: 50%;
     } 
+    .hover-cursor{
+      cursor: pointer;
+    }
+    .hover-cursor:hover{
+      color: #67C23A;
+    }
   }
 </style>

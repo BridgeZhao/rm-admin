@@ -16,7 +16,7 @@
       </el-col>
     </el-row>
     <!--弹框-->
-    <!--添加用户-->
+    <!--添加-->
     <el-dialog v-if="dialogVisible" v-drag-dialog  :title="dialogType==='add'?'门店添加':stepNameTransform()+'修改'" :width="'720px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="()=>{clearClose()}" @closed="steps=0">
       <el-steps :active="steps" align-center finish-status="success" v-if="dialogType==='add'">
         <el-step title="基本信息"></el-step>
@@ -317,7 +317,7 @@ export default {
 			})
 			const p_data = this.fromInfo.pointData.point || {}
 			for (const key in p_data) {
-				const ck=p_data[key].checkType
+				const ck=p_data[key].checkType||[]
 				this.checkType[p_data[key].areaId] =typeof(ck)==='boolean'?[~~ck]:ck
 			}
 			this.checkType = Object.assign({}, this.checkType)
@@ -341,7 +341,6 @@ export default {
 			})
 		},
 		deleteRow(id) {
-			console.log(this)
 			this.$confirm('还将删除门店下的所有区域、设备吗？', '删除门店', {
 				confirmButtonText: '确定',
 				cancelButtonText: '取消',
@@ -514,6 +513,7 @@ export default {
 						this.fromInfo.imgBase64 = res.floorGraph
 						this.fromInfo.pointData = res.pointData
 						if (this.steps === 0) {
+							this.$emit('updateStoreList')
 							this.getTableData()
 						}
 						this.steps++
@@ -566,10 +566,15 @@ export default {
 					this.areaData.storeId = this.fromInfo.storeId
 					addUpdateArea(this.areaData).then(() => {
 						this.fromLoading = false
-						delete this.areaData.id
+						if(this.areaData.hasOwnProperty('id')){
+							delete this.areaData.id
+						}else{
+							// 添加门店成功
+							this.getAreasData()
+							// updateStoreList
+						}
 						this.areaData.name = ''
 						this.areaData.num = ''
-						this.getAreasData()
 						this.$message.success('操作成功')
 						this.$refs['myform' + this.steps].resetFields()
 					})
@@ -579,7 +584,6 @@ export default {
 		getAreasData() {
 			return new Promise(resolve => {
 				getAreas(this.fromInfo.storeId).then(res => {
-
 					if (res.length) {
 						this.areaList = res
 						this.selectedArea = res[0].id

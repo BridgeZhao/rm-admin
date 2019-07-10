@@ -7,7 +7,8 @@ import Cookies from 'js-cookie'
 const state = {
   token: getToken(),
   name: Cookies.get('name') ? Cookies.get('name') : '',
-  menus: setMenus()
+  menus: setMenus(),
+  userId:Cookies.get('userId') ? Cookies.get('userId') : ''
 }
 
 const mutations = {
@@ -21,7 +22,11 @@ const mutations = {
   },
   SET_MENUS: (state, meuns) => {
     state.menus = meuns
-  }
+  },
+  SET_USERID: (state, userId) => {
+    state.userId = userId
+  	Cookies.set('userId', userId)
+  },
 }
 
 const actions = {
@@ -30,9 +35,10 @@ const actions = {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
-        const { token } = response
+        const { token ,userId} = response
         commit('SET_NAME', username)
         commit('SET_TOKEN', token)
+        commit('SET_USERID', userId)
         resolve()
       }).catch(error => {
         reject(error)

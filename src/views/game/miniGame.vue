@@ -1,23 +1,29 @@
 <template>
   <div class="app-container mini_game">
-    <ul  class="data-list game-list">
-      <li v-for='(item, key) in miniGame' :key='key'>
-        <div  class="name-warp">
-          <span  class="name">{{item.name}}</span>
-          <div>
-            <svg-icon icon-class="edit" class="svg-icon" @click="editChannelGame(item)"></svg-icon>
-            <svg-icon icon-class="trash" class="delete-icon" @click='delGame(item)' />
+    <div>
+      <el-row :gutter="20" class="data-list game-list">
+        <el-col :span="4" v-for='(item, key) in miniGame' :key='key'>
+          <div class="data-list-item">
+            <div  class="name-warp">
+              <span  class="name">{{item.name}}</span>
+              <div>
+                <svg-icon icon-class="edit" class="svg-icon" @click="editChannelGame(item)"></svg-icon>
+                <svg-icon icon-class="trash" class="delete-icon" @click='delGame(item)' />
+              </div>
+             </div>
+            <div class="img">
+              <img :src='item.img' />
+            </div>
           </div>
-         </div>
-        <div class="img">
-          <img :src='item.img' />
-        </div>
-      </li>
-      <li  class="add" @click="addGame">
-        <svg-icon icon-class="plus" class="svg-plus"></svg-icon>
-         <span class="font-red" >添加游戏</span>
-      </li>
-    </ul>
+        </el-col>
+        <el-col :span="4">
+          <div class="add data-list-item" @click="addGame">
+            <svg-icon icon-class="plus" class="svg-plus"></svg-icon>
+             <span class="font-red" >添加游戏</span>
+          </div>
+        </el-col>
+      </el-row>
+    </div>
     <!--弹框-->
     <el-dialog :title="dialogType === 'add' ? '添加游戏' : '修改游戏'" :width="'720px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="()=>{clearClose()}">
       <!--基本信息-->
@@ -186,9 +192,6 @@
   .app-container {
     background: none;
   }
-  ul {
-    list-style: none;
-  }
   .svg-icon{
     cursor: pointer;
   }
@@ -201,30 +204,34 @@
         display: flex;
         flex-wrap: wrap;
         padding-inline-start: 0;
-        >li {
+        .data-list-item{
           width: 13.2rem;
           height: 25rem;
           background: $menuBg;
           border:1px solid $borderColor;
           border-radius: 4px;
-          margin-right: 1.2rem;
-          margin-bottom: 1.2rem;
+          // margin-right: 1.2rem;
+          margin-bottom: 1rem;
           padding: 0 1.2rem;
           box-sizing: border-box;
           .name-warp {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 1rem;
-            margin-top: 1.2rem;
+            margin: 1rem  auto;
             align-items: center;
+            .name{
+              width: 8rem;
+              text-overflow: ellipsis;
+              white-space:nowrap;
+              overflow:hidden;
+            }
           }
           .img {
-            width: 10.8rem;
-            height: 19.2rem;
+            height: 19rem;
+            margin: 0 auto;
             position: relative;
             >img{
               width: 100%;
-              height: 100%;
             }
             >.error{
               width: auto;
@@ -251,7 +258,7 @@
         }
       }
       .data-list{
-        >li.add {
+        .data-list-item.add {
           border: 1px dashed red;
           box-sizing: border-box;
           cursor: pointer;
