@@ -542,7 +542,10 @@
 					obj.xAxisData.push(element.areaName)
 				})
 				this.areaTopData = obj
+<<<<<<< Updated upstream
 				console.log('laodAreaTopData',this.areaTopData)
+=======
+>>>>>>> Stashed changes
       },
       // 区域客流年龄
       laodAreaAge(data) {

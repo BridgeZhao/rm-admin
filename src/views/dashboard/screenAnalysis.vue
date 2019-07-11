@@ -138,140 +138,138 @@
 													播放设备数：有使用的设备数（如：大屏、Pad等;
 													观看人数：除了当前互动以外之围观人数;
 													互动人数：主要互动顾客的人数;
-													领劵人数：领用优惠劵的"
-                  placement="top-start"
-                >
-                  <i class="el-icon-info report-tip" />
-                </el-tooltip>
-              </div>
-              <div style="width:100%;height:100%;padding:2%;">
-                <el-table
-                  :data="scenarioData"
-                  stripe
-                  highlight-current-row
-                  show-overflow-tooltip
-                  :height="tableHeight"
-                  style="width: 100%"
-                >
-                  <el-table-column
-                    prop="scenarioName"
-                    label="场景名称"
-                  />
-                  <el-table-column
-                    prop="deviceCount"
-                    label="播放设备数"
-                  />
-                  <el-table-column
-                    prop="view"
-                    label="观看人数"
-                  />
-                  <el-table-column
-                    prop="interaction"
-                    label="互动人数"
-                  />
-                  <el-table-column
-                    prop="couponCount"
-                    label="领券人数"
-                  />
-                  <el-table-column
-                    prop="avgInteractionDevice"
-                    label="平均设备互动数"
-                  />
-                </el-table>
-              </div>
-            </div>
-            <div class="bg-purple report-line report-margin">
-              <div class="report-gang tip">
-                <span>内容监测</span>
-                <el-tooltip
-                  class="item"
-                  effect="dark"
-                  content="根据大屏展示的广告内容进行监测;
+													领劵人数：领用优惠劵的" placement="top-start">
+									<i class="el-icon-info report-tip"></i>
+								</el-tooltip>
+							</div>
+							<div style="width:100%;height:100%;padding:2%;">
+							    <el-table
+									:data="scenarioData"
+									stripe
+									highlight-current-row
+									show-overflow-tooltip
+									:height="tableHeight"
+									style="width: 100%">
+									<el-table-column
+									prop="scenarioName"
+									label="场景名称">
+									</el-table-column>
+									<el-table-column
+									prop="deviceCount"
+									sortable
+									label="播放设备数">
+									</el-table-column>
+									<el-table-column
+									prop="view"
+									sortable
+									label="观看人数">
+									</el-table-column>
+									<el-table-column
+									prop="interaction"
+									sortable
+									label="互动人数">
+									</el-table-column>
+									<el-table-column
+									prop="couponCount"
+									sortable
+									label="领券人数">
+									</el-table-column>
+									<el-table-column
+									prop="avgInteractionDevice"
+									sortable
+									label="平均设备互动数">
+									</el-table-column>
+								</el-table>
+							</div>
+						</div>
+						<div class="bg-purple report-line report-margin">
+							<div class="report-gang tip">
+								<span>内容监测</span>
+								<el-tooltip class="item" effect="dark" content="根据大屏展示的广告内容进行监测;
 										播放设备数：有使用的设备数（如：大屏、Pad等）;
 										观看人数：所有观看广告的人数（含点击与围观）;
-										平均设备观看数：观看人数/播放设备数"
-                  placement="top-start"
-                >
-                  <i class="el-icon-info report-tip" />
-                </el-tooltip>
-              </div>
-              <div style="width:100%;height:100%;padding:2%;">
-                <el-table
-                  :data="contentData"
-                  stripe
-                  highlight-current-row
-                  :height="tableHeight"
-                  style="width: 100%"
-                >
-                  <el-table-column
-                    prop="contentName"
-                    label="广告名称"
-                  />
-                  <el-table-column
-                    prop="device"
-                    label="播放设备数"
-                  />
-                  <el-table-column
-                    prop="view"
-                    label="观看人数"
-                  />
-                  <el-table-column
-                    prop="avgViewDevice"
-                    label="平均设备观看人数"
-                  />
-                </el-table>
-              </div>
-            </div>
-            <div class="bg-purple report-line report-margin">
-              <div class="report-gang tip">
-                <span>优惠券监测</span>
-                <el-tooltip
-                  class="item"
-                  effect="dark"
-                  content="时间区间内，发放、使用优惠劵的数量及销售额;
+										平均设备观看数：观看人数/播放设备数" placement="top-start">
+									<i class="el-icon-info report-tip"></i>
+								</el-tooltip>
+							</div>
+							<div style="width:100%;height:100%;padding:2%;">
+							    <el-table
+									:data="contentData"
+									stripe
+									highlight-current-row
+									:height="tableHeight"
+									style="width: 100%">
+									<el-table-column
+									prop="contentName"
+									label="广告名称">
+									</el-table-column>
+									<el-table-column
+									prop="device"
+									sortable
+									label="播放设备数">
+									</el-table-column>
+									<el-table-column
+									prop="view"
+									sortable
+									label="观看人数">
+									</el-table-column>
+									<el-table-column
+									prop="avgViewDevice"
+									sortable
+									label="平均设备观看人数">
+									</el-table-column>
+								</el-table>
+							</div>
+						</div>
+						<div class="bg-purple report-line report-margin">
+							<div class="report-gang tip">
+								<span>优惠券监测</span>
+								<el-tooltip class="item" effect="dark" content="时间区间内，发放、使用优惠劵的数量及销售额;
 											发放数量，每小时更新数据;
-											使用数量，每日更新数据"
-                  placement="top-start"
-                >
-                  <i class="el-icon-info report-tip" />
-                </el-tooltip>
-              </div>
-              <div style="width:100%;height:100%;padding:2%;">
-                <el-table
-                  :data="couponData"
-                  stripe
-                  highlight-current-row
-                  :height="tableHeight"
-                  style="width: 100%"
-                >
-                  <el-table-column
-                    prop="couponName"
-                    label="优惠券名称"
-                  />
-                  <el-table-column
-                    prop="takeCount"
-                    label="区间发放量"
-                  />
-                  <el-table-column
-                    prop="usageCount"
-                    label="区间发放使用量"
-                  />
-                  <el-table-column
-                    prop="conserveRate"
-                    label="转化率"
-                  />
-                  <el-table-column
-                    prop="salesAmount"
-                    label="销售额"
-                  />
-                </el-table>
-              </div>
-            </div>
-          </div>
-        </el-col>
-      </el-row>
-    </div>
-  </div>
+											使用数量，每日更新数据" placement="top-start">
+										<i class="el-icon-info report-tip"></i>
+								</el-tooltip>
+							</div>
+							<div style="width:100%;height:100%;padding:2%;" >
+							    <el-table
+									:data="couponData"
+									stripe
+									highlight-current-row
+									:height="tableHeight"
+									style="width: 100%">
+									<el-table-column
+									prop="couponName"
+									sortable
+									label="优惠券名称">
+									</el-table-column>
+									<el-table-column
+									prop="takeCount"
+									sortable
+									label="区间发放量">
+									</el-table-column>
+									<el-table-column
+									prop="usageCount"
+									sortable
+									label="区间发放使用量">
+									</el-table-column>
+									<el-table-column
+									prop="conserveRate"
+									sortable
+									label="转化率">
+									</el-table-column>
+									<el-table-column
+									prop="salesAmount"
+									sortable
+									label="销售额">
+									</el-table-column>
+								</el-table>
+							</div>
+						</div>
+					</div>
+				</el-col>
+			</el-row>
+		</div>
+	</div>
 </template>
 <script>
 import moment from 'moment'
