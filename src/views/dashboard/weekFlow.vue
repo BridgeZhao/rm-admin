@@ -1,34 +1,34 @@
 <template>
-    <div class="app-container" style="background:none">
-        <div class="top">
-            <div style="width: 15%;float: left;margin-left: 1%;">
-                <label-view labelFather="周时段客流统计"></label-view>
-            </div>
-           <div style="float: left">
-                <el-radio-group v-model="radio" >
-                    <el-radio-button label="图形报表" class="radioBtn"></el-radio-button>
-                    <el-radio-button label="数据报表" class="radioBtn"></el-radio-button>
-                </el-radio-group>
-           </div>
-					<div v-show="radio == '图形报表'" style="float: right">
-						<el-form :inline="true" :model="formInline" class="demo-form-inline">
-							<el-form-item label="时间">
-								<el-date-picker
-									type="week"
-									style="width: 200px"
-									value-format="yyyy-MM-dd"
-									v-model="formInline.dateTimeDay"
-									:picker-options="{
-                                disabledDate(time) {
-                                            return time.getTime() > Date.now() - 8.64e7;
-                                        },
-                                    firstDayOfWeek: 1
-                            }"
-									format="yyyy 第 WW 周"
-									placeholder="选择周">
-								</el-date-picker>
-							</el-form-item>
-							<!-- <el-form-item label="时间">
+  <div class="app-container" style="background:none">
+    <div class="top">
+      <div style="width: 15%;float: left;margin-left: 1%;">
+        <label-view label-father="周时段客流统计" />
+      </div>
+      <div style="float: left">
+        <el-radio-group v-model="radio">
+          <el-radio-button label="图形报表" class="radioBtn" />
+          <el-radio-button label="数据报表" class="radioBtn" />
+        </el-radio-group>
+      </div>
+      <div v-show="radio == '图形报表'" style="float: right">
+        <el-form :inline="true" :model="formInline" class="demo-form-inline">
+          <el-form-item label="时间">
+            <el-date-picker
+              v-model="formInline.dateTimeDay"
+              type="week"
+              style="width: 200px"
+              value-format="yyyy-MM-dd"
+              :picker-options="{
+                disabledDate(time) {
+                  return time.getTime() > Date.now() - 8.64e7;
+                },
+                firstDayOfWeek: 1
+              }"
+              format="yyyy 第 WW 周"
+              placeholder="选择周"
+            />
+          </el-form-item>
+          <!-- <el-form-item label="时间">
                   <el-time-select
                   placeholder="起始时间"
                   v-model="formInline.startTime"
@@ -50,106 +50,106 @@
                   }">
               </el-time-select>
               </el-form-item> -->
-							<el-form-item>
-								<el-button type="primary" @click="searchData">查询</el-button>
-							</el-form-item>
-						</el-form>
-					</div>
-        </div>
-        <div class="middle" v-show="radio == '图形报表'">
-            <div class="reportGraphics">
-                 <el-row :gutter="24" class="report-margin">
-                    <el-col :span="24"><div class="grid-content bg-purple report-line">
-                        <div class="report-gang">
-                            <span>图形报表</span>
-                            <el-button size="mini" @click="saveImage('客流性别对比')">保存图片</el-button>
-                        </div>
-                        <div style="width:100%;height:100%;">
-                            <week-chat :data='weekData' ref="客流性别对比"/>
-                        </div>
-                        </div></el-col>
-
-                </el-row>
-            </div>
-        </div>
-        <div class="tableDataBox report-margin" v-show="radio == '数据报表'">
-            <div class="tableTop report-margin">
-                <div>
-                    <span>{{startWeekTime + ' - ' + endWeekTime }}</span>
-                    <span>08:00 - 22:00</span>
-                </div>
-                <el-button type="primary" plain style="background-color: #1881a0;color: #494c50;padding:0;" size="medium">
-                    <a :href="downloadPath" download="" style="text-decoration: none;color: #ffffff;display: block;width: 70px;height: 35px;line-height: 35px;">下载</a>
-                </el-button>
-            </div>
-            <div class="report-margin">
-                <el-row :gutter="24" class="report-margin">
-                    <el-col :span="24"><div class="grid-content bg-purple report-line">
-                        <div class="report-gang">
-                            <span>客流报表</span>
-                        </div>
-                        <div style="width:90%;height:100%;margin: 2% auto">
-                             <el-table
-                            :data="tableData"
-							:default-sort = "{prop: 'hh', order: 'Ascending'}"
-                            style="width: 100%"
-                            stripe>
-                                <el-table-column
-                                    prop="hh"
-                                    label="时间段"
-									sortable
-                                    >
-                                </el-table-column>
-                                <el-table-column
-                                    prop="weekday1"
-                                    label="周一"
-                                    >
-                                </el-table-column>
-                                <el-table-column
-                                    prop="weekday2"
-                                    label="周二">
-                                </el-table-column>
-                                 <el-table-column
-                                    prop="weekday3"
-                                    label="周三"
-                                    >
-                                </el-table-column>
-                                <el-table-column
-                                    prop="weekday4"
-                                    label="周四"
-                                    >
-                                </el-table-column>
-                                <el-table-column
-                                    prop="weekday5"
-                                    label="周五">
-                                </el-table-column>
-                                 <el-table-column
-                                    prop="weekday6"
-                                    label="周六"
-                                    >
-                                </el-table-column>
-                                <el-table-column
-                                    prop="weekday7"
-                                    label="周日"
-                                    >
-                                </el-table-column>
-                            </el-table>
-                        </div>
-                    </div></el-col>
-                </el-row>
-            </div>
-
-        </div>
-
+          <el-form-item>
+            <el-button type="primary" @click="searchData">
+              查询
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </div>
     </div>
+    <div v-show="radio == '图形报表'" class="middle">
+      <div class="reportGraphics">
+        <el-row :gutter="24" class="report-margin">
+          <el-col :span="24">
+            <div class="grid-content bg-purple report-line">
+              <div class="report-gang">
+                <span>图形报表</span>
+                <el-button size="mini" @click="saveImage('客流性别对比')">
+                  保存图片
+                </el-button>
+              </div>
+              <div style="width:100%;height:100%;">
+                <week-chat ref="客流性别对比" :data="weekData" />
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+      </div>
+    </div>
+    <div v-show="radio == '数据报表'" class="tableDataBox report-margin">
+      <div class="tableTop report-margin">
+        <div>
+          <span>{{ startWeekTime + ' - ' + endWeekTime }}</span>
+          <span>08:00 - 22:00</span>
+        </div>
+        <el-button type="primary" plain style="background-color: #1881a0;color: #494c50;padding:0;" size="medium">
+          <a :href="downloadPath" download="" style="text-decoration: none;color: #ffffff;display: block;width: 70px;height: 35px;line-height: 35px;">下载</a>
+        </el-button>
+      </div>
+      <div class="report-margin">
+        <el-row :gutter="24" class="report-margin">
+          <el-col :span="24">
+            <div class="grid-content bg-purple report-line">
+              <div class="report-gang">
+                <span>客流报表</span>
+              </div>
+              <div style="width:90%;height:100%;margin: 2% auto">
+                <el-table
+                  :data="tableData"
+                  :default-sort="{prop: 'hh', order: 'Ascending'}"
+                  style="width: 100%"
+                  stripe
+                >
+                  <el-table-column
+                    prop="hh"
+                    label="时间段"
+                    sortable
+                  />
+                  <el-table-column
+                    prop="weekday1"
+                    label="周一"
+                  />
+                  <el-table-column
+                    prop="weekday2"
+                    label="周二"
+                  />
+                  <el-table-column
+                    prop="weekday3"
+                    label="周三"
+                  />
+                  <el-table-column
+                    prop="weekday4"
+                    label="周四"
+                  />
+                  <el-table-column
+                    prop="weekday5"
+                    label="周五"
+                  />
+                  <el-table-column
+                    prop="weekday6"
+                    label="周六"
+                  />
+                  <el-table-column
+                    prop="weekday7"
+                    label="周日"
+                  />
+                </el-table>
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+      </div>
+    </div>
+  </div>
 </template>
 <script>
-import moment from "moment"
+import moment from 'moment'
 import labelView from  '@/components/Label/index'
-import WeekChat from "@/components/Charts/WeekChat"
-import { getWeekFlowData, showWindowHref} from "@/api/report"
+import WeekChat from '@/components/Charts/WeekChat'
+import { getWeekFlowData, showWindowHref} from '@/api/report'
 export default {
-    name:'intoShopFlow',
+    name:'IntoShopFlow',
     components: {labelView, WeekChat},
     data(){
         return{
@@ -166,23 +166,23 @@ export default {
             endWeekTime:'',
             tableData: [
                 {
-                    "weekday4": 14,
-                    "weekday2": 37,
-                    "weekday3": 33,
-                    "hh": 13
+                    'weekday4': 14,
+                    'weekday2': 37,
+                    'weekday3': 33,
+                    'hh': 13
                 },
                 {
-                    "weekday4": 12,
-                    "hh": 14
+                    'weekday4': 12,
+                    'hh': 14
                 },
                 {
-                    "weekday4": 12,
-                    "hh": 15
+                    'weekday4': 12,
+                    'hh': 15
                 },
                 {
-                    "weekday4": 7,
-                    "hh": 16
-                },
+                    'weekday4': 7,
+                    'hh': 16
+                }
             ]
         }
     },
@@ -197,7 +197,6 @@ export default {
 					dateTimeDay:new Date()
 				}
 				this.init(newVal)
-
 			}
 		},
     created(){
@@ -206,25 +205,25 @@ export default {
     },
      methods:{
     	  isAndroid(){
-				 const isStoreid = this.showWindowHref("storeId")
+				 const isStoreid = this.showWindowHref('storeId')
 					if(isStoreid !== ''){
-						let id = isStoreid.storeId
+						const id = isStoreid.storeId
 						this.$store.dispatch('app/setStoreId', id)
 					}else{
 						return false
 					}
 				},
 			 showWindowHref(){
-				 let sHref = window.location.href;
-				 let args = sHref.split('?');
+				 const sHref = window.location.href
+				 const args = sHref.split('?')
 				 if(args[0] == sHref){
-					 return ""
+					 return ''
 				 }
-				 let arr = args[1].split('&');
-				 let obj = {};
+				 const arr = args[1].split('&')
+				 const obj = {}
 				 for(let i = 0;i< arr.length;i++){
-					 let arg = arr[i].split('=');
-					 obj[arg[0]] = arg[1];
+					 const arg = arr[i].split('=')
+					 obj[arg[0]] = arg[1]
 				 }
 				 return obj
 			 },
@@ -273,7 +272,7 @@ export default {
                this.tableData = res.data.weekHeatTable
                let arr = []
                  for (let i = 0; i < res_data.length; i++) {
-                   arr.push([res_data[i].weekday - 1,res_data[i].hh,res_data[i].count]);
+                   arr.push([res_data[i].weekday - 1,res_data[i].hh,res_data[i].count])
                 }
                 arr = arr.map(function (item) {
                     return [item[0], item[1], item[2] || '-']

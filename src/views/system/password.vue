@@ -1,33 +1,35 @@
 <template>
   <div class="change-password app-container">
-    <el-form :model="ruleForm" :rules="rules" ref="ruleForm" class="form">
+    <el-form ref="ruleForm" :model="ruleForm" :rules="rules" class="form">
       <el-form-item label="原密码" prop="oldPassword" :label-width="formLabelWidth">
-        <el-col >
-          <el-input v-model="ruleForm.oldPassword" placeholder="请输入原密码" ref="oldPassInput"  :type="!pwt.pass?'':'password'"></el-input>
+        <el-col>
+          <el-input ref="oldPassInput" v-model="ruleForm.oldPassword" placeholder="请输入原密码" :type="!pwt.pass?'':'password'" />
           <span class="show-pwd" @click="pwt.pass = !pwt.pass">
             <svg-icon :icon-class="pwt.pass? 'eye' : 'eye-open'" />
           </span>
         </el-col>
       </el-form-item>
       <el-form-item label="新密码" prop="newPassword" :label-width="formLabelWidth">
-        <el-col >
-          <el-input v-model="ruleForm.newPassword" placeholder="请输入新密码"  :type="!pwt.nPass?'':'password'"></el-input>
+        <el-col>
+          <el-input v-model="ruleForm.newPassword" placeholder="请输入新密码" :type="!pwt.nPass?'':'password'" />
           <span class="show-pwd" @click="pwt.nPass = !pwt.nPass">
             <svg-icon :icon-class="pwt.nPass? 'eye' : 'eye-open'" />
           </span>
         </el-col>
       </el-form-item>
       <el-form-item label="重复新密码" prop="cnPass" :label-width="formLabelWidth">
-        <el-col >
-          <el-input v-model="ruleForm.cnPass" placeholder="请再次输入新密码" :type="!pwt.cnPass?'':'password'"></el-input>
+        <el-col>
+          <el-input v-model="ruleForm.cnPass" placeholder="请再次输入新密码" :type="!pwt.cnPass?'':'password'" />
           <span class="show-pwd" @click="pwt.cnPass = !pwt.cnPass">
             <svg-icon :icon-class="pwt.cnPass? 'eye' : 'eye-open'" />
           </span>
         </el-col>
       </el-form-item>
-			<div class="footer-btn">
-				<el-button :loading="loading" type="primary" @click="submitForm('ruleForm')">保存</el-button>
-			</div>
+      <div class="footer-btn">
+        <el-button :loading="loading" type="primary" @click="submitForm('ruleForm')">
+          保存
+        </el-button>
+      </div>
     </el-form>
   </div>
 </template>
@@ -38,11 +40,11 @@
 
   export default {
     data() {
-      let validatePass2 = (rule, value, callback) => {
-        if (value === "") {
-          callback(new Error("请再次输入密码"))
+      const validatePass2 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请再次输入密码'))
         } else if (value !== this.ruleForm.newPassword) {
-          callback(new Error("两次输入密码不一致!"))
+          callback(new Error('两次输入密码不一致!'))
         } else {
           callback()
         }
@@ -51,7 +53,7 @@
         rules: {
           oldPassword: [{
             required: true,
-            message: "请输入密码"
+            message: '请输入密码'
           },
           {
             min: 6,
@@ -61,7 +63,7 @@
           }],
           newPassword: [{
             required: true,
-            message: "请输入密码"
+            message: '请输入密码'
           },
           {
             min: 6,
@@ -72,7 +74,7 @@
           cnPass: [{
             required: true,
             validator: validatePass2,
-            trigger: "blur"
+            trigger: 'blur'
           },
           {
             min: 6,
@@ -101,6 +103,9 @@
         'userId'
     	])
     },
+    created(){
+      this.ruleForm.id = this.userId
+      },
     methods: {
       submitForm(formName){
         this.$refs[formName].validate((valid) => {
@@ -126,11 +131,8 @@
             })
           }
         })
-      },
-    },
-    created(){
-      this.ruleForm.id = this.userId
       }
+    }
     }
 </script>
 

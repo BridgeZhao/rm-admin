@@ -3,45 +3,45 @@ export default {
   props: {
     accept: {
       type: String,
-      default: "*"
+      default: '*'
     },
     extra: {
-      default: null,
+      default: null
     },
     multiple: {
       type: Boolean,
-      default: false,
+      default: false
     },
     path: {
-      type: String,
+      type: String
     }
   },
   data() {
     return {
       vitrualPath: this.path
-    };
-  },
-  methods: {
-    onFileChange($event) {
-      let path = $event.target.value;
-      this.vitrualPath = path;
-      this.$emit("change", $event, this.extra);
     }
   },
   watch: {
     path(v){
-      this.vitrualPath=v;
+      this.vitrualPath=v
     }
   },
-};
+  methods: {
+    onFileChange($event) {
+      const path = $event.target.value
+      this.vitrualPath = path
+      this.$emit('change', $event, this.extra)
+    }
+  }
+}
 </script>
 
 <template>
-    <div class="cs-upload-warpper">
-        <input :multiple="multiple" class="file-input" type="file" :accept="accept" @change="onFileChange">
-        <input :value="vitrualPath" type="text" readonly class="input">
-        <span class="upload-icon"></span>
-    </div>
+  <div class="cs-upload-warpper">
+    <input :multiple="multiple" class="file-input" type="file" :accept="accept" @change="onFileChange">
+    <input :value="vitrualPath" type="text" readonly class="input">
+    <span class="upload-icon" />
+  </div>
 </template>
 <style lang="scss" scoped>
 .upload-icon {

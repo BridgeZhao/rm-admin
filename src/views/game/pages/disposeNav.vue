@@ -1,5 +1,5 @@
 <template>
- <!-- <div class="first_item">
+  <!-- <div class="first_item">
   <div class="filter-warp">
         <div class="drop-down area-drop-down">
           <template>
@@ -71,7 +71,7 @@
   import { getScenarioData } from '@/api/coupons'
   import { getDevices } from '@/api/device'
   export default {
-    name: 'disposeNav',
+    name: 'DisposeNav',
     data() {
       return {
         gameTab: '关联游戏',
@@ -90,7 +90,7 @@
         listdataIn : undefined,
         nowId : '',
         defaultStoreId : undefined,
-        dgLoading: false,
+        dgLoading: false
       
       }
     },
@@ -114,16 +114,16 @@
            time: '',
            imgThumbnail:'',
            imgNavigation:''
-         };
+         }
          _listdata.id = this.defaultStoreId 
          _listdata.name = this.storeList.find(item => {return item.id === this.defaultStoreId}).name
-         let thisListdata = this.listdata
-         let lastListdata = thisListdata[thisListdata.length - 1]
+         const thisListdata = this.listdata
+         const lastListdata = thisListdata[thisListdata.length - 1]
           if(this.defaultStoreId === lastListdata.id){
             this.$message({
               message: '该区域已存在，请勿重复添加',
               type: 'warning'
-            });
+            })
             return false
           }
           this.listdata.push(_listdata)
@@ -133,12 +133,12 @@
         this.$message({
           message: '删除成功',
           type: 'success'
-        });
+        })
       },
       handlePreview(file) {
         this.changeImgBase64=true
-        let mun = this.listdataIn
-        let listdataImg = this.listdataImg
+        const mun = this.listdataIn
+        const listdataImg = this.listdataImg
         const fileName = file.name
         const isLimt = file.size / 1024 / 1024 < 1
         const regex = /(.jpg|.jpeg|.png)$/
@@ -159,7 +159,7 @@
         this.listdataIn = key
         this.listdataImg = type
       }
-    },
+    }
 
   }
 </script>

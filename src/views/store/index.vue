@@ -2,75 +2,82 @@
   <div class="app-container store-list">
     <!--头部按钮-->
     <el-row :gutter="20" class="table-head-btns">
-			<el-col :span="12" class="flex">
-				<el-input
-					style="width: 300px;margin-right: 10px"
-					placeholder="请输入门店名称"
-					v-model="pagination.name">
-					<i slot="prefix" class="el-input__icon el-icon-search"></i>
-				</el-input>
-				<el-button type="primary" icon="el-icon-search" @click="getTableData">搜索</el-button>
-			</el-col>
+      <el-col :span="12" class="flex">
+        <el-input
+          v-model="pagination.name"
+          style="width: 300px;margin-right: 10px"
+          placeholder="请输入门店名称"
+        >
+          <i slot="prefix" class="el-input__icon el-icon-search" />
+        </el-input>
+        <el-button type="primary" icon="el-icon-search" @click="getTableData">
+          搜索
+        </el-button>
+      </el-col>
       <el-col :span="12" style="text-align: right">
-        <el-button v-permission="'add'" type="primary"  @click="btnAddStore">+ 添加门店</el-button>
+        <el-button v-permission="'add'" type="primary" @click="btnAddStore">
+          + 添加门店
+        </el-button>
       </el-col>
     </el-row>
     <!--弹框-->
     <!--添加-->
-    <el-dialog v-if="dialogVisible" v-drag-dialog  :title="dialogType==='add'?'门店添加':stepNameTransform()+'修改'" :width="'720px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="()=>{clearClose()}" @closed="steps=0">
-      <el-steps :active="steps" align-center finish-status="success" v-if="dialogType==='add'">
-        <el-step title="基本信息"></el-step>
-        <el-step title="区域管理"></el-step>
-        <el-step title="区域绘制"></el-step>
+    <el-dialog v-if="dialogVisible" v-drag-dialog :title="dialogType==='add'?'门店添加':stepNameTransform()+'修改'" :width="'720px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="()=>{clearClose()}" @closed="steps=0">
+      <el-steps v-if="dialogType==='add'" :active="steps" align-center finish-status="success">
+        <el-step title="基本信息" />
+        <el-step title="区域管理" />
+        <el-step title="区域绘制" />
       </el-steps>
       <!--基本信息-->
-      <el-form v-if="steps===0" v-loading="fromLoading" :model="fromInfo"  :rules="rules"  ref="myform0">
+      <el-form v-if="steps===0" ref="myform0" v-loading="fromLoading" :model="fromInfo" :rules="rules">
         <el-form-item label="门店名称" prop="name" :label-width="formLabelWidth">
-          <el-input v-model="fromInfo.name" autocomplete="off"></el-input>
+          <el-input v-model="fromInfo.name" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="所属省市"  prop="regionId" :label-width="formLabelWidth">
+        <el-form-item label="所属省市" prop="regionId" :label-width="formLabelWidth">
           <div class="flex">
             <div class="col">
-              <el-select v-model="regionVal" @change="regionChange" placeholder="请选择">
+              <el-select v-model="regionVal" placeholder="请选择" @change="regionChange">
                 <el-option
                   v-for="item in regionAry"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
                 />
-              </el-select></div>
+              </el-select>
+            </div>
             <div class="col">
               <el-select v-model="fromInfo.regionId" placeholder="请选择">
                 <el-option
                   v-for="item in cityAry"
                   :key="item.id"
                   :label="item.cityName"
-                  :value="item.id">
-                </el-option>
+                  :value="item.id"
+                />
               </el-select>
             </div>
           </div>
         </el-form-item>
         <el-form-item label="平面图" :label-width="formLabelWidth">
           <el-upload
+            ref="upload"
             class="upload-img"
             action=""
-            ref="upload"
             name="imgBase64"
             :auto-upload="false"
             :show-file-list="false"
-            :on-change="handlePreview">
-						<div v-if="fromInfo.imgBase64" class="leave" @mouseenter="enterUploadBtn" @mouseleave="leaveUploadBtn">
-            <div class="upload-imgshow rel" >
-              <img :src="fromInfo.imgBase64" alt="">
+            :on-change="handlePreview"
+          >
+            <div v-if="fromInfo.imgBase64" class="leave" @mouseenter="enterUploadBtn" @mouseleave="leaveUploadBtn">
+              <div class="upload-imgshow rel">
+                <img :src="fromInfo.imgBase64" alt="">
+              </div>
+              <div class="has-upload abs abs-center">
+                <el-button><i class="el-icon-upload el-icon--plus" /> 点击修改</el-button>
+              </div>
             </div>
-						<div class="has-upload abs abs-center">
-							<el-button><i class="el-icon-upload el-icon--plus"/> 点击修改</el-button>
-						</div>
-						</div>
-						<div v-else class="has-upload abs abs-center">
-							<el-button><i class="el-icon-upload el-icon--plus"/> 点击上传</el-button>
-						</div>
+            <div v-else class="has-upload abs abs-center">
+              <el-button><i class="el-icon-upload el-icon--plus" /> 点击上传</el-button>
+            </div>
           </el-upload>
         </el-form-item>
       </el-form>
@@ -85,18 +92,21 @@
               closable
               :disable-transitions="false"
               @click="handleEdti(tag)"
-              @close="handleClose(tag)">
+              @close="handleClose(tag)"
+            >
               {{ tag.name +'(' + tag.num +'人)' }}
             </el-tag>
-            <el-form :inline="true" :model="areaData"  :rules="rulesArea" ref="myform1">
+            <el-form ref="myform1" :inline="true" :model="areaData" :rules="rulesArea">
               <el-form-item label="区域名称" prop="name">
-                <el-input v-model="areaData.name" placeholder="请输入名称"></el-input>
+                <el-input v-model="areaData.name" placeholder="请输入名称" />
               </el-form-item>
               <el-form-item label="预警人数" prop="num">
-                <el-input v-model.number="areaData.num"  type="number" placeholder="请输入整数"></el-input>
+                <el-input v-model.number="areaData.num" type="number" placeholder="请输入整数" />
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="btnAddUpdateArea">{{areaData.id?'修改':'新增'}}</el-button>
+                <el-button type="primary" @click="btnAddUpdateArea">
+                  {{ areaData.id?'修改':'新增' }}
+                </el-button>
               </el-form-item>
             </el-form>
           </el-col>
@@ -111,43 +121,66 @@
                 <el-select
                   v-model="selectedArea"
                   placeholder="绘制区域选择"
-                  @change="onareaSelect">
+                  @change="onareaSelect"
+                >
                   <el-option
                     v-for="item in areaList"
                     :key="item.id"
                     :label="item.name+'(预警人数'+item.num+')'"
-                    :value="item.id">
-                  </el-option>
+                    :value="item.id"
+                  />
                 </el-select>
               </el-col>
               <el-col :span="8" style="text-align: left;padding-left: 20px">
-                <el-checkbox-group v-model="checkType[selectedArea]" @change="checkChange" class="ck-type">
-                  <el-checkbox label="0">空岗监测</el-checkbox>
-                  <el-checkbox label="1">超员监测</el-checkbox>
+                <el-checkbox-group v-model="checkType[selectedArea]" class="ck-type" @change="checkChange">
+                  <el-checkbox label="0">
+                    空岗监测
+                  </el-checkbox>
+                  <el-checkbox label="1">
+                    超员监测
+                  </el-checkbox>
                 </el-checkbox-group>
               </el-col>
             </el-row>
           </el-col>
           <el-col :span="12" style="text-align: right;">
             <el-button-group>
-              <el-button @click="cancelArea"><svg-icon icon-class="cancel" />撤销</el-button>
-              <el-button @click="setAllPoint"><svg-icon icon-class="all" />全绘</el-button>
-              <el-button @click="clearArea" ><svg-icon icon-class="clear" />清除</el-button>
-              <el-button @click="clearAllAreaData"><svg-icon icon-class="del" />全清</el-button>
+              <el-button @click="cancelArea">
+                <svg-icon icon-class="cancel" />撤销
+              </el-button>
+              <el-button @click="setAllPoint">
+                <svg-icon icon-class="all" />全绘
+              </el-button>
+              <el-button @click="clearArea">
+                <svg-icon icon-class="clear" />清除
+              </el-button>
+              <el-button @click="clearAllAreaData">
+                <svg-icon icon-class="del" />全清
+              </el-button>
             </el-button-group>
           </el-col>
         </el-row>
-				<div class="info-tips"><i class="el-icon-time"></i> 请按顺时针方向点击绘制点位，不得超过10个，下拉可选择对应的绘制区域</div>
-				<div  v-waves class="perview-warp">
-					<canvas id="canvasDom" />
-					<img :src="fromInfo.imgBase64" onerror="notfound(this)"/>
-				</div>
+        <div class="info-tips">
+          <i class="el-icon-time" /> 请按顺时针方向点击绘制点位，不得超过10个，下拉可选择对应的绘制区域
+        </div>
+        <div v-waves class="perview-warp">
+          <canvas id="canvasDom" />
+          <img :src="fromInfo.imgBase64" onerror="notfound(this)">
+        </div>
       </el-form>
       <div slot="footer" class="dialog-footer text-center">
-        <el-button v-if="dialogType==='add'&&steps===2" @click="stepUp">上一步</el-button>
-        <el-button v-if="dialogType==='add'&&steps!==2" type="primary" :disabled="disabledBtn" @click="checkForm">下一步</el-button>
-        <el-button  v-if="dialogType==='add'&&steps===2" type="primary" :disabled="disabledBtn" @click="checkForm('close')">完 成</el-button>
-        <el-button v-if="dialogType==='edit'&&(steps===0||steps===2)" type="primary" :disabled="disabledBtn" @click="checkForm('close')">确定修改</el-button>
+        <el-button v-if="dialogType==='add'&&steps===2" @click="stepUp">
+          上一步
+        </el-button>
+        <el-button v-if="dialogType==='add'&&steps!==2" type="primary" :disabled="disabledBtn" @click="checkForm">
+          下一步
+        </el-button>
+        <el-button v-if="dialogType==='add'&&steps===2" type="primary" :disabled="disabledBtn" @click="checkForm('close')">
+          完 成
+        </el-button>
+        <el-button v-if="dialogType==='edit'&&(steps===0||steps===2)" type="primary" :disabled="disabledBtn" @click="checkForm('close')">
+          确定修改
+        </el-button>
       </div>
     </el-dialog>
     <!--数据列表-->
@@ -157,23 +190,26 @@
       element-loading-text="Loading"
       border
       stripe
-      style="width: 100%">
+      style="width: 100%"
+    >
       <el-table-column
         label="ID"
-        width="80">
+        width="80"
+      >
         <template slot-scope="scope">
           {{ scope.row.id }}
         </template>
       </el-table-column>
       <el-table-column
         prop="name"
-        label="门店名"/>
+        label="门店名"
+      />
       <el-table-column
         label="地区"
       >
         <template slot-scope="scope">
           <el-tag type="info">
-           {{ transIdtoName(scope.row.regionId) }}
+            {{ transIdtoName(scope.row.regionId) }}
           </el-tag>
         </template>
       </el-table-column>
@@ -185,12 +221,15 @@
           <el-tag v-if="!scope.row.floorGraph" type="danger">
             无
           </el-tag>
-          <div v-else><img :src="scope.row.floorGraph" onerror="notfound(this)" class="store-img"></div>
+          <div v-else>
+            <img :src="scope.row.floorGraph" onerror="notfound(this)" class="store-img">
+          </div>
         </template>
       </el-table-column>
       <el-table-column
         label="区域绘制"
-        width="120">
+        width="120"
+      >
         <template slot-scope="scope">
           <el-tag :type="scope.row.pointData.point&&JSON.stringify(scope.row.pointData.point).length>5?'success':'danger'">
             {{ scope.row.pointData.point&&JSON.stringify(scope.row.pointData.point).length>5?'已绘制':'未绘制' }}
@@ -199,23 +238,31 @@
       </el-table-column>
       <el-table-column
         label="更新时间"
-        width="180">
+        width="180"
+      >
         <template slot-scope="scope">
           <span>{{ scope.row.updateTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span>
         </template>
       </el-table-column>
       <el-table-column
         label="操作"
-        width="180">
+        width="180"
+      >
         <template slot-scope="scope">
           <el-dropdown v-permission="'edit'" @command="(idx)=>{edtiData(idx,scope.row)}">
             <el-button size="small" split-button>
               编辑<i class="el-icon-arrow-down el-icon--right" />
             </el-button>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item command="0">基本信息</el-dropdown-item>
-              <el-dropdown-item command="1">区域管理</el-dropdown-item>
-              <el-dropdown-item command="2" v-if="scope.row.floorGraph">区域绘制</el-dropdown-item>
+              <el-dropdown-item command="0">
+                基本信息
+              </el-dropdown-item>
+              <el-dropdown-item command="1">
+                区域管理
+              </el-dropdown-item>
+              <el-dropdown-item v-if="scope.row.floorGraph" command="2">
+                区域绘制
+              </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
           <el-button v-permission="'delete'" type="danger" size="small" @click.native.prevent="deleteRow(scope.row.id)">

@@ -3,7 +3,7 @@
     <div class="header">
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="场景">
-          <el-input v-model="formInline.scene" placeholder="场景" clearable/>
+          <el-input v-model="formInline.scene" placeholder="场景" clearable />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="search">
@@ -45,7 +45,7 @@
         align="center"
       >
         <template slot-scope="scope">
-          <el-button size="small"  style="margin-right: 10px;" @click="edit(scope.row)">
+          <el-button size="small" style="margin-right: 10px;" @click="edit(scope.row)">
             编辑
           </el-button>
           <el-button type="danger" size="small" @click="deleteData(scope.row)">
@@ -70,18 +70,23 @@
       </el-button>
     </div>
     <el-dialog :title="dialogTitle" :visible.sync="dialogTableVisible">
-      <el-form ref="ruleForm" :model="ruleForm" :rules="rules" label-width="140px" 
-	    style="width: 60%;
+      <el-form
+        ref="ruleForm"
+        :model="ruleForm"
+        :rules="rules"
+        label-width="140px" 
+        style="width: 60%;
 		margin-left: 20%;
-		margin-top: 2%;"> 
+		margin-top: 2%;"
+      > 
         <el-form-item label="场景名称" prop="name">
           <el-input v-model="ruleForm.name" />
         </el-form-item>
         <el-form-item label="每人每日领取上限" prop="dayLimit">
-          <el-input-number v-model="ruleForm.dayLimit" :controls="false" :min="1" :max="10000" style="width: 100%;"></el-input-number>
+          <el-input-number v-model="ruleForm.dayLimit" :controls="false" :min="1" :max="10000" style="width: 100%;" />
         </el-form-item>
         <el-form-item label="每人总领取上限" prop="totalLimit">
-					<el-input-number v-model="ruleForm.totalLimit" :controls="false" :min="1" :max="10000" style="width: 100%;"></el-input-number>
+          <el-input-number v-model="ruleForm.totalLimit" :controls="false" :min="1" :max="10000" style="width: 100%;" />
         </el-form-item>
       </el-form>
       <div slot="footer" style="width: 80%;">
@@ -96,7 +101,7 @@
   </div>
 </template>
 <script>
-	import moment from "moment"
+	import moment from 'moment'
 	import {setScenarioData, getScenarioData, delScenarioData } from '@/api/coupons'
 	export default {
 		name: 'SceneSetting',
@@ -145,7 +150,7 @@
 		},
 		methods: {
 			dispose(row, column, cellValue, index){
-				return moment(cellValue).format("YYYY-MM-DD")
+				return moment(cellValue).format('YYYY-MM-DD')
 			},
 			addSence() {
 				this.dialogTableVisible = true
@@ -230,7 +235,7 @@
 				this.page.name = this.formInline.scene
 				const _data = this.page
 				getScenarioData(_data).then(res =>{
-					console.log("res",res)
+					console.log('res',res)
 					this.page.page = res.page
 					this.page.size = res.size
 					this.total = res.total

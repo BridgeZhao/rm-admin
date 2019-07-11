@@ -1,14 +1,14 @@
 <template>
   <v-chart
+    ref="chart"
     theme="dark"
     :class="className"
     :style="{height:height,width:width}"
     :options="options"
-    ref="chart"
   />
 </template>
 <script>
-import echarts from "echarts";
+import echarts from 'echarts'
 // var data = [[1,1,5],[8,0,1],[0,2,0],[0,3,0],[0,4,0],[0,5,0],[0,6,0],[0,6,1]];
 // data = data.map(function (item) {
 //     return [item[1], item[0], item[2] || '-'];
@@ -17,15 +17,15 @@ export default {
     props: {
     className: {
       type: String,
-      default: "chart"
+      default: 'chart'
     },
     width: {
       type: String,
-      default: "100%"
+      default: '100%'
     },
     height: {
       type: String,
-      default: "500px"
+      default: '500px'
     },
     data: {
       type: Object,
@@ -73,7 +73,7 @@ export default {
             orient: 'horizontal',
             left: 'center',
 					  inRange: {
-							color: ['#3398DB','yellow'],
+							color: ['#3398DB','yellow']
 
 						},
 					textStyle:{
@@ -96,48 +96,48 @@ export default {
                     shadowBlur: 10,
                     shadowColor: 'rgba(1, 1, 1, 0.8)',
 									  textStyle:{
-											color:"#fff",
+											color:'#fff'
 										}
                 }
             }
         }]
       }
-    };
+    }
   },
   watch:{
     data(val){
-      let _val = JSON.parse(JSON.stringify(val))
-      console.log("接受到的数据",_val)
-      this.options.series[0].data = _val.data;
+      const _val = JSON.parse(JSON.stringify(val))
+      console.log('接受到的数据',_val)
+      this.options.series[0].data = _val.data
     }
   },
   created() {
-    this.options.series[0].data = this.weekData;
+    this.options.series[0].data = this.weekData
     // this.options = option;
   },
   methods: {
     base64ToBlob(code) {
-      let parts = code.split(";base64,");
-      let contentType = parts[0].split(":")[1];
-      let raw = window.atob(parts[1]);
-      let rawLength = raw.length;
-      let uInt8Array = new Uint8Array(rawLength);
+      const parts = code.split(';base64,')
+      const contentType = parts[0].split(':')[1]
+      const raw = window.atob(parts[1])
+      const rawLength = raw.length
+      const uInt8Array = new Uint8Array(rawLength)
       for (let i = 0; i < rawLength; ++i) {
-        uInt8Array[i] = raw.charCodeAt(i);
+        uInt8Array[i] = raw.charCodeAt(i)
       }
       return new Blob([uInt8Array], {
         type: contentType
-      });
+      })
     },
     saveImage(fileName) {
-      let aLink = document.createElement("a");
-      let base64 = this.$refs.chart.getDataURL();
-      let blob = this.base64ToBlob(base64); //new Blob([content]);
+      const aLink = document.createElement('a')
+      const base64 = this.$refs.chart.getDataURL()
+      const blob = this.base64ToBlob(base64) // new Blob([content]);
 
-      let evt = document.createEvent("HTMLEvents");
-      evt.initEvent("click", true, true); //initEvent 不加后两个参数在FF下会报错  事件类型，是否冒泡，是否阻止浏览器的默认行为
-      aLink.download = fileName;
-      aLink.href = URL.createObjectURL(blob);
+      const evt = document.createEvent('HTMLEvents')
+      evt.initEvent('click', true, true) // initEvent 不加后两个参数在FF下会报错  事件类型，是否冒泡，是否阻止浏览器的默认行为
+      aLink.download = fileName
+      aLink.href = URL.createObjectURL(blob)
       aLink.click()
     }
   }

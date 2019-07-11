@@ -1,15 +1,19 @@
 <template>
-  <div id='store_content' class="app-container">
+  <div id="store_content" class="app-container">
     <div class="top-bar">
       <el-radio-group v-model="gameTab">
-          <!-- <el-radio-button label="店内导航" class="radioBtn"></el-radio-button> -->
-          <el-radio-button label="navGame" class="radioBtn">关联游戏</el-radio-button>
-          <el-radio-button label="navAd" class="radioBtn">广告配置</el-radio-button>
+        <!-- <el-radio-button label="店内导航" class="radioBtn"></el-radio-button> -->
+        <el-radio-button label="navGame" class="radioBtn">
+          关联游戏
+        </el-radio-button>
+        <el-radio-button label="navAd" class="radioBtn">
+          广告配置
+        </el-radio-button>
       </el-radio-group>
     </div>
-    <dispose-nav  v-show='gameTab === "nav"' ></dispose-nav>
-    <dispose-game v-show='gameTab === "navGame"' :StoreId="defaultStoreId"></dispose-game>
-    <dispose-ad v-show='gameTab === "navAd"' :StoreId="defaultStoreId"></dispose-ad>
+    <dispose-nav v-show="gameTab === &quot;nav&quot;" />
+    <dispose-game v-show="gameTab === &quot;navGame&quot;" :store-id="defaultStoreId" />
+    <dispose-ad v-show="gameTab === &quot;navAd&quot;" :store-id="defaultStoreId" />
   </div>
 </template>
 
@@ -19,7 +23,7 @@
   import disposeNav from '@/views/game/pages/disposeNav'
 
   export default {
-    name: 'storeContent',
+    name: 'StoreContent',
     components: {
         disposeGame,
         disposeAd,
@@ -37,7 +41,7 @@
         if(storeId){
           this.defaultStoreId=storeId
         }
-        console.log("下拉测试",this.defaultStoreId)
+        console.log('下拉测试',this.defaultStoreId)
       }
     }
   }

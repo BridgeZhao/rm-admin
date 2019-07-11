@@ -3,22 +3,24 @@
     <!--头部按钮-->
     <el-form :inline="true" class="demo-form-inline">
       <el-form-item label="注册时间">
-				<el-date-picker
-					style="width: 270px"
-					v-model="dateTimes"
-					type="daterange"
-					format="yyyy-MM-dd"
-					range-separator="至"
-					start-placeholder="开始日期"
-					end-placeholder="结束日期"
-					value-format="timestamp"
-					:default-time="['00:00:00', '23:59:59']"
-				/>
+        <el-date-picker
+          v-model="dateTimes"
+          style="width: 270px"
+          type="daterange"
+          format="yyyy-MM-dd"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          value-format="timestamp"
+          :default-time="['00:00:00', '23:59:59']"
+        />
       </el-form-item>
       <el-form-item>
-				<el-button-group>
-        <el-button type="primary" @click="()=>{pageChange(1)}">查询</el-button>
-				</el-button-group>
+        <el-button-group>
+          <el-button type="primary" @click="()=>{pageChange(1)}">
+            查询
+          </el-button>
+        </el-button-group>
       </el-form-item>
     </el-form>
     <!--数据列表-->
@@ -32,7 +34,8 @@
       <el-table-column
         prop="id"
         label="ID"
-        width="80"/>
+        width="80"
+      />
       <el-table-column
         prop="storeName"
         label="门店名"
@@ -58,16 +61,17 @@
         </template>
       </el-table-column>
       <el-table-column
-				 label="电话"
-				 width="120"
-			>
+        label="电话"
+        width="120"
+      >
         <template slot-scope="scope">
           {{ scope.row.phone }}
         </template>
       </el-table-column>
       <el-table-column
         label="注册时间"
-        width="180">
+        width="180"
+      >
         <template slot-scope="scope">
           <span>{{ scope.row.createTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span>
         </template>
@@ -85,7 +89,6 @@
   </div>
 </template>
 <script>
-import moment from 'moment'
 import { mapGetters } from 'vuex'
 import {getRegisterMember} from '@/api/member'
 export default {

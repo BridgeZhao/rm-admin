@@ -1,9 +1,9 @@
 <template>
   <div class="login-container">
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="off" label-position="left">
-
       <div class="title-container">
-        <h3 class="title">KANKAN AI
+        <h3 class="title">
+          KANKAN AI
           <h2>{{ $t("title") }}</h2>
         </h3>
       </div>
@@ -43,12 +43,12 @@
         </span>
       </el-form-item>
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">
-        {{ $t("buttons.login") }}</el-button>
+        {{ $t("buttons.login") }}
+      </el-button>
       <div class="tips">
         <span>Copyright© 2016 - 2019 Ruima.All Right Reserved.</span>
         <span>蜀ICP备16009239号-12 成都睿码科技有限责任公司 版权所有</span>
       </div>
-
     </el-form>
   </div>
 </template>

@@ -13,9 +13,6 @@ import router from './router'
 import moment from 'moment'
 import ECharts from 'vue-echarts'
 import themeDark from '@/components/Charts/theme/dark.json'
-import rem from '@/rem'
-const PC_DESIGN_SIZE = 2080
-rem(PC_DESIGN_SIZE)
 ECharts.registerTheme('dark', themeDark)
 Vue.filter('dateformat', function(dataStr, pattern = 'YYYY-MM-DD HH:mm:ss') {
   return moment(dataStr).format(pattern)

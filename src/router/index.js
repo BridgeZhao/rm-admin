@@ -107,7 +107,7 @@ export const constantRoutes = [
       name: 'system-password',
       component: () => import('@/views/system/password'),
       meta: {
-      	title: '密码修改',
+      	title: '密码修改'
       },
       hidden: true
     }]
@@ -268,13 +268,13 @@ export const constantRoutes = [
 	    component: () => import('@/views/game/miniGame'),
 	    meta: { title: '小游戏'}
 	  }]
-	},
+	}
 ]
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes,
+  routes: constantRoutes
 })
 const router = createRouter()
 

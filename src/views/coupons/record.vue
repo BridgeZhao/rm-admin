@@ -1,162 +1,166 @@
 <template>
-	<div class="app-container">
-		<div class="record-top">
-			<el-row :gutter="20">
-				<el-col :span="22">
-					<div class="grid-content bg-purple">
-						<el-form :model="ruleForm" :inline="true" status-icon ref="ruleForm" class="demo-ruleForm">
-							<el-form-item label="券号" prop="couponNo">
-								<el-input v-model="ruleForm.couponNo" autocomplete="off" placeholder="输入券号"></el-input>
-							</el-form-item>
-							<el-form-item label="名称" prop="name">
-								<el-input v-model="ruleForm.name" autocomplete="off" placeholder="输入名称"></el-input>
-							</el-form-item>
-							<el-form-item label="发放时间" prop="time">
-								<el-date-picker
-									v-model="ruleForm.time"
-									type="daterange"
-									range-separator="至"
-									start-placeholder="开始日期"
-									end-placeholder="结束日期">
-								</el-date-picker>
-							</el-form-item>
-							<el-form-item label="场景" prop="scenarioId">
-								<el-select v-model="ruleForm.scenarioId" clearable filterable placeholder="请选择">
-									<el-option
-										v-for="item in sceneList"
-										:key="item.id"
-										:label="item.name"
-										:value="item.id">
-									</el-option>
-								</el-select>
-							</el-form-item>
-							<el-form-item label="类型" prop="couponType">
-								<el-select v-model="ruleForm.couponType" clearable placeholder="请选择">
-									<el-option label="优惠券" value="1"></el-option>
-									<el-option label="积分券" value="2"></el-option>
-								</el-select>
-							</el-form-item>
-							<el-form-item>
-								<el-button type="primary" @click="searchData()">筛选</el-button>
-								<el-button @click="resetForm('ruleForm')">重置</el-button>
-							</el-form-item>
-						</el-form>
-					</div>
-				</el-col>
-				<el-col :span="2">
-					<div class="grid-content bg-purple">
-						<el-button type="primary" @click="goBack">返回</el-button>
-					</div>
-				</el-col>
-			</el-row>
-		</div>
-		<div class="record-bottom">
-			<el-table
-				:data="tableData"
-				border
-				style="width: 100%;margin-bottom: 20px;">
-				<el-table-column
-					prop="cardNo"
-					label="券号"
-					width="150">
-				</el-table-column>
-				<el-table-column
-					prop="couponName"
-					label="名称"
-				>
-				</el-table-column>
-				<el-table-column
-					prop="storeName"
-					label="门店"
-				>
-				</el-table-column>
-				<el-table-column
-					prop="couponType"
-					label="类型"
-				>
-					<template slot-scope="scope">
-						<span>{{typeChange(scope.row.couponType)}}</span>
-					</template>
-				</el-table-column>
-				<el-table-column
-					prop="scenarioName"
-					label="发放场景"
-				>
-				</el-table-column>
-				<el-table-column
-					prop="time"
-					label="发放时间"
-				>
-					<template slot-scope="scope">
-						<span>{{timeChange(scope.row.time)}}</span>
-					</template>
-				</el-table-column>
-				<!-- <el-table-column
+  <div class="app-container">
+    <div class="record-top">
+      <el-row :gutter="20">
+        <el-col :span="22">
+          <div class="grid-content bg-purple">
+            <el-form ref="ruleForm" :model="ruleForm" :inline="true" status-icon class="demo-ruleForm">
+              <el-form-item label="券号" prop="couponNo">
+                <el-input v-model="ruleForm.couponNo" autocomplete="off" placeholder="输入券号" />
+              </el-form-item>
+              <el-form-item label="名称" prop="name">
+                <el-input v-model="ruleForm.name" autocomplete="off" placeholder="输入名称" />
+              </el-form-item>
+              <el-form-item label="发放时间" prop="time">
+                <el-date-picker
+                  v-model="ruleForm.time"
+                  type="daterange"
+                  range-separator="至"
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                />
+              </el-form-item>
+              <el-form-item label="场景" prop="scenarioId">
+                <el-select v-model="ruleForm.scenarioId" clearable filterable placeholder="请选择">
+                  <el-option
+                    v-for="item in sceneList"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  />
+                </el-select>
+              </el-form-item>
+              <el-form-item label="类型" prop="couponType">
+                <el-select v-model="ruleForm.couponType" clearable placeholder="请选择">
+                  <el-option label="优惠券" value="1" />
+                  <el-option label="积分券" value="2" />
+                </el-select>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="searchData()">
+                  筛选
+                </el-button>
+                <el-button @click="resetForm('ruleForm')">
+                  重置
+                </el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-col>
+        <el-col :span="2">
+          <div class="grid-content bg-purple">
+            <el-button type="primary" @click="goBack">
+              返回
+            </el-button>
+          </div>
+        </el-col>
+      </el-row>
+    </div>
+    <div class="record-bottom">
+      <el-table
+        :data="tableData"
+        border
+        style="width: 100%;margin-bottom: 20px;"
+      >
+        <el-table-column
+          prop="cardNo"
+          label="券号"
+          width="150"
+        />
+        <el-table-column
+          prop="couponName"
+          label="名称"
+        />
+        <el-table-column
+          prop="storeName"
+          label="门店"
+        />
+        <el-table-column
+          prop="couponType"
+          label="类型"
+        >
+          <template slot-scope="scope">
+            <span>{{ typeChange(scope.row.couponType) }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          prop="scenarioName"
+          label="发放场景"
+        />
+        <el-table-column
+          prop="time"
+          label="发放时间"
+        >
+          <template slot-scope="scope">
+            <span>{{ timeChange(scope.row.time) }}</span>
+          </template>
+        </el-table-column>
+        <!-- <el-table-column
 					label="操作"
 					width="100">
 					<template slot-scope="scope">
 						<el-button type="text" size="mini" @click="lookDetail(scope.row)">详情</el-button>
 					</template>
 				</el-table-column> -->
-			</el-table>
-			<el-pagination
-				@size-change="handleSizeChange"
-				@current-change="handleCurrentChange"
-				:current-page="page.page"
-				:page-sizes="[10, 20, 30, 40]"
-				:page-size="page.size"
-				class="pagination"
-				layout="total, sizes, prev, pager, next, jumper"
-				:total="page.total"
-				style="float: right">
-			</el-pagination>
-		</div>
-		<el-dialog :title="title" :visible.sync="dialogTableVisible" :close-on-click-modal="false" class="dialogBox">
-			<el-row :gutter="20">
-				<el-col :span="12">
-					<div class="grid-content bg-purple">
-						<span class="tit">门店：</span><span class="content">{{rowsData.storeName}}</span>
-					</div>
-				</el-col>
-				<el-col :span="12">
-					<div class="grid-content bg-purple">
-						<span class="tit">有效期：</span><span class="content">{{timeChange(rowsData.time)}}</span>
-					</div>
-				</el-col>
-			</el-row>
-			<el-row :gutter="20">
-				<el-col :span="12">
-					<div class="grid-content bg-purple">
-						<span class="tit">名称：</span><span class="content">{{rowsData.id}}</span>
-					</div>
-				</el-col>
-				<el-col :span="12">
-					<div class="grid-content bg-purple">
-						<span class="tit">发放日期：</span><span class="content">{{rowsData.time}}</span>
-					</div>
-				</el-col>
-			</el-row>
-			<el-row :gutter="20">
-				<el-col :span="12">
-					<div class="grid-content bg-purple">
-						<span class="tit">类型：</span><span class="content">{{rowsData.couponType === 1 ? '优惠券' : '积分券'}}</span>
-					</div>
-				</el-col>
-				<el-col :span="12">
-					<div class="grid-content bg-purple">
-						<span class="tit">发放场景：</span><span class="content">{{rowsData.scenarioName}}</span>
-					</div>
-				</el-col>
-			</el-row>
-		</el-dialog>
-	</div>
+      </el-table>
+      <el-pagination
+        :current-page="page.page"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="page.size"
+        class="pagination"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="page.total"
+        style="float: right"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </div>
+    <el-dialog :title="title" :visible.sync="dialogTableVisible" :close-on-click-modal="false" class="dialogBox">
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <div class="grid-content bg-purple">
+            <span class="tit">门店：</span><span class="content">{{ rowsData.storeName }}</span>
+          </div>
+        </el-col>
+        <el-col :span="12">
+          <div class="grid-content bg-purple">
+            <span class="tit">有效期：</span><span class="content">{{ timeChange(rowsData.time) }}</span>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <div class="grid-content bg-purple">
+            <span class="tit">名称：</span><span class="content">{{ rowsData.id }}</span>
+          </div>
+        </el-col>
+        <el-col :span="12">
+          <div class="grid-content bg-purple">
+            <span class="tit">发放日期：</span><span class="content">{{ rowsData.time }}</span>
+          </div>
+        </el-col>
+      </el-row>
+      <el-row :gutter="20">
+        <el-col :span="12">
+          <div class="grid-content bg-purple">
+            <span class="tit">类型：</span><span class="content">{{ rowsData.couponType === 1 ? '优惠券' : '积分券' }}</span>
+          </div>
+        </el-col>
+        <el-col :span="12">
+          <div class="grid-content bg-purple">
+            <span class="tit">发放场景：</span><span class="content">{{ rowsData.scenarioName }}</span>
+          </div>
+        </el-col>
+      </el-row>
+    </el-dialog>
+  </div>
 </template>
 <script>
 	import moment from 'moment'
 	import {searchRecord, getScenarioData} from '@/api/coupons'
 
 	export default {
-		name: 'record',
+		name: 'Record',
 		data() {
 			return {
 				dialogTableVisible: false,
@@ -220,7 +224,7 @@
 			goBack() {
 				const step = '2'
 				this.$router.push({
-					path: "/coupons/manage",
+					path: '/coupons/manage',
 					query: {
 						isStep: step
 					}
@@ -252,14 +256,14 @@
 			},
 			searchData(data) {
 				const _id = this.storeID
-				let pages = {
+				const pages = {
 					page: this.page.page,
 					size: this.page.size
 				}
 				this.ruleForm.time = this.ruleForm.time === null ? [] : this.ruleForm.time
 				const obj = Object.assign({}, pages, this.ruleForm)
-				let _startTime = moment(obj.time[0]).valueOf()
-				let _endTime = moment(obj.time[1]).valueOf()
+				const _startTime = moment(obj.time[0]).valueOf()
+				const _endTime = moment(obj.time[1]).valueOf()
 				obj.storeId = _id
 				obj.couponId = this.ID
 				if(obj.time.length !== 0){

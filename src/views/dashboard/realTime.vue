@@ -1,49 +1,63 @@
 <template>
   <div class="app-container">
     <div>
-      <label-view labelFather="实时客流统计"></label-view>
+      <label-view label-father="实时客流统计" />
     </div>
     <div class="top report-margin">
       <el-row :gutter="24">
         <el-col :span="8">
           <div class="grid-content bg-purple report-line">
-            <div class="report-title">店前客流</div>
-            <div class="report-num" style="color: #d8b104;">{{summary.frontFlow}}</div>
+            <div class="report-title">
+              店前客流
+            </div>
+            <div class="report-num" style="color: #d8b104;">
+              {{ summary.frontFlow }}
+            </div>
             <div class="report-small">
               <span style="color: #71dcff;">昨日同期</span>
-              <i class="icon iconfont" :class="'icon-'+summaryClass(summary.frontFlowChange)" style="font-size:18px;"></i>
-              <span :class="'i-'+summaryClass(summary.frontFlowChange)">{{summary.frontFlowChange}}%</span>
+              <i class="icon iconfont" :class="'icon-'+summaryClass(summary.frontFlowChange)" style="font-size:18px;" />
+              <span :class="'i-'+summaryClass(summary.frontFlowChange)">{{ summary.frontFlowChange }}%</span>
             </div>
           </div>
         </el-col>
         <el-col :span="8">
           <div class="grid-content bg-purple report-line">
-            <div class="report-title">进店客流</div>
-            <div class="report-num" style="color: #d8b104;">{{summary.entryFlow}}</div>
+            <div class="report-title">
+              进店客流
+            </div>
+            <div class="report-num" style="color: #d8b104;">
+              {{ summary.entryFlow }}
+            </div>
             <div class="report-small">
               <span style="color: #71dcff;">昨日同期</span>
               <i
-                class="icon iconfont" :class="'icon-'+summaryClass(summary.entryFlowChange)"
+                class="icon iconfont"
+                :class="'icon-'+summaryClass(summary.entryFlowChange)"
                 style="font-size:18px;"
-              ></i>
-              <span :class="'i-'+summaryClass(summary.entryFlowChange)">{{summary.entryFlowChange}}%</span>
+              />
+              <span :class="'i-'+summaryClass(summary.entryFlowChange)">{{ summary.entryFlowChange }}%</span>
             </div>
           </div>
         </el-col>
         <el-col :span="8">
           <div class="grid-content bg-purple report-line">
-            <div class="report-title">进店率</div>
+            <div class="report-title">
+              进店率
+            </div>
             <div
               class="report-num"
               style="color: #d8b104;"
-            >{{(summary.entryRate * 100).toFixed(2)}}%</div>
+            >
+              {{ (summary.entryRate * 100).toFixed(2) }}%
+            </div>
             <div class="report-small">
               <span style="color: #71dcff;">昨日同比</span>
               <i
                 class="icon iconfont"
-								:class="'icon-'+summaryClass(summary.entryRateChange)"
-                style='font-size:18px;'></i>
-              <span :class="'i-'+summaryClass(summary.entryRateChange)">{{summary.entryRateChange}}%</span>
+                :class="'icon-'+summaryClass(summary.entryRateChange)"
+                style="font-size:18px;"
+              />
+              <span :class="'i-'+summaryClass(summary.entryRateChange)">{{ summary.entryRateChange }}%</span>
             </div>
           </div>
         </el-col>
@@ -55,10 +69,12 @@
           <div class="grid-content bg-purple report-line">
             <div class="report-gang">
               <span>客流性别对比</span>
-              <el-button size="mini" @click="saveImage('客流性别对比')">保存图片</el-button>
+              <el-button size="mini" @click="saveImage('客流性别对比')">
+                保存图片
+              </el-button>
             </div>
             <div style="width:100%;height:100%;">
-              <pie-chart :data="genderData" ref="客流性别对比"/>
+              <pie-chart ref="客流性别对比" :data="genderData" />
             </div>
           </div>
         </el-col>
@@ -66,10 +82,12 @@
           <div class="grid-content bg-purple report-line">
             <div class="report-gang">
               <span>客流类型分布</span>
-              <el-button size="mini" @click="saveImage('客流类型分布')">保存图片</el-button>
+              <el-button size="mini" @click="saveImage('客流类型分布')">
+                保存图片
+              </el-button>
             </div>
             <div style="width:100%;height:100%;">
-              <pie-chart :data="vipData" ref="客流类型分布"/>
+              <pie-chart ref="客流类型分布" :data="vipData" />
             </div>
           </div>
         </el-col>
@@ -77,10 +95,12 @@
           <div class="grid-content bg-purple report-line">
             <div class="report-gang">
               <span>客流年龄分布</span>
-							<el-button size="mini" @click="saveImage('客流年龄分布')">保存图片</el-button>
+              <el-button size="mini" @click="saveImage('客流年龄分布')">
+                保存图片
+              </el-button>
             </div>
             <div style="width:100%;height:100%;">
-							<bar-chart-age :data="ageData" ref="客流年龄分布" height="250px"/>
+              <bar-chart-age ref="客流年龄分布" :data="ageData" height="250px" />
             </div>
           </div>
         </el-col>
@@ -92,10 +112,12 @@
           <div class="grid-content bg-purple report-line">
             <div class="report-gang">
               <span>小时客流趋势</span>
-							<el-button size="mini" @click="saveImage('小时客流趋势')">保存图片</el-button>
+              <el-button size="mini" @click="saveImage('小时客流趋势')">
+                保存图片
+              </el-button>
             </div>
             <div style="width:100%;height:100%;">
-              <people-chart :dataList="hourPeopleData" height="300px" ref="小时客流趋势"/>
+              <people-chart ref="小时客流趋势" :data-list="hourPeopleData" height="300px" />
             </div>
           </div>
         </el-col>
@@ -104,18 +126,18 @@
   </div>
 </template>
 <script>
-import moment from "moment";
-import labelView from "@/components/Label/index";
-import PieChart from "@/components/Charts/PieChart";
-import BarChartAge from "@/components/Charts/BarChartAge";
-import PeopleChart from "@/components/Charts/PeopleChart";
-import { getRealTimeData } from "@/api/report";
+import moment from 'moment'
+import labelView from '@/components/Label/index'
+import PieChart from '@/components/Charts/PieChart'
+import BarChartAge from '@/components/Charts/BarChartAge'
+import PeopleChart from '@/components/Charts/PeopleChart'
+import { getRealTimeData } from '@/api/report'
 export default {
-  name: "realTimeTraffic",
+  name: 'RealTimeTraffic',
   components: { labelView, PieChart, BarChartAge, PeopleChart },
   data() {
     return {
-      height2: "300px",
+      height2: '300px',
       summary: {
         frontFlow: 0,
         entryFlow: 0,
@@ -158,56 +180,56 @@ export default {
   },
   methods: {
 		isAndroid(){
-			const isStoreid = this.showWindowHref("storeId")
+			const isStoreid = this.showWindowHref('storeId')
 			if(isStoreid !== ''){
-				let id = isStoreid.storeId
+				const id = isStoreid.storeId
 				this.$store.dispatch('app/setStoreId', id)
 			}else{
 				return false
 			}
 		},
 		showWindowHref(){
-			let sHref = window.location.href;
-			let args = sHref.split('?');
+			const sHref = window.location.href
+			const args = sHref.split('?')
 			if(args[0] == sHref){
-				return ""
+				return ''
 			}
-			let arr = args[1].split('&');
-			let obj = {};
+			const arr = args[1].split('&')
+			const obj = {}
 			for(let i = 0;i< arr.length;i++){
-				let arg = arr[i].split('=');
-				obj[arg[0]] = arg[1];
+				const arg = arr[i].split('=')
+				obj[arg[0]] = arg[1]
 			}
 			return obj
 		},
     loadData(storeId) {
-			const start_time = moment(new Date()).format("YYYY-MM-DD")
+			const start_time = moment(new Date()).format('YYYY-MM-DD')
       const _storeId = storeId || this.$store.state.app.storeId
 			const _params = {
         store_id: _storeId,
         starttime: start_time,
         endtime: start_time,
-        hh: "08,22"
+        hh: '08,22'
       }
       getRealTimeData(_params).then(res => {
-        console.log("!!!!!---", res)
-        let res_data = res.data
+        console.log('!!!!!---', res)
+        const res_data = res.data
         this.summary = res_data.summary
         this.optionPieData.gender = res_data.gender
         this.optionPieData.vip = res_data.vip
         this.hourData = res_data.hourPlot
         const arr = []
-        for (let i in res_data.age) {
+        for (const i in res_data.age) {
           arr.push(res_data.age[i])
         }
-        console.log("-----",arr)
+        console.log('-----',arr)
 				const ageData ={
 					data: [],
 					xAxisName:'',
 					xAxisData:[]
 				}
 				const obj = Object.assign({}, ageData)
-				const xData = ["0-18", "19-29", "30-39", "40-64", ">65"]
+				const xData = ['0-18', '19-29', '30-39', '40-64', '>65']
 				obj.xAxisData =xData
 				obj.xAxisName = '年龄'
 				obj.data = arr
@@ -216,7 +238,7 @@ export default {
         this.loadVip()
         this.loadHourPeople()
       })
-      console.log("!!!!!", _params)
+      console.log('!!!!!', _params)
     },
     saveImage(name) {
 			const _name = name
@@ -250,7 +272,7 @@ export default {
 				obj.legendData.push(element.name)
 			})
 			this.genderData = obj
-			console.log("男女性别数据",this.genderData)
+			console.log('男女性别数据',this.genderData)
 		},
     loadVip() {
 			const vip = this.optionPieData.vip
@@ -258,14 +280,14 @@ export default {
       for (const key in vip) {
         if (vip.hasOwnProperty(key)) {
           const element = vip[key]
-					const name = key === "vipFlow" ? "会员" : "非会员";
+					const name = key === 'vipFlow' ? '会员' : '非会员'
           arr.push({
             value: element,
             name: name
           })
         }
       }
-			let vipTip = ["会员", "非会员"];
+			const vipTip = ['会员', '非会员']
 			const vipDatas ={
 				data: [],
 				name:'',
@@ -278,10 +300,10 @@ export default {
 			this.vipData = obj
     },
     loadHourPeople() {
-			const xData = [],
-        s_male = [],
-        s_female = [],
-        s_all = [];
+			const xData = []
+        const s_male = []
+        const s_female = []
+        const s_all = []
       this.hourData.map(item => {
         xData.push(item.hh)
         s_male.push(item.maleFlow)
@@ -302,7 +324,7 @@ export default {
 			this.hourPeopleData = obj
     },
     summaryClass(num) {
-      return num === 0 ? "null" : /^[0-9]+.?[0-9]*$/.test(num) ? "up" : "down";
+      return num === 0 ? 'null' : /^[0-9]+.?[0-9]*$/.test(num) ? 'up' : 'down'
     }
   }
 }

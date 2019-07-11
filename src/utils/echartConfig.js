@@ -1,6 +1,6 @@
 export default function (config) {
-  let opt={
-    tooltip:config.tooltip|| {//提示框
+  const opt={
+    tooltip:config.tooltip|| {// 提示框
       trigger: 'axis',
       axisPointer: {
         type: 'cross',
@@ -11,10 +11,10 @@ export default function (config) {
     },
     ...{toolbox:config.toolbox},
     grid:config.grid||{
-      top: "15%",
-      left: "5%",
-      right: "5%",
-      bottom: "18%"
+      top: '15%',
+      left: '5%',
+      right: '5%',
+      bottom: '18%'
     },
     // barWidth:2,
     // axisLine:config.axisLine|| {            // 坐标轴线
@@ -41,10 +41,10 @@ export default function (config) {
     yAxis: config.yAxis,
     series:config.series
   }
-  for(let i in opt){
+  for(const i in opt){
     if(!opt[i]){
       delete  opt[i]
     }
   }
-  return Object.assign(config,opt);
+  return Object.assign(config,opt)
 }

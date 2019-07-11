@@ -19,7 +19,7 @@ export function statusAd(data) {
 export function delAd(id) {
   return request({
     url: `/mg/ads/${id}`,
-    method: 'delete',
+    method: 'delete'
   })
 }
 export function adPage(params) {

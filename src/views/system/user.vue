@@ -2,71 +2,81 @@
   <div class="app-container">
     <!--添加用户-->
     <el-dialog
-			v-drag-dialog
+      v-drag-dialog
       :title="dialogType==='add'?'管理员添加':'管理员修改'"
       append-to-body
       :width="'620px'"
       :visible.sync="dialogVisible"
       :close-on-click-modal="false"
-      @close="clearClose">
-      <el-form v-loading="loading" :model="form" :rules="rules" ref="myform">
+      @close="clearClose"
+    >
+      <el-form ref="myform" v-loading="loading" :model="form" :rules="rules">
         <el-form-item label="登录名" prop="username" :label-width="formLabelWidth">
-          <el-input v-model="form.username" autocomplete="off"></el-input>
+          <el-input v-model="form.username" autocomplete="off" />
         </el-form-item>
-        <el-form-item  label="登陆密码" :label-width="formLabelWidth">
-          <el-input v-model="form.password" type="password" autocomplete="off"></el-input>
+        <el-form-item label="登陆密码" :label-width="formLabelWidth">
+          <el-input v-model="form.password" type="password" autocomplete="off" />
         </el-form-item>
-        <el-form-item label="所属门店" prop="storeIds"  :label-width="formLabelWidth">
+        <el-form-item label="所属门店" prop="storeIds" :label-width="formLabelWidth">
           <el-select
             v-model="form.storeIds"
             multiple
-            placeholder="请选择">
+            placeholder="请选择"
+          >
             <el-option
               v-for="item in storeList"
               :key="item.id"
               :label="item.name"
               :value="~~item.id"
-            >
-            </el-option>
+            />
           </el-select>
         </el-form-item>
         <el-form-item label="所属角色" prop="roleIds" :label-width="formLabelWidth">
           <el-select
             v-model="form.roleIds"
             multiple
-            placeholder="请选择">
+            placeholder="请选择"
+          >
             <el-option
               v-for="item in rolesList"
               :key="item.id"
               :label="item.roleName"
               :value="item.id"
-            >
-            </el-option>
+            />
           </el-select>
         </el-form-item>
         <el-form-item label="是否启用" :label-width="formLabelWidth">
           <el-switch
-            v-model="form.enabled">
-          </el-switch>
+            v-model="form.enabled"
+          />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="btnSubmit('myform')">确 定</el-button>
+        <el-button @click="dialogVisible = false">
+          取 消
+        </el-button>
+        <el-button type="primary" @click="btnSubmit('myform')">
+          确 定
+        </el-button>
       </div>
     </el-dialog>
     <el-row class="table-head-btns">
-			<el-col :span="12" class="flex">
-				<el-input
-					style="width: 300px;margin-right: 10px"
-					placeholder="请输入用户名"
-					v-model="pagination.username">
-					<i slot="prefix" class="el-input__icon el-icon-search"></i>
-				</el-input>
-				<el-button type="primary" icon="el-icon-search" @click="getUsers">搜索</el-button>
-			</el-col>
-			<el-col :span="12" style="text-align: right">
-        <el-button v-permission="'add'" type="primary" @click="openDialog">+ 添加管理员</el-button>
+      <el-col :span="12" class="flex">
+        <el-input
+          v-model="pagination.username"
+          style="width: 300px;margin-right: 10px"
+          placeholder="请输入用户名"
+        >
+          <i slot="prefix" class="el-input__icon el-icon-search" />
+        </el-input>
+        <el-button type="primary" icon="el-icon-search" @click="getUsers">
+          搜索
+        </el-button>
+      </el-col>
+      <el-col :span="12" style="text-align: right">
+        <el-button v-permission="'add'" type="primary" @click="openDialog">
+          + 添加管理员
+        </el-button>
       </el-col>
     </el-row>
     <el-table
@@ -100,15 +110,18 @@
       />
       <el-table-column
         label="状态"
-				width="100"
+        width="100"
       >
         <template slot-scope="scope">
-          <el-tag :type="scope.row.enabled?'':'danger'">{{ scope.row.enabled?'启用':'停用' }}</el-tag>
+          <el-tag :type="scope.row.enabled?'':'danger'">
+            {{ scope.row.enabled?'启用':'停用' }}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column
         label="创建时间"
-        width="180">
+        width="180"
+      >
         <template slot-scope="scope">
           <span>{{ scope.row.createTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span>
         </template>
@@ -140,15 +153,15 @@
         </template>
       </el-table-column>
     </el-table>
-		<nav class="nav-page">
-			<el-pagination
-				:page-size="pagination.size"
-				layout="prev, pager, next, jumper"
-				:total="pagination.total"
-				@size-change="pageChange"
-				@current-change="pageChange"
-			/>
-		</nav>
+    <nav class="nav-page">
+      <el-pagination
+        :page-size="pagination.size"
+        layout="prev, pager, next, jumper"
+        :total="pagination.total"
+        @size-change="pageChange"
+        @current-change="pageChange"
+      />
+    </nav>
   </div>
 </template>
 
@@ -212,7 +225,7 @@ export default {
   },
   methods: {
     getUsers() {
-    	for(let key in this.pagination){
+    	for(const key in this.pagination){
     		if(!this.pagination[key]){
     			delete this.pagination[key]
 				}

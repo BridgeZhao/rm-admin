@@ -2,24 +2,24 @@
   <div class="app-container mini_game">
     <div>
       <el-row :gutter="20" class="data-list game-list">
-        <el-col :span="4" v-for='(item, key) in miniGame' :key='key'>
+        <el-col v-for="(item, key) in miniGame" :key="key" :span="4">
           <div class="data-list-item">
-            <div  class="name-warp">
-              <span  class="name">{{item.name}}</span>
+            <div class="name-warp">
+              <span class="name">{{ item.name }}</span>
               <div>
-                <svg-icon icon-class="edit" class="svg-icon" @click="editChannelGame(item)"></svg-icon>
-                <svg-icon icon-class="trash" class="delete-icon" @click='delGame(item)' />
+                <svg-icon icon-class="edit" class="svg-icon" @click="editChannelGame(item)" />
+                <svg-icon icon-class="trash" class="delete-icon" @click="delGame(item)" />
               </div>
-             </div>
+            </div>
             <div class="img">
-              <img :src='item.img' />
+              <img :src="item.img">
             </div>
           </div>
         </el-col>
         <el-col :span="4">
           <div class="add data-list-item" @click="addGame">
-            <svg-icon icon-class="plus" class="svg-plus"></svg-icon>
-             <span class="font-red" >添加游戏</span>
+            <svg-icon icon-class="plus" class="svg-plus" />
+            <span class="font-red">添加游戏</span>
           </div>
         </el-col>
       </el-row>
@@ -27,31 +27,36 @@
     <!--弹框-->
     <el-dialog :title="dialogType === 'add' ? '添加游戏' : '修改游戏'" :width="'720px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="()=>{clearClose()}">
       <!--基本信息-->
-      <el-form  v-loading="dgLoading" :model="fromInfo" :rules="rules"  ref="myform">
+      <el-form ref="myform" v-loading="dgLoading" :model="fromInfo" :rules="rules">
         <el-row :gutter="24" class="">
           <el-col :span="16">
-            <el-form-item label="游戏名称" :label-width="formLabelWidth" prop="name" >
-              <el-input v-model="fromInfo.name" autocomplete="off" placeholder="请输入游戏名称"></el-input>
+            <el-form-item label="游戏名称" :label-width="formLabelWidth" prop="name">
+              <el-input v-model="fromInfo.name" autocomplete="off" placeholder="请输入游戏名称" />
             </el-form-item>
-            <el-form-item label="path" :label-width="formLabelWidth" prop="link" >
-              <el-input v-model="fromInfo.link" autocomplete="on"  placeholder="请输入path"></el-input>
+            <el-form-item label="path" :label-width="formLabelWidth" prop="link">
+              <el-input v-model="fromInfo.link" autocomplete="on" placeholder="请输入path" />
             </el-form-item>
-            <el-form-item label="" :label-width="formLabelWidth" prop="imgBase64" >
+            <el-form-item label="" :label-width="formLabelWidth" prop="imgBase64">
               <el-upload
+                ref="upload"
                 class="upload-img"
                 action=""
-                ref="upload"
                 name="imgBase64"
                 :auto-upload="false"
                 :show-file-list="false"
-                :on-change="handlePreview">
+                :on-change="handlePreview"
+              >
                 <div class="text-left">
-                  <el-button type="primary" size="small"><i class="el-icon-upload el-icon--right"/> 点击上传</el-button>
-                  <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过2MB</div>
+                  <el-button type="primary" size="small">
+                    <i class="el-icon-upload el-icon--right" /> 点击上传
+                  </el-button>
+                  <div slot="tip" class="el-upload__tip">
+                    只能上传jpg/png文件，且不超过2MB
+                  </div>
                 </div>  
               </el-upload>
-          </el-form-item>
-          </el-col >
+            </el-form-item>
+          </el-col>
           <el-col :span="8">
             <div class="upload-imgshow">
               <img class="game_img" :src="fromInfoImg" onerror="notfound(this)">
@@ -60,7 +65,10 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer text-center">
-        <el-button type="primary"  @click="btnSubmit">确定</el-button></div>
+        <el-button type="primary" @click="btnSubmit">
+          确定
+        </el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
@@ -68,7 +76,7 @@
 <script>
   import { addGame, gamePage ,delGame } from '@/api/game'
   export default {
-    name: 'miniGame',
+    name: 'MiniGame',
     data () {
       return {
         miniGame: [],
@@ -81,7 +89,7 @@
           id:'',
           name:'',
           link:'',
-          imgBase64:undefined,
+          imgBase64:undefined
         },
         fromInfoImg:undefined,
         rules: {
@@ -94,7 +102,7 @@
             // {type: 'url', message: '请输入正确的游戏h5链接', trigger: 'blur'},
           ],
           imgBase64:[{required: true, message: '请上传h5游戏图片', trigger: 'change'}]
-        },
+        }
       }
     },
     created(){

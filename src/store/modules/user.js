@@ -26,7 +26,7 @@ const mutations = {
   SET_USERID: (state, userId) => {
     state.userId = userId
   	Cookies.set('userId', userId)
-  },
+  }
 }
 
 const actions = {

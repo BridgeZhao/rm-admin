@@ -4,28 +4,34 @@
     <el-dialog v-drag-dialog :title="dialogType==='add'?'角色添加':'角色修改'" append-to-body :width="'620px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="clearClose">
       <el-form ref="myform" :model="form" :rules="rules">
         <el-form-item label="角色名称" prop="roleName" :label-width="formLabelWidth">
-          <el-input v-model="form.roleName" autocomplete="off"></el-input>
+          <el-input v-model="form.roleName" autocomplete="off" />
         </el-form-item>
         <el-form-item label="菜单分配" :label-width="formLabelWidth">
           <el-tree
+            ref="tree"
             class="filter-tree"
             :data="menusData"
-						@check="checkTree"
-            ref="tree"
             node-key="id"
             :props="defaultProps"
-            show-checkbox>
-          </el-tree>
+            show-checkbox
+            @check="checkTree"
+          />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="clearClose">取 消</el-button>
-        <el-button type="primary" @click="btnSubmit('myform')">确 定</el-button>
+        <el-button @click="clearClose">
+          取 消
+        </el-button>
+        <el-button type="primary" @click="btnSubmit('myform')">
+          确 定
+        </el-button>
       </div>
     </el-dialog>
     <el-row :gutter="20" class="table-head-btns">
       <el-col style="text-align: right">
-        <el-button v-permission="'add'" type="primary" @click="dialogVisible=true">添加角色</el-button>
+        <el-button v-permission="'add'" type="primary" @click="dialogVisible=true">
+          添加角色
+        </el-button>
       </el-col>
     </el-row>
     <el-table
@@ -47,13 +53,15 @@
         label="角色名称"
       />
       <el-table-column
-        label="更新时间">
+        label="更新时间"
+      >
         <template slot-scope="scope">
           <span>{{ scope.row.updateTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span>
         </template>
       </el-table-column>
       <el-table-column
-        label="创建时间">
+        label="创建时间"
+      >
         <template slot-scope="scope">
           <span>{{ scope.row.createTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span>
         </template>
@@ -73,21 +81,22 @@
             v-permission="'delete'"
             type="danger"
             size="small"
-            @click.native.prevent="deleteRow(scope.row.id)">
+            @click.native.prevent="deleteRow(scope.row.id)"
+          >
             删除
           </el-button>
         </template>
       </el-table-column>
     </el-table>
-		<nav class="nav-page">
-			<el-pagination
-				:page-size="pagination.size"
-				layout="prev, pager, next, jumper"
-				:total="pagination.total"
-				@size-change="pageChange"
-				@current-change="pageChange"
-			/>
-		</nav>
+    <nav class="nav-page">
+      <el-pagination
+        :page-size="pagination.size"
+        layout="prev, pager, next, jumper"
+        :total="pagination.total"
+        @size-change="pageChange"
+        @current-change="pageChange"
+      />
+    </nav>
   </div>
 </template>
 

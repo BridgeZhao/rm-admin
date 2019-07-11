@@ -1,6 +1,5 @@
 <template>
-  <v-chart theme="dark" :class="className" :style="{height:height,width:width}" :options="options" ref="lineTimeChart"/>
-
+  <v-chart ref="lineTimeChart" theme="dark" :class="className" :style="{height:height,width:width}" :options="options" />
 </template>
 
 <script>
@@ -73,14 +72,14 @@
         }
       }
     },
-    beforeDestroy() {
-      this.options = null
-    },
     watch: {
       data(val) {
 				console.log('LineTimeChart中的watch',val)
-        this.loadData(val);
+        this.loadData(val)
       }
+    },
+    beforeDestroy() {
+      this.options = null
     },
     mounted() {
       const datas = this.data
@@ -93,7 +92,7 @@
       loadData(data) {
 				this.options.series = []
 				console.log('LineTimeChart', data)
-        const {xAxisData, legendData, seriesData} = data;
+        const {xAxisData, legendData, seriesData} = data
         this.options.legend.data = legendData
         this.options.xAxis.data = xAxisData
         seriesData.map((item, idx) => {
@@ -121,10 +120,10 @@
         })
       },
       initColor() {
-        let r = Math.random() * 255
-        let g = Math.random() * 255
-        let b = Math.random() * 255
-        let a = 0.8
+        const r = Math.random() * 255
+        const g = Math.random() * 255
+        const b = Math.random() * 255
+        const a = 0.8
         const colors = `rgba(${r},${g},${b},${a})`
         return colors
       }

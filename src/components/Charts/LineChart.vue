@@ -1,5 +1,5 @@
 <template>
-  <v-chart theme="dark" :class="className" :style="{height:height,width:width}" :options="options"/>
+  <v-chart theme="dark" :class="className" :style="{height:height,width:width}" :options="options" />
 </template>
 
 <script>
@@ -85,27 +85,26 @@
         }
       }
     },
-    beforeDestroy() {
-      this.options = null
-    },
     watch: {
       data(val) {
       	console.log('line-chart',val)
-        let _val = JSON.parse(JSON.stringify(val))
+        const _val = JSON.parse(JSON.stringify(val))
         console.log('valcalaall', _val)
         this.loadData(_val)
       }
+    },
+    beforeDestroy() {
+      this.options = null
     },
     created() {
       const datas = this.data
       if(datas.seriesData){
         this.loadData(datas)
       }
-
     },
     methods: {
       loadData(data) {
-        const {legendData, xAxisData,yAxisName, seriesData} = data;
+        const {legendData, xAxisData,yAxisName, seriesData} = data
         this.options.legend.data = legendData||[]
         this.options.xAxis = []
         this.options.yAxis.name =  yAxisName || '人数'
@@ -139,7 +138,7 @@
             },
 						areaStyle:{
 							normal:{
-								//颜色渐变函数 前四个参数分别表示四个位置依次为左、下、右、上
+								// 颜色渐变函数 前四个参数分别表示四个位置依次为左、下、右、上
 								color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
 									offset: 0,
 									color: 'rgba(113,220,255,.8)'

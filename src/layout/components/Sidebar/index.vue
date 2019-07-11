@@ -1,9 +1,9 @@
 <template>
-  <div :class="{'has-logo':showLogo}" v-if="authRoutes.length>0">
+  <div v-if="authRoutes.length>0" :class="{'has-logo':showLogo}">
     <logo v-if="showLogo" :collapse="isCollapse" />
     <el-scrollbar wrap-class="scrollbar-wrapper">
       <el-menu
-				:unique-opened="true"
+        :unique-opened="true"
         :default-active="activeMenu"
         :collapse="isCollapse"
         :background-color="variables.menuBg"

@@ -6,8 +6,8 @@
       <div class="head-storelist">
         <svg-icon icon-class="store" />
       </div>
-      <div class="head-storelist" v-if="storeList&&storeList.length">
-        <el-select class="active" v-model="defaultStoreId" placeholder="请选择">
+      <div v-if="storeList&&storeList.length" class="head-storelist">
+        <el-select v-model="defaultStoreId" class="active" placeholder="请选择">
           <el-option
             v-for="item in storeList"
             :key="item.id"
@@ -30,16 +30,16 @@
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <svg-icon icon-class="user" />
-          <span>{{name}}</span>
+          <span>{{ name }}</span>
         </div>
         <el-dropdown-menu class="user-dropdown">
-					<el-dropdown-item>
+          <el-dropdown-item>
             <span style="display:block;" @click="changePassword">
-							{{ $t("menus.password") }}</span>
-					</el-dropdown-item>
+              {{ $t("menus.password") }}</span>
+          </el-dropdown-item>
           <el-dropdown-item>
             <span style="display:block;" @click="logout">
-							{{ $t("menus.loginout") }}</span>
+              {{ $t("menus.loginout") }}</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>

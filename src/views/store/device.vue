@@ -3,15 +3,17 @@
     <!--头部按钮-->
     <el-row :gutter="20" class="table-head-btns">
       <el-col style="text-align: right">
-        <el-button v-permission="'add'" type="primary" @click="btnDevice('add')">+ 添加设备</el-button>
+        <el-button v-permission="'add'" type="primary" @click="btnDevice('add')">
+          + 添加设备
+        </el-button>
       </el-col>
     </el-row>
     <!--弹框-->
     <el-dialog v-if="dialogVisible" v-drag-dialog :title="dialogType==='add'?'添 加':'编 辑'" :width="'720px'" :visible.sync="dialogVisible" :close-on-click-modal="false" @close="clearClose">
       <!--基本信息-->
-      <el-form v-if="drawType==='info'" v-loading="dgLoading" :model="fromInfo" :rules="rules" ref="myform">
-        <el-form-item label="设备名称" :label-width="formLabelWidth" prop="name" >
-          <el-input v-model="fromInfo.name" autocomplete="off" placeholder="请输入设备名称"></el-input>
+      <el-form v-if="drawType==='info'" ref="myform" v-loading="dgLoading" :model="fromInfo" :rules="rules">
+        <el-form-item label="设备名称" :label-width="formLabelWidth" prop="name">
+          <el-input v-model="fromInfo.name" autocomplete="off" placeholder="请输入设备名称" />
         </el-form-item>
         <el-form-item label="所属区域" :label-width="formLabelWidth" prop="areaId">
           <el-select v-model="fromInfo.areaId" placeholder="请选择">
@@ -19,8 +21,8 @@
               v-for="item in areaList"
               :key="item.id"
               :label="item.name"
-              :value="item.id">
-            </el-option>
+              :value="item.id"
+            />
           </el-select>
         </el-form-item>
         <el-form-item label="设备类型" :label-width="formLabelWidth" prop="deviceType">
@@ -31,58 +33,75 @@
                   v-for="item in options"
                   :key="item.value"
                   :label="item.label"
-                  :value="item.value">
-                </el-option>
+                  :value="item.value"
+                />
               </el-select>
             </el-col>
             <el-col v-if="fromInfo.deviceType==='camera'" :span="12" prop="usage">
-              <el-radio v-model="fromInfo.usage" :label="0">人头摄像头</el-radio>
-              <el-radio v-model="fromInfo.usage" :label="1">人脸摄像头</el-radio>
+              <el-radio v-model="fromInfo.usage" :label="0">
+                人头摄像头
+              </el-radio>
+              <el-radio v-model="fromInfo.usage" :label="1">
+                人脸摄像头
+              </el-radio>
             </el-col>
           </el-row>
         </el-form-item>
-				<el-form-item v-if="dialogType!=='add'&&fromInfo.deviceType!=='camera'" label="登录名" :label-width="formLabelWidth">
-					<el-input v-model="fromInfo.authName" :disabled="true"></el-input>
-				</el-form-item>
-				<el-form-item v-if="fromInfo.deviceType!=='camera'" label="登陆密码" :label-width="formLabelWidth">
-					<el-input v-model="fromInfo.password" type="password" autocomplete="off" placeholder="123456"></el-input>
-				</el-form-item>
+        <el-form-item v-if="dialogType!=='add'&&fromInfo.deviceType!=='camera'" label="登录名" :label-width="formLabelWidth">
+          <el-input v-model="fromInfo.authName" :disabled="true" />
+        </el-form-item>
+        <el-form-item v-if="fromInfo.deviceType!=='camera'" label="登陆密码" :label-width="formLabelWidth">
+          <el-input v-model="fromInfo.password" type="password" autocomplete="off" placeholder="123456" />
+        </el-form-item>
         <el-form-item v-if="fromInfo.deviceType==='camera'" label="RTSP" :label-width="formLabelWidth">
-          <el-input v-model="fromInfo.rtsp" autocomplete="off" placeholder="请输入设备rtsp流地址"></el-input>
+          <el-input v-model="fromInfo.rtsp" autocomplete="off" placeholder="请输入设备rtsp流地址" />
         </el-form-item>
       </el-form>
-      <el-form v-else v-loading="dgLoading" :model="fromInfo" :rules="rules" ref="myform">
+      <el-form v-else ref="myform" v-loading="dgLoading" :model="fromInfo" :rules="rules">
         <el-row>
           <el-col :span="12">
             <el-row>
               <el-col :span="16">
                 <el-select
-              class="mg-bot20"
-              v-model="selectedArea"
-              placeholder="绘制区域选择"
-              @change="onareaSelect">
-              <el-option
-                v-for="item in areaList"
-                :key="item.id"
-                :label="item.name+'(预警人数'+item.num+')'"
-                :value="item.id">
-              </el-option>
+                  v-model="selectedArea"
+                  class="mg-bot20"
+                  placeholder="绘制区域选择"
+                  @change="onareaSelect"
+                >
+                  <el-option
+                    v-for="item in areaList"
+                    :key="item.id"
+                    :label="item.name+'(预警人数'+item.num+')'"
+                    :value="item.id"
+                  />
                 </el-select>
               </el-col>
               <el-col :span="8" style="text-align: left;padding-left: 20px">
-								<el-checkbox-group v-model="checkType[selectedArea]" @change="checkChange" class="ck-type">
-              <el-checkbox label="0">空岗监测</el-checkbox>
-              <el-checkbox label="1">超员监测</el-checkbox>
-            </el-checkbox-group>
-          </el-col>
+                <el-checkbox-group v-model="checkType[selectedArea]" class="ck-type" @change="checkChange">
+                  <el-checkbox label="0">
+                    空岗监测
+                  </el-checkbox>
+                  <el-checkbox label="1">
+                    超员监测
+                  </el-checkbox>
+                </el-checkbox-group>
+              </el-col>
             </el-row>
           </el-col>
           <el-col :span="12" style="text-align: right">
             <el-button-group>
-              <el-button @click="cancelArea"><svg-icon icon-class="cancel" />撤销</el-button>
-              <el-button @click="setAllPoint"><svg-icon icon-class="all" />全绘</el-button>
-              <el-button @click="clearArea" ><svg-icon icon-class="clear" />清除</el-button>
-              <el-button @click="clearAllAreaData"><svg-icon icon-class="del" />全清</el-button>
+              <el-button @click="cancelArea">
+                <svg-icon icon-class="cancel" />撤销
+              </el-button>
+              <el-button @click="setAllPoint">
+                <svg-icon icon-class="all" />全绘
+              </el-button>
+              <el-button @click="clearArea">
+                <svg-icon icon-class="clear" />清除
+              </el-button>
+              <el-button @click="clearAllAreaData">
+                <svg-icon icon-class="del" />全清
+              </el-button>
             </el-button-group>
           </el-col>
         </el-row>
@@ -92,7 +111,10 @@
         </div>
       </el-form>
       <div slot="footer" class="dialog-footer text-center">
-        <el-button type="primary" :disabled="disabledBtn||!areaList.length" @click="btnSubmit">{{dialogType==='add'?'确定添加':'确定修改'}}</el-button></div>
+        <el-button type="primary" :disabled="disabledBtn||!areaList.length" @click="btnSubmit">
+          {{ dialogType==='add'?'确定添加':'确定修改' }}
+        </el-button>
+      </div>
     </el-dialog>
     <!--数据列表-->
     <el-table
@@ -101,25 +123,29 @@
       element-loading-text="Loading"
       border
       stripe
-      style="width: 100%">
+      style="width: 100%"
+    >
       <el-table-column
         label="ID"
-        width="80">
+        width="80"
+      >
         <template slot-scope="scope">
           {{ scope.row.id }}
         </template>
       </el-table-column>
       <el-table-column
         prop="name"
-        label="设备名" />
-			<el-table-column
-				label="登录名" >
-				<template slot-scope="scope">
-					<el-tag type="danger">
-						{{ scope.row.authName }}
-					</el-tag>
-				</template>
-			</el-table-column>
+        label="设备名"
+      />
+      <el-table-column
+        label="登录名"
+      >
+        <template slot-scope="scope">
+          <el-tag type="danger">
+            {{ scope.row.authName }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column
         label="设备类型"
       >
@@ -130,26 +156,31 @@
         </template>
       </el-table-column>
       <el-table-column
-        label="所属区域">
+        label="所属区域"
+      >
         <template slot-scope="scope">
-          <el-tag type="info">{{ areaIdTransText(scope.row.areaId) }}</el-tag>
+          <el-tag type="info">
+            {{ areaIdTransText(scope.row.areaId) }}
+          </el-tag>
         </template>
       </el-table-column>
       <el-table-column
-        label="更新时间">
+        label="更新时间"
+      >
         <template slot-scope="scope">
           <span>{{ scope.row.updateTime | dateformat('YYYY-MM-DD HH:mm:ss') }}</span>
         </template>
       </el-table-column>
       <el-table-column
         label="操作"
-        width="280">
+        width="280"
+      >
         <template slot-scope="scope">
           <el-button v-permission="'edit'" size="small" @click.native.prevent="edtiData(scope.row.id,'info')">
             编辑
           </el-button>
           <el-button v-if="scope.row.deviceType==='camera'&&scope.row.snapshot" v-permission="'edit'" type="primary" size="small" @click.native.prevent="edtiData(scope.row.id,'draw')">
-						区域绘制
+            区域绘制
           </el-button>
           <el-button v-permission="'delete'" type="danger" size="small" @click.native.prevent="deleteRow(scope.row.id)">
             删除

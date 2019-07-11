@@ -1,62 +1,64 @@
 <template>
   <div class="app-container">
-    <el-row  type="flex">
+    <el-row type="flex">
       <el-col :span="8">
         <el-form ref="myform" :model="form" :rules="rules">
           <el-form-item label="父级菜单" p :label-width="formLabelWidth">
             <el-select v-model="form.parentId" placeholder="请选择">
-              <el-option label="无" :value="0"></el-option>
+              <el-option label="无" :value="0" />
               <el-option
                 v-for="item in menuList"
                 :key="item.id"
                 :label="item.title"
-                :value="~~item.id">
-              </el-option>
+                :value="~~item.id"
+              />
             </el-select>
           </el-form-item>
           <el-form-item label="菜单标题" prop="title" :label-width="formLabelWidth">
-            <el-input v-model="form.title" autocomplete="off"></el-input>
+            <el-input v-model="form.title" autocomplete="off" />
           </el-form-item>
           <el-form-item label="路由名称" prop="menuName" :label-width="formLabelWidth">
-            <el-input v-model="form.menuName" autocomplete="off"></el-input>
+            <el-input v-model="form.menuName" autocomplete="off" />
           </el-form-item>
-					<el-form-item v-if="isOrderNo" label="排序" prop="orderNo" :label-width="formLabelWidth">
-						<el-input v-model.number="form.orderNo" type="number" autocomplete="off"></el-input>
-					</el-form-item>
-					<el-form-item style="text-align: center">
-						<el-button type="primary" @click="btnSubmit('myform')">
-							{{ !form.id?'确定添加':'确定修改' }}
-						</el-button>
-					</el-form-item>
+          <el-form-item v-if="isOrderNo" label="排序" prop="orderNo" :label-width="formLabelWidth">
+            <el-input v-model.number="form.orderNo" type="number" autocomplete="off" />
+          </el-form-item>
+          <el-form-item style="text-align: center">
+            <el-button type="primary" @click="btnSubmit('myform')">
+              {{ !form.id?'确定添加':'确定修改' }}
+            </el-button>
+          </el-form-item>
         </el-form>
       </el-col>
-      <el-col :span="1">
-      </el-col>
-      <el-col  v-loading="loading" :span="8">
+      <el-col :span="1" />
+      <el-col v-loading="loading" :span="8">
         <el-tree
+          ref="tree"
           class="filter-tree"
           :data="menusData"
           node-key="id"
           :props="defaultProps"
           default-expand-all
-          ref="tree">
-           <span class="custom-tree-node" slot-scope="{ node, data }">
+        >
+          <span slot-scope="{ node, item }" class="custom-tree-node">
             <span>{{ node.label }}</span>
             <span>
-          <el-button
-            type="text"
-            size="mini"
-            @click="editMenu(data)">
-            <svg-icon icon-class="edit" />
-          </el-button>
-          <el-button
-            type="text"
-            size="mini"
-            @click="deleteMenu(data)">
-             <svg-icon icon-class="del" />
-          </el-button>
-        </span>
-           </span>
+              <el-button
+                type="text"
+                size="mini"
+                @click="editMenu(item)"
+              >
+                <svg-icon icon-class="edit" />
+              </el-button>
+              <el-button
+                type="text"
+                size="mini"
+                @click="deleteMenu(item)"
+              >
+                <svg-icon icon-class="del" />
+              </el-button>
+            </span>
+          </span>
         </el-tree>
       </el-col>
     </el-row>

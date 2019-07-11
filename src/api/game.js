@@ -18,7 +18,7 @@ export function delGame(id) {
 export function gameDetails(id) {
   return request({
     url: `/mg/games/${id}`,
-    method: 'get',
+    method: 'get'
   })
 }
 export function gamePage(data) {
@@ -51,7 +51,7 @@ export function channelGameDetails (id) {
 export function channelGamePage (id) {
   return request({
     url: `/mg/channel_games/by_store/${id}`,
-    method: 'get',
+    method: 'get'
   })
 }
 export function byDeviceGame (device){

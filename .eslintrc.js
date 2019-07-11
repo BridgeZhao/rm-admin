@@ -1,13 +1,13 @@
 module.exports = {
   root: true,
-  parserOptions: {
-    parser: 'babel-eslint',
-    sourceType: 'module'
-  },
   env: {
     browser: true,
     node: true,
     es6: true,
+  },
+  parserOptions: {
+    parser: 'babel-eslint',
+    sourceType: 'module'
   },
   extends: ['plugin:vue/recommended', 'eslint:recommended'],
 
@@ -145,7 +145,7 @@ module.exports = {
       'avoidEscape': true,
       'allowTemplateLiterals': true
     }],
-    'semi': [2, 'never'],
+    'semi':  ['error', 'never'],
     'semi-spacing': 0,
     'space-before-blocks':0,
     'space-before-function-paren': 0,

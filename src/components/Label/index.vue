@@ -1,17 +1,19 @@
 <template>
-    <div class="labelView">
-        <h1 class="label-title">{{labelFather}}</h1>
-    </div>
+  <div class="labelView">
+    <h1 class="label-title">
+      {{ labelFather }}
+    </h1>
+  </div>
 </template>
 <script>
 export default {
-    name:'labelView',
+    name:'LabelView',
+    props:['labelFather'],
     data(){
         return{
 
         }
-    },
-    props:['labelFather']
+    }
 }
 </script>
 
