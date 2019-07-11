@@ -74,14 +74,17 @@
 
 <script>
   import { mapGetters } from 'vuex'
-  import { addGame, gamePage, channelGame ,channelGamePage ,delChannelGame} from '@/api/game'
+  import { gamePage, channelGame ,channelGamePage ,delChannelGame} from '@/api/game'
   import { getScenarioData } from '@/api/coupons'
   import { getDevices } from '@/api/device'
   export default {
     name: 'DisposeGame',
-    props:[
-      'storeId'
-    ],
+    props:{
+      storeId: {
+        type: String,
+        default: ''
+      }
+    },
     data() {
       return {
         gameData: [],
