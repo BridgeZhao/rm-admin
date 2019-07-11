@@ -7,6 +7,8 @@ stages:
 variables:
   DOCKER_HOST: tcp://docker:2375/
   DOCKER_DRIVER: overlay2
+  DEV_HOST: 172.16.2.182
+  STAGE_HOST: 172.16.2.33
 
 services:
   - name: 172.16.2.182:5000/docker:dind
@@ -29,20 +31,25 @@ build:
 deploy_dev:
   stage: deploy
   script:
-    - export DOCKER_HOST=tcp://172.16.2.182:2375/
+    - export DOCKER_HOST=tcp://$DEV_HOST:2375/
     - docker rm -f frontend-admin-retail || true
     - docker rmi "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME" || true
-    - docker run --rm --detach --name frontend-admin-retail -p 8080:80 "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME"
+    - docker run -it -d --name frontend-admin-retail -p 8080:80 "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME"
+  tags:
+    - dev
   only:
     - dev
 
 deploy_stage:
   stage: deploy
   script:
-    - export DOCKER_HOST=tcp://172.16.2.33:2375/
+    - export DOCKER_HOST=tcp://$STAGE_HOST:2375/
     - docker rm -f frontend-admin-retail || true
     - docker rmi "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME" || true
-    - docker run --rm --detach --name frontend-admin-retail -p 8080:80 "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME"
+    - docker run -it -d --name frontend-admin-retail -p 8080:80 "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME"
+    - docker tag "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME" "harbor.kankanai.com.cn/retail/frontend-admin-retail:$CI_COMMIT_REF_NAME"
+    - docker login harbor.kankanai.com.cn -uhaoran.wang -pKmM7mAj8
+    - docker push "harbor.kankanai.com.cn/retail/frontend-admin-retail:$CI_COMMIT_REF_NAME"
   tags:
     - stage
   only:
@@ -51,10 +58,13 @@ deploy_stage:
 deploy_4k:
   stage: deploy
   script:
-    - export DOCKER_HOST=tcp://172.16.2.33:2375/
+    - export DOCKER_HOST=tcp://$STAGE_HOST:2375/
     - docker rm -f frontend-admin-retail-4k || true
     - docker rmi "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME" || true
-    - docker run --rm --detach --name frontend-admin-retail-4k -p 8083:80 "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME"
+    - docker run -it -d --name frontend-admin-retail-4k -p 8083:80 "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME"
+    - docker tag "172.16.2.182:5000/frontend-admin-retail-4k:$CI_COMMIT_REF_NAME" "harbor.kankanai.com.cn/retail/frontend-admin-retail-4k:$CI_COMMIT_REF_NAME"
+    - docker login harbor.kankanai.com.cn -uhaoran.wang -pKmM7mAj8
+    - docker push "harbor.kankanai.com.cn/retail/frontend-admin-retail-4k:$CI_COMMIT_REF_NAME"
   tags:
     - stage
   only:
