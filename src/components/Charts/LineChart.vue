@@ -5,13 +5,6 @@
 <script>
   import echarts from 'echarts'
   const animationDuration = 1000
-  const colorAry = [{
-    item: 'rgba(113,220,255,1)',
-    area: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{offset: 0, color: 'rgba(113,220,255,.1)'}, {
-      offset: 0.8,
-      color: 'rgba(0, 136, 212, 0)'
-    }], false)
-  }]
   export default {
     props: {
       className: {
@@ -62,7 +55,7 @@
           },
 					grid: this.grid,
           xAxis: [
-            { 
+            {
               type: 'category',
               boundaryGap: false,
               data: []

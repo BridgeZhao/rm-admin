@@ -10,8 +10,6 @@
 </template>
 
 <script>
-import echarts from 'echarts'
-const animationDuration = 3000
 export default {
   props: {
     className: {

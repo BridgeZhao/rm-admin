@@ -8,11 +8,6 @@
   />
 </template>
 <script>
-import echarts from 'echarts'
-// var data = [[1,1,5],[8,0,1],[0,2,0],[0,3,0],[0,4,0],[0,5,0],[0,6,0],[0,6,1]];
-// data = data.map(function (item) {
-//     return [item[1], item[0], item[2] || '-'];
-// });
 export default {
     props: {
     className: {

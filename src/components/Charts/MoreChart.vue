@@ -9,8 +9,6 @@
 </template>
 
 <script>
-import echarts from 'echarts'
-const animationDuration = 3000
 export default {
   props: {
     className: {
@@ -83,7 +81,7 @@ export default {
               //     },
               //     data: [320, 332, 301, 334, 390]
               // },
-            
+
           ]
       }
     }
