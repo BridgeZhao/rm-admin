@@ -69,9 +69,9 @@ const actions = {
 			getStores().then(data => {
 				if (data.length) {
 					let _storeId=~~Cookies.get('storeId')
-					if(_storeId){
+					if(!_storeId){
 						_storeId=data[0].id
-						Cookies.set('storeId',storeId)
+						Cookies.set('storeId',_storeId)
 					}
 					commit('SET_STOREID',  _storeId)
 					commit('STORELIST',  data)

@@ -1,240 +1,256 @@
 <template>
-  <div class="app-container">
-    <div class="box-header">
-      <span style="font-size: 1.2rem">互动屏实时监控分析</span>
-      <div class="search" style="margin-top: 25px;">
-        <el-form
-          :inline="true"
-          :model="formInline"
-          class="demo-form-inline"
-          label-width="10px"
-        >
-          <el-form-item label>
-            <el-date-picker
-              v-model="formInline.time"
-              type="daterange"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-            />
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" @click="searchData()">
-              查询
-            </el-button>
-          </el-form-item>
-        </el-form>
-      </div>
-    </div>
-    <div class="report-margin">
-      <el-row>
-        <el-col :span="12">
-          <div class="grid-content bg-purple">
-            <el-row :gutter="24">
-              <el-col :span="8">
-                <div class="grid-content bg-purple report-line">
-                  <el-tooltip class="item" effect="dark" content="用于查看即时顾客人数" placement="top-start">
-                    <i class="el-icon-info report-tip" />
-                  </el-tooltip>
-                  <div class="report-title">
-                    最新互动数
-                  </div>
-                  <div class="report-num" style="color: #d8b104;">
-                    {{ nearlyInteraction || 0 }}
-                  </div>
-                  <div class="report-small" />
-                </div>
-              </el-col>
-              <el-col :span="8">
-                <div class="grid-content bg-purple report-line">
-                  <el-tooltip
-                    class="item"
-                    effect="dark"
-                    content="用于查看查询日期内互动顾客数"
-                    placement="top-start"
-                  >
-                    <i class="el-icon-info report-tip" />
-                  </el-tooltip>
-                  <div class="report-title">
-                    总互动数
-                  </div>
-                  <div class="report-num" style="color: #50e3c2;">
-                    {{ totalInteraction || 0 }}
-                  </div>
-                  <div class="report-small" />
-                </div>
-              </el-col>
-              <el-col :span="8">
-                <div class="grid-content bg-purple report-line">
-                  <el-tooltip
-                    class="item"
-                    effect="dark"
-                    content="用于查看顾客在大屏前平均停留时间"
-                    placement="top-start"
-                  >
-                    <i class="el-icon-info report-tip" />
-                  </el-tooltip>
-                  <div class="report-title">
-                    顾客平均停留时间（秒）
-                  </div>
-                  <div class="report-num" style="color: #d8b104;">
-                    {{ avgDuration || 0 }}
-                  </div>
-                  <div class="report-small" />
-                </div>
-              </el-col>
-            </el-row>
-            <div class="grid-content bg-purple report-line report-margin">
-              <div class="report-gang">
-                <span>期间浏览人数</span>
-                <!-- <i class="el-icon-picture" @click="openFull('barChartAge',frequencyDatas,'到店频率')"></i> -->
-              </div>
-              <div style="width:100%;height:100%;">
-                <bar-chart-age ref="barChartAge" :data="peopleChartDatas" :height="chartHeight" :width="chartWidth" />
-              </div>
-            </div>
-            <div class="grid-content bg-purple report-line report-margin">
-              <div class="report-gang">
-                <span>停留时间分布</span>
-                <!-- <i class="el-icon-picture" @click="openFull('barChartAge',frequencyDatas,'到店频率')"></i> -->
-              </div>
-              <div style="width:100%;height:100%;">
-                <bar-chart-age ref="barChartAge" :data="stayChartDatas" :height="chartHeight" :width="chartWidth" />
-              </div>
-            </div>
-            <div class="grid-content bg-purple report-line report-margin">
-              <div class="report-gang">
-                <span>区域监测</span>
-                <!-- <i class="el-icon-picture" @click="openFull('barChartAge',frequencyDatas,'到店频率')"></i> -->
-              </div>
-              <div style="width:100%;height:100%;">
-                <bar-chart-age ref="barChartAge" :data="areaChartDatas" :height="chartHeight" :width="chartWidth" />
-              </div>
-            </div>
-          </div>
-        </el-col>
-        <el-col :span="12">
-          <div class="grid-content bg-purple-light">
-            <div class="grid-content bg-purple report-line">
-              <div class="report-gang">
-                <span>场景监测</span>
-                <!-- <i class="el-icon-picture" @click="openFull('barChartAge',frequencyDatas,'到店频率')"></i> -->
-              </div>
-              <div style="width:100%;height:100%;padding:2%;">
-                <el-table
-                  :data="scenarioData"
-                  stripe
-                  style="width: 100%"
-                >
-                  <el-table-column
-                    prop="scenarioName"
-                    label="场景名称"
-                  />
-                  <el-table-column
-                    prop="deviceCount"
-                    label="播放设备数"
-                  />
-                  <el-table-column
-                    prop="view"
-                    label="观看人数"
-                  />
-                  <el-table-column
-                    prop="interaction"
-                    label="互动人数"
-                  />
-                  <el-table-column
-                    prop="couponCount"
-                    label="领券人数"
-                  />
-                  <el-table-column
-                    prop="avgInteractionDevice"
-                    label="平均设备互动数"
-                  />
-                </el-table>
-              </div>
-            </div>
-            <div class="grid-content bg-purple report-line report-margin">
-              <div class="report-gang">
-                <span>内容监测</span>
-                <!-- <i class="el-icon-picture" @click="openFull('barChartAge',frequencyDatas,'到店频率')"></i> -->
-              </div>
-              <div style="width:100%;height:100%;padding:2%;">
-                <el-table
-                  :data="contentData"
-                  stripe
-                  style="width: 100%"
-                >
-                  <el-table-column
-                    prop="contentName"
-                    label="广告名称"
-                  />
-                  <el-table-column
-                    prop="device"
-                    label="播放设备数"
-                  />
-                  <el-table-column
-                    prop="view"
-                    label="观看人数"
-                  />
-                  <el-table-column
-                    prop="avgViewDevice"
-                    label="平均设备观看人数"
-                  />
-                </el-table>
-              </div>
-            </div>
-            <div class="grid-content bg-purple report-line report-margin">
-              <div class="report-gang">
-                <span>优惠券监测</span>
-                <!-- <i class="el-icon-picture" @click="openFull('barChartAge',frequencyDatas,'到店频率')"></i> -->
-              </div>
-              <div style="width:100%;height:100%;padding:2%;">
-                <el-table
-                  :data="couponData"
-                  stripe
-                  style="width: 100%"
-                >
-                  <el-table-column
-                    prop="couponName"
-                    label="优惠券名称"
-                  />
-                  <el-table-column
-                    prop="takeCount"
-                    label="区间发放量"
-                  />
-                  <el-table-column
-                    prop="usageCount"
-                    label="区间发放使用量"
-                  />
-                  <el-table-column
-                    prop="conserveRate"
-                    label="转化率"
-                  />
-                  <el-table-column
-                    prop="salesAmount"
-                    label="销售额"
-                  />
-                </el-table>
-              </div>
-            </div>
-          </div>
-        </el-col>
-      </el-row>
-    </div>
-  </div>
+	<div class="app-container">
+		<div class="box-header">
+			<span style="font-size: 1.2rem">互动屏实时监控分析</span>
+			<div class="search" style="margin-top: 25px;">
+				<el-form
+					:inline="true"
+					:model="formInline"
+					class="demo-form-inline"
+					label-width="10px"
+				>
+					<el-form-item label>
+						<el-date-picker
+							v-model="formInline.time"
+							type="daterange"
+							range-separator="至"
+							start-placeholder="开始日期"
+							end-placeholder="结束日期"
+						></el-date-picker>
+					</el-form-item>
+					<el-form-item>
+						<el-button type="primary" @click="searchData()">查询</el-button>
+					</el-form-item>
+				</el-form>
+			</div>
+		</div>
+		<div class="report-margin">
+			<el-row :gutter="15">
+				<el-col :span="12">
+					<div class="bg-purple">
+						<el-row :gutter="24">
+								<el-col :span="8">
+									<div class="grid-content bg-purple report-line">
+										<el-tooltip class="item" effect="dark" content="用于查看即时顾客人数" placement="top-start">
+											<i class="el-icon-info report-tip"></i>
+										</el-tooltip>
+										<div class="report-title">最新互动数</div>
+										<div class="report-num" style="color: #d8b104;">{{nearlyInteraction || 0}}</div>
+										<div class="report-small"></div>
+									</div>
+								</el-col>
+								<el-col :span="8">
+									<div class="grid-content bg-purple report-line">
+										<el-tooltip
+											class="item"
+											effect="dark"
+											content="用于查看查询日期内互动顾客数"
+											placement="top-start"
+										>
+											<i class="el-icon-info report-tip"></i>
+										</el-tooltip>
+										<div class="report-title">总互动数</div>
+										<div class="report-num" style="color: #50e3c2;">{{totalInteraction || 0}}</div>
+										<div class="report-small"></div>
+									</div>
+								</el-col>
+								<el-col :span="8">
+									<div class="grid-content bg-purple report-line">
+										<el-tooltip
+											class="item"
+											effect="dark"
+											content="用于查看顾客在大屏前平均停留时间"
+											placement="top-start"
+										>
+											<i class="el-icon-info report-tip"></i>
+										</el-tooltip>
+										<div class="report-title">顾客平均停留时间（秒）</div>
+										<div class="report-num" style="color: #d8b104;">{{avgDuration || 0}}</div>
+										<div class="report-small"></div>
+									</div>
+								</el-col>
+						</el-row>
+						<div class="bg-purple report-line report-margin">
+							<div class="report-gang tip">
+								<span>期间浏览人数</span>
+								<el-tooltip class="item" effect="dark" content="查询时间内，每小时的顾客总人数" placement="top-start">
+									<i class="el-icon-info report-tip"></i>
+								</el-tooltip>
+							</div>
+							<div style="width:100%;height:100%;">
+							  <bar-chart-age :data="peopleChartDatas" :height="chartHeight" :width="chartWidth" ref="barChartAge"/>
+							</div>
+						</div>
+						<div class="bg-purple report-line report-margin">
+							<div class="report-gang tip">
+							    <span>停留时间分布</span>
+								<el-tooltip class="item" effect="dark" content="用于查看顾客在大屏前平均停留时间" placement="top-start">
+									<i class="el-icon-info report-tip"></i>
+								</el-tooltip>
+							</div>
+							<div style="width:100%;height:100%;">
+							  <bar-chart-age :data="stayChartDatas" :height="chartHeight" :width="chartWidth" ref="barChartAge"/>
+							</div>
+						</div>
+						<div class="bg-purple report-line report-margin">
+							<div class="report-gang tip">
+								<span>区域监测</span>
+								<el-tooltip class="item" effect="dark" 
+											content="观看人数：除了当前互动以外之围观人数;
+													互动人数：主要互动顾客的人数;
+													领劵人数：领用优惠劵的人数" placement="top-start">
+										<i class="el-icon-info report-tip"></i>
+								</el-tooltip>
+							</div>
+							<div style="width:100%;height:100%;">
+							  <more-chart :data="areaChartDatas" :height="chartHeight" :width="chartWidth" ref="moreChart"/>
+							</div>
+						</div>
+				  </div>
+				</el-col>
+				<el-col :span="12">
+					<div class="bg-purple-light">
+					    <div class="bg-purple report-line">
+							<div class="report-gang tip">
+								<span>场景监测</span>
+								<el-tooltip class="item" effect="dark" 
+								            content="根据大屏配置的不同场景显示数据;
+													播放设备数：有使用的设备数（如：大屏、Pad等;
+													观看人数：除了当前互动以外之围观人数;
+													互动人数：主要互动顾客的人数;
+													领劵人数：领用优惠劵的" placement="top-start">
+									<i class="el-icon-info report-tip"></i>
+								</el-tooltip>
+							</div>
+							<div style="width:100%;height:100%;padding:2%;">
+							    <el-table
+									:data="scenarioData"
+									stripe
+									highlight-current-row
+									show-overflow-tooltip
+									:height="tableHeight"
+									style="width: 100%">
+									<el-table-column
+									prop="scenarioName"
+									label="场景名称">
+									</el-table-column>
+									<el-table-column
+									prop="deviceCount"
+									label="播放设备数">
+									</el-table-column>
+									<el-table-column
+									prop="view"
+									label="观看人数">
+									</el-table-column>
+									<el-table-column
+									prop="interaction"
+									label="互动人数">
+									</el-table-column>
+									<el-table-column
+									prop="couponCount"
+									label="领券人数">
+									</el-table-column>
+									<el-table-column
+									prop="avgInteractionDevice"
+									label="平均设备互动数">
+									</el-table-column>
+								</el-table>
+							</div>
+						</div>
+						<div class="bg-purple report-line report-margin">
+							<div class="report-gang tip">
+								<span>内容监测</span>
+								<el-tooltip class="item" effect="dark" content="根据大屏展示的广告内容进行监测;
+										播放设备数：有使用的设备数（如：大屏、Pad等）;
+										观看人数：所有观看广告的人数（含点击与围观）;
+										平均设备观看数：观看人数/播放设备数" placement="top-start">
+									<i class="el-icon-info report-tip"></i>
+								</el-tooltip>
+							</div>
+							<div style="width:100%;height:100%;padding:2%;">
+							    <el-table
+									:data="contentData"
+									stripe
+									highlight-current-row
+									:height="tableHeight"
+									style="width: 100%">
+									<el-table-column
+									prop="contentName"
+									label="广告名称">
+									</el-table-column>
+									<el-table-column
+									prop="device"
+									label="播放设备数">
+									</el-table-column>
+									<el-table-column
+									prop="view"
+									label="观看人数">
+									</el-table-column>
+									<el-table-column
+									prop="avgViewDevice"
+									label="平均设备观看人数">
+									</el-table-column>
+								</el-table>
+							</div>
+						</div>
+						<div class="bg-purple report-line report-margin">
+							<div class="report-gang tip">
+								<span>优惠券监测</span>
+								<el-tooltip class="item" effect="dark" content="时间区间内，发放、使用优惠劵的数量及销售额;
+											发放数量，每小时更新数据;
+											使用数量，每日更新数据" placement="top-start">
+										<i class="el-icon-info report-tip"></i>
+								</el-tooltip>
+							</div>
+							<div style="width:100%;height:100%;padding:2%;" >
+							    <el-table
+									:data="couponData"
+									stripe
+									highlight-current-row
+									:height="tableHeight"
+									style="width: 100%">
+									<el-table-column
+									prop="couponName"
+									label="优惠券名称">
+									</el-table-column>
+									<el-table-column
+									prop="takeCount"
+									label="区间发放量">
+									</el-table-column>
+									<el-table-column
+									prop="usageCount"
+									label="区间发放使用量">
+									</el-table-column>
+									<el-table-column
+									prop="conserveRate"
+									label="转化率">
+									</el-table-column>
+									<el-table-column
+									prop="salesAmount"
+									label="销售额">
+									</el-table-column>
+								</el-table>
+							</div>
+						</div>
+					</div>
+				</el-col>
+			</el-row>
+		</div>
+	</div>
 </template>
 <script>
 import moment from 'moment'
 import BarChartAge from '@/components/Charts/BarChartAge'
+import MoreChart from '@/components/Charts/MoreChart'
 import {getScreenData} from '@/api/report'
 export default {
-	name:'ScreenAnalysis',
-	components: {BarChartAge},
+	name:'screenAnalysis',
 	data(){
 		return{
 			formInline: {
 				time: ''
 			},
+			tableHeight:202,
 			nearlyInteraction:null,
 			avgDuration:null,
 			totalInteraction:null,
@@ -245,12 +261,12 @@ export default {
 			areaChartDatas:{},
 			scenarioData:[
 				{
-					'scenarioName': 'scenario1',
-					'deviceCount': 2,
-					'view': 10,
-					'interaction': 20,
-					'couponCount': 5,
-					'avgInteractionDevice': 0.1
+					"scenarioName": "scenario1",
+					"deviceCount": 2,
+					"view": 10,
+					"interaction": 20,
+					"couponCount": 5,
+					"avgInteractionDevice": 0.1
 				}
 			],
 			contentData:[],
@@ -258,6 +274,7 @@ export default {
 
 		}
 	},
+	components: {BarChartAge, MoreChart},
 	computed: {
 		listenstage() {
 			return this.$store.state.app.storeId
@@ -288,12 +305,32 @@ export default {
 			const _params = {
 				store_id: _storeId,
 				starttime: start_time,
-				endtime: start_time
+				endtime: start_time,
             }
             this.loadData(_params)
 		},
 		loadData(params){
 			getScreenData(params).then(res =>{
+				const arr = [
+			   {
+				    areaName: "大屏区",
+					couponCount: 2,
+					interaction: 8,
+					view: 0,
+			   },
+			   {
+				    areaName: "大屏2区",
+					couponCount: 4,
+					interaction: 6,
+					view: 8,
+			   },
+			   {
+				    areaName: "大屏3区",
+					couponCount: 10,
+					interaction: 30,
+					view: 3,
+			   }
+		   ]
 				this.nearlyInteraction = res.data.nearlyInteraction
 				this.avgDuration = res.data.avgDuration
 				this.totalInteraction = res.data.totalInteraction
@@ -303,7 +340,6 @@ export default {
 				this.loadScenarioData(res.data.scenario)
 				this.loadContentData(res.data.content)
 				this.loadCouponData(res.data.coupon)
-				console.log(res)
 			})
 		},
 		// 期间浏览人数
@@ -331,7 +367,7 @@ export default {
 			}
 			const obj = Object.assign({}, peopleData)
 			obj.xAxisName = '人数'
-			for(const i in data){
+			for(let i in data){
 				obj.data.push(data[i])
 				obj.xAxisData.push(that.filterTime(i))
 			}
@@ -341,17 +377,26 @@ export default {
 	   laodAreaData(data) {
 			const that = this
 			const peopleData ={
-				data: [],
+				data: {},
 				xAxisData:[],
-				xAxisName:''
+				xAxisName:'',
+				legendData:[]
 			}
 			const obj = Object.assign({}, peopleData)
-			obj.xAxisName = '人数'
-			obj.legendData =['legendData', '互动人数', '观看人数']
-			for(const i in data){
-				obj.data.push([data[i].couponCount,data[i].interaction,data[i].view])
+			obj.xAxisName = '区域'
+			obj.legendData =['领券人数', '互动人数', '观看人数']
+			let _couponCount = [], _interaction = [], _view = []
+			for(let i in data){
+				_couponCount.push(data[i].couponCount)
+				_interaction.push(data[i].interaction)
+				_view.push(data[i].view)
 				obj.xAxisData.push(data[i].areaName)
 			}
+			obj.data={
+				'领券人数':_couponCount,
+				'互动人数':_interaction,
+				'观看人数':_view
+			} 
 			console.log('-----&&&,',obj)
 			this.areaChartDatas = obj
 	   },
@@ -367,32 +412,47 @@ export default {
 	   loadCouponData(data){
 		 this.couponData = data
 	   },
-	   filterTime(data){
+	//    filterSeriesName(data){
+	// 	   let name = ''
+	// 	   switch(data){
+	// 		case 'couponCount':
+	// 			name = "领券人数";
+	// 			break;
+	// 		case 'interaction':
+	// 			name = "互动人数";
+	// 			break;
+	// 		case 'view':
+	// 			name = "观看人数";
+	// 			break;	
+	// 	   }
+	// 	   return name
+	// 	},
+	    filterTime(data){
 		   let time = ''
 		   switch(data){
 			case 'tenBelow':
-				time = '<10秒'
-				break
+				time = "<10秒";
+				break;
 			case 'tenToThirty':
-				time = '10-30秒'
-				break
+				time = "10-30秒";
+				break;
 			case 'thirtyToSixty':
-				time = '31-60秒'
-				break
+				time = "31-60秒";
+				break;
 			case 'sixtyToNinety':
-				time = '60-90秒'
-				break
+				time = "60-90秒";
+				break;
 			case 'ninetyToTwomins':
-				time = '90-120秒'
-				break
+				time = "90-120秒";
+				break;
 			case 'twominsAbove':
-				time = '120秒以上'
-				break		
+				time = "120秒以上";
+				break;		
 		   }
 		   return time
 		}
-	   }
 
+	}
 }
 </script>
 <style lang="scss" scoped>
@@ -427,6 +487,9 @@ export default {
 		}
 		.grid-content{
 			padding: 3%;
+		}
+		.tip .report-tip{
+			top:5%;
 		}
 	}
 </style>
