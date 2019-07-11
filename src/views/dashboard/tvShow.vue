@@ -216,7 +216,7 @@
 	import moment from 'moment'
 	import h337 from 'heatmap.js'
 	import BarChartNew from '@/components/Charts/BarChartNew'
-  import {getImageData, getLeftImg, getLeftImg2, getPinData, getAreaHotData, superDemo, heatDemo} from '@/api/report'
+  import {getImageData, getLeftImg, getPinData, getAreaHotData} from '@/api/report'
   import {getStoresImg} from '@/api/store'
   const MAX_HEAT_VALUE = 10
   let loop_play_heatmap_timer_id
@@ -402,7 +402,6 @@
     },
     // -----------------------------------
     generateHoursChartOptions(data) {
-      const that = this
       const composeSourceData = function(data) {
         const indexMap = {}
         let cursor = 0
@@ -523,7 +522,6 @@
           hh: data[0] + ',' + (Number(data[0])+1)
         }
        getAreaHotData(_params).then(res => {
-        // heatDemo(_params).then(res => { // 展厅专用
         const _heatmap = res.data.heatmap
         const heatmapData = []
         const originalWidth = 900
@@ -558,9 +556,6 @@
 			getLeftImg(size).then(res =>{
 				this.list2 = res.reverse()
       })
-      // getLeftImg2(size).then(res =>{ //展厅专用
-      //   this.list2 = res.data
-			// })
 		},
     setImgData(){// 获取下方抓去图片
 			const _size = {
@@ -607,13 +602,13 @@
 		},
     init(storeId) {
 			const _storeId = storeId || this.$store.state.app.storeId
-			const _params = {
-        filter: 2,
-        store_id: _storeId,
-        starttime: this.timeData[0],
-        endtime: this.timeData[1],
-        hh: '08,22'
-      }
+			// const _params = {
+      //   filter: 2,
+      //   store_id: _storeId,
+      //   starttime: this.timeData[0],
+      //   endtime: this.timeData[1],
+      //   hh: '08,22'
+      // }
       this.setStoreImg(storeId)
       // this.setHeampData(_params)
       this.setImgData()

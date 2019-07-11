@@ -307,16 +307,13 @@
   </div>
 </template>
 <script>
-	import csFileUpload from '@/components/couponsComponents/cs-file-upload'
 	import moment from 'moment'
-	import axios from 'axios'
 	import { mapGetters } from 'vuex'
-	import {getScenarioData, getCouponsList, postCouponsData, changeCouponsStatus,deleteCouponsList,searchScenarioData } from '@/api/coupons'
-import { debuglog } from 'util'
+	import {getCouponsList, postCouponsData, changeCouponsStatus,deleteCouponsList,searchScenarioData } from '@/api/coupons'
 	export default {
 		name: 'SceneLoad',
 		components:{
-			csFileUpload
+			
 		},
 		data() {
 			return {
@@ -543,20 +540,20 @@ import { debuglog } from 'util'
 			edit(row) {
 				this.rowIcon = row.icon
 				console.log('row',row.icon)
-				const couponsFlag2 = {
-					id:'',
-					storeId:[],
-					couponType:1,
-					name:'',
-					limit:null,
-					weight:null,
-					time:'',
-					description:'',
-					level:null,
-					iconBase64:'',
-					credit:null,
-					creditNum:null
-				}
+				// const couponsFlag2 = {
+				// 	id:'',
+				// 	storeId:[],
+				// 	couponType:1,
+				// 	name:'',
+				// 	limit:null,
+				// 	weight:null,
+				// 	time:'',
+				// 	description:'',
+				// 	level:null,
+				// 	iconBase64:'',
+				// 	credit:null,
+				// 	creditNum:null
+				// }
 				this.dialogTableVisible = true
 				this.fileList = JSON.parse(JSON.stringify(row.scenarios))
 				const data = JSON.parse(JSON.stringify(row))
@@ -617,9 +614,9 @@ import { debuglog } from 'util'
 			},
 			// 删除优惠券
       deleteCoupon(row){
-				const data = {
-					id :row.id
-				}
+				// const data = {
+				// 	id :row.id
+				// }
 				deleteCouponsList(row.id).then(res =>{
 					if(res === 'OK'){
 						this.$message({
@@ -680,16 +677,6 @@ import { debuglog } from 'util'
 					}
 				)
 				console.log(rsp.data)
-			},
-			submit() {
-				this.dialogTableVisible = false
-				this.$refs['ruleForm'].validate((valid) => {
-					if (valid) {
-
-					} else {
-						return false
-					}
-				})
 			},
 			handleSizeChange(val) {
 				this.page.size = val

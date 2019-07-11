@@ -37,9 +37,9 @@
     },
     computed:{
       componentName(){
-        if(this.isStep == 1){
+        if(this.isStep === 1){
           return 'sceneSetting'
-        }else if(this.isStep == 2){
+        }else if(this.isStep === 2){
           return 'sceneLoad'
         }else {
           return 'sceneConnect'

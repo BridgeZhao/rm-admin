@@ -193,10 +193,8 @@
   </div>
 </template>
 <script>
-	import BarChartAge from '@/components/Charts/BarChartAge'
 export default {
 	name:'Advertising',
-	components:{BarChartAge},
 	data(){
 		return{
 			formInline: {

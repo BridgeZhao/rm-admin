@@ -147,7 +147,7 @@
 import moment from 'moment'
 import labelView from  '@/components/Label/index'
 import WeekChat from '@/components/Charts/WeekChat'
-import { getWeekFlowData, showWindowHref} from '@/api/report'
+import { getWeekFlowData} from '@/api/report'
 export default {
     name:'IntoShopFlow',
     components: {labelView, WeekChat},
@@ -216,7 +216,7 @@ export default {
 			 showWindowHref(){
 				 const sHref = window.location.href
 				 const args = sHref.split('?')
-				 if(args[0] == sHref){
+				 if(args[0] === sHref){
 					 return ''
 				 }
 				 const arr = args[1].split('&')

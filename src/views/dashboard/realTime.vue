@@ -191,7 +191,7 @@ export default {
 		showWindowHref(){
 			const sHref = window.location.href
 			const args = sHref.split('?')
-			if(args[0] == sHref){
+			if(args[0] === sHref){
 				return ''
 			}
 			const arr = args[1].split('&')

@@ -166,14 +166,13 @@
 <script>
 import moment from 'moment'
 import labelView from  '@/components/Label/index'
-import BarChart from '@/components/Charts/BarChart'
 import PieChart from '@/components/Charts/PieChart'
 import BarChartAge from '@/components/Charts/BarChartAge'
 import PeopleChart from '@/components/Charts/PeopleChart'
 import {getRealTimeData} from '@/api/report'
 export default {
     name:'IntoShopFlow',
-    components: {labelView,BarChart,PieChart,BarChartAge,PeopleChart},
+    components: {labelView,PieChart,BarChartAge,PeopleChart},
     data(){
         return{
 					  loadPath:'/mg/dashboard/camera/',
@@ -264,7 +263,7 @@ export default {
 			 showWindowHref(){
 				 const sHref = window.location.href
 				 const args = sHref.split('?')
-				 if(args[0] == sHref){
+				 if(args[0] === sHref){
 					 return ''
 				 }
 				 const arr = args[1].split('&')
