@@ -20,14 +20,11 @@
 <script>
   import disposeGame from '@/views/game/pages/disposeGame'
   import disposeAd from '@/views/game/pages/disposeAd'
-  import disposeNav from '@/views/game/pages/disposeNav'
-
   export default {
     name: 'StoreContent',
     components: {
         disposeGame,
-        disposeAd,
-        disposeNav
+        disposeAd
     },
     data() {
       return {
