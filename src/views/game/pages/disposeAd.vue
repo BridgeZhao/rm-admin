@@ -584,8 +584,9 @@
         this.form.area = areaId
         if (this.form.imgs[0]) {
           this.imgBase64Show = this.form.imgs[0]
+          this.bannerImgBase64Show = this.form.bannerImg
         }
-        console.log('详情弹窗', this.form, this.imgBase64Show)
+        console.log('详情弹窗', this.form)
         this.dialogType = 'detail'
         this.dialogVisible = true
       },
