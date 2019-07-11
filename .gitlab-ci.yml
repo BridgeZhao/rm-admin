@@ -62,9 +62,9 @@ deploy_4k:
     - docker rm -f frontend-admin-retail-4k || true
     - docker rmi "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME" || true
     - docker run -it -d --name frontend-admin-retail-4k -p 8083:80 "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME"
-    - docker tag "172.16.2.182:5000/frontend-admin-retail-4k:$CI_COMMIT_REF_NAME" "harbor.kankanai.com.cn/retail/frontend-admin-retail-4k:$CI_COMMIT_REF_NAME"
+    - docker tag "172.16.2.182:5000/frontend-admin-retail:$CI_COMMIT_REF_NAME" "harbor.kankanai.com.cn/retail/frontend-admin-retail:$CI_COMMIT_REF_NAME"
     - docker login harbor.kankanai.com.cn -uhaoran.wang -pKmM7mAj8
-    - docker push "harbor.kankanai.com.cn/retail/frontend-admin-retail-4k:$CI_COMMIT_REF_NAME"
+    - docker push "harbor.kankanai.com.cn/retail/frontend-admin-retail:$CI_COMMIT_REF_NAME"
   tags:
     - stage
   only:
