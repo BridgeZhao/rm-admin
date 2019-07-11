@@ -255,14 +255,17 @@
 <script>
   import { mapGetters} from 'vuex'
 
-  import { addAd, statusAd,  delAd,  adPage} from '@/api/ads'
+  import { addAd, statusAd, adPage} from '@/api/ads'
   import {  getAreas } from '@/api/area'
   import Sortable from 'sortablejs'
   export default {
     name: 'DisposeAd',
-    props: [
-      'storeId'
-    ],
+    props:{
+      storeId: {
+        type: String,
+        default: ''
+      }
+    },
     data() {
       return {
         dialogType: 'add',
@@ -602,8 +605,8 @@
             areaIds: [],
             storeId: 0,
             formTime: []
-          },
-          _self.imgsTableData =[],
+          }
+          _self.imgsTableData =[]
           _self.bannerImgBase64Show =''
         },200)
         // this.$refs['myform'].resetFields() 
