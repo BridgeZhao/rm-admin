@@ -34,16 +34,15 @@ export default {
   data() {
     return {
       options :{
+          color: ['#D8B104', '#1583DF', '#71DCFF'],
           tooltip: {
-            trigger: "axis",
-            axisPointer: {
-              // 坐标轴指示器，坐标轴触发有效
-              type: "shadow" // 默认为直线，可选为：'line' | 'shadow'
-            },
-            formatter: "{a} <br/>{b} : {c}"
+              trigger: 'axis',
+              axisPointer: {
+                  type: 'shadow'
+              }
           },
-          legend:{
-            data:[]
+          legend: {
+              data: []
           },
           grid: {
             left: "3%",
@@ -51,42 +50,42 @@ export default {
             bottom: "3%",
             containLabel: true
           },
-          xAxis: {
+          calculable: true,
+          xAxis: [{
             name: '',
-            nameGap: 0,
-            type: "category",
-            splitLine: { show: true },
-            // data: ["0-18", "19-29", "30-39", "40-64", ">65"]
+            type: 'category',
+            axisTick: {show: false},
             data: []
-          },
-          yAxis: {
-            name: "人数",
-            type: "value",
-            splitLine: { show: false }
-          },
+          }],
+          yAxis: [{
+                  name: '人数',
+                  type: 'value'
+              }],
           series: [
-            {
-              name: "人数",
-              type: "bar",
-              barWidth:12,
-              itemStyle: {
-                    normal: {
-                        barBorderRadius: [10, 10, 0, 0],
-                        color:'#71DCFF',
-                        opacity: 0.85
-                    }
-                },
-              label: {
-                normal: {
-                  show: true,
-                  color:"#fff",
-                  position: "top"
-                },
-              },
-              data: []
-            }
+              // {
+              //     name: 'Forest',
+              //     type: 'bar',
+              //     barGap: 0,
+              //     barWidth:12,
+              //     itemStyle: {
+              //       normal: {
+              //           barBorderRadius: [10, 10, 0, 0],
+              //           color:'#71DCFF',
+              //           opacity: 0.85
+              //       }
+              //     },
+              //     label: {
+              //       normal: {
+              //         show: true,
+              //         color:"#fff",
+              //         position: "top"
+              //       },
+              //     },
+              //     data: [320, 332, 301, 334, 390]
+              // },
+            
           ]
-        }
+      }
     }
   },
   beforeDestroy() {
@@ -106,10 +105,36 @@ export default {
   },
   methods: {
   	loadData(_data){
-      const {xAxisData, xAxisName, data} = _data
-			this.options.xAxis.data = xAxisData
-      this.options.xAxis.name = xAxisName
-			this.options.series[0].data = data
+      this.options.legend.data = []
+      this.options.series =[]
+      const {xAxisData, xAxisName,legendData, data} = _data
+			this.options.xAxis[0].data = xAxisData
+      this.options.xAxis[0].name = xAxisName
+      this.options.legend.data = legendData
+			Object.keys(data).forEach(key => {
+        this.options.series.push(
+					 {
+              name: key,
+              type: 'bar',
+              barGap: 0,
+              barWidth:12,
+              itemStyle: {
+                normal: {
+                    barBorderRadius: [10, 10, 0, 0],
+                    opacity: 0.85
+                }
+              },
+              label: {
+                normal: {
+                  show: true,
+                  color:"#fff",
+                  position: "top"
+                },
+              },
+              data: data[key]
+          },
+				)
+      })
 		},
     base64ToBlob(code) {
       let parts = code.split(";base64,")

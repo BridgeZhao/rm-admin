@@ -571,7 +571,6 @@
 					obj.legendData.push(element.name)
 				})
 				this.genderData = obj
-        console.log("男女性别数据",this.genderData)
       }
     }
   }
