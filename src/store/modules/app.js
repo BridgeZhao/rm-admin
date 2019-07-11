@@ -68,7 +68,12 @@ const actions = {
 		return new Promise((resolve, reject) => {
 			getStores().then(data => {
 				if (data.length) {
-					commit('SET_STOREID',  data[0].id)
+					let _storeId=~~Cookies.get('storeId')
+					if(!_storeId){
+						_storeId=data[0].id
+						Cookies.set('storeId',storeId)
+					}
+					commit('SET_STOREID',  _storeId)
 					commit('STORELIST',  data)
 				}
 				resolve(data)
