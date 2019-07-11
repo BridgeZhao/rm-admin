@@ -1,33 +1,35 @@
 <template>
   <div class="app-container">
     <div class="layoutTitle">
-      <label-view labelFather="门店客流分析"></label-view>
-			<div>
-				<el-form :inline="true" :model="formInline" class="demo-form-inline">
-					<!--        <el-form-item>-->
-					<!--          <el-select v-model="formInline.value" placeholder="请选择">-->
-					<!--            <el-option-->
-					<!--              v-for="item in formInline.options"-->
-					<!--              :key="item.value"-->
-					<!--              :label="item.label"-->
-					<!--              :value="item.value"-->
-					<!--            ></el-option>-->
-					<!--          </el-select>-->
-					<!--        </el-form-item>-->
-					<el-form-item>
-						<el-date-picker
-							v-model="formInline.date"
-							type="daterange"
-							range-separator="至"
-							start-placeholder="开始日期"
-							end-placeholder="结束日期"
-						></el-date-picker>
-					</el-form-item>
-					<el-form-item>
-						<el-button type="primary" @click="searchData">查询</el-button>
-					</el-form-item>
-				</el-form>
-			</div>
+      <label-view label-father="门店客流分析" />
+      <div>
+        <el-form :inline="true" :model="formInline" class="demo-form-inline">
+          <!--        <el-form-item>-->
+          <!--          <el-select v-model="formInline.value" placeholder="请选择">-->
+          <!--            <el-option-->
+          <!--              v-for="item in formInline.options"-->
+          <!--              :key="item.value"-->
+          <!--              :label="item.label"-->
+          <!--              :value="item.value"-->
+          <!--            ></el-option>-->
+          <!--          </el-select>-->
+          <!--        </el-form-item>-->
+          <el-form-item>
+            <el-date-picker
+              v-model="formInline.date"
+              type="daterange"
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="searchData">
+              查询
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </div>
     </div>
 
     <div class="top report-margin">
@@ -35,11 +37,15 @@
         <el-col :span="6">
           <div class="grid-content bg-purple report-line">
             <el-tooltip class="item" effect="dark" content="筛选条件内汇总每日客流" placement="top-start">
-              <i class="el-icon-info report-tip"></i>
+              <i class="el-icon-info report-tip" />
             </el-tooltip>
-            <div class="report-title">总客流</div>
-            <div class="report-num" style="color: #d8b104;">{{SummaryData.totalNum}}</div>
-            <div class="report-small"></div>
+            <div class="report-title">
+              总客流
+            </div>
+            <div class="report-num" style="color: #d8b104;">
+              {{ SummaryData.totalNum }}
+            </div>
+            <div class="report-small" />
           </div>
         </el-col>
         <el-col :span="6">
@@ -50,11 +56,15 @@
               content="期间内，汇总每日新顾客的人数（初次到访门店，列为新顾客）"
               placement="top-start"
             >
-              <i class="el-icon-info report-tip"></i>
+              <i class="el-icon-info report-tip" />
             </el-tooltip>
-            <div class="report-title">总新顾客数</div>
-            <div class="report-num" style="color: #50e3c2;">{{SummaryData.totalNew}}</div>
-            <div class="report-small"></div>
+            <div class="report-title">
+              总新顾客数
+            </div>
+            <div class="report-num" style="color: #50e3c2;">
+              {{ SummaryData.totalNew }}
+            </div>
+            <div class="report-small" />
           </div>
         </el-col>
         <el-col :span="6">
@@ -65,32 +75,40 @@
               content="期间内，汇总每日老顾客的人数（曾经到访过门店，即列为老顾客）"
               placement="top-start"
             >
-              <i class="el-icon-info report-tip"></i>
+              <i class="el-icon-info report-tip" />
             </el-tooltip>
-            <div class="report-title">老顾客数</div>
-            <div class="report-num" style="color: #d8b104;">{{SummaryData.totalOld}}</div>
-            <div class="report-small"></div>
+            <div class="report-title">
+              老顾客数
+            </div>
+            <div class="report-num" style="color: #d8b104;">
+              {{ SummaryData.totalOld }}
+            </div>
+            <div class="report-small" />
           </div>
         </el-col>
         <el-col :span="6">
           <div class="grid-content bg-purple report-line">
             <el-tooltip class="item" effect="dark" content="平均每人累积到访次数" placement="top-start">
-              <i class="el-icon-info report-tip"></i>
+              <i class="el-icon-info report-tip" />
             </el-tooltip>
-            <div class="report-title">平均到店频次</div>
-            <div class="report-num" style="color: #50e3c2;">{{(SummaryData.totalAvgFrequency).toFixed(2)}}</div>
-            <div class="report-small"></div>
+            <div class="report-title">
+              平均到店频次
+            </div>
+            <div class="report-num" style="color: #50e3c2;">
+              {{ (SummaryData.totalAvgFrequency).toFixed(2) }}
+            </div>
+            <div class="report-small" />
           </div>
         </el-col>
       </el-row>
     </div>
     <div class="hourFLow report-margin">
-      <el-row :gutter="24" v-if="showPeopleChart">
+      <el-row v-if="showPeopleChart" :gutter="24">
         <el-col :span="24">
           <div class="grid-content bg-purple report-line">
             <div class="report-gang">
               <span>客流类型分布</span>
-              <i class="el-icon-picture" @click="openFull('lineTimeChart',options1,'客流类型分布')"></i>
+              <i class="el-icon-picture" @click="openFull('lineTimeChart',options1,'客流类型分布')" />
             </div>
             <div style="width:100%;height:100%;">
               <!-- <v-chart
@@ -99,7 +117,7 @@
                 style="height:200px;width:100%"
                 :options="options1"
               />-->
-              <line-time-chart :data="options1" ref="lineTimeChart"/>
+              <line-time-chart ref="lineTimeChart" :data="options1" />
             </div>
           </div>
         </el-col>
@@ -109,10 +127,10 @@
           <div class="grid-content bg-purple report-line">
             <div class="report-gang">
               <span>小时客流汇总</span>
-              <i class="el-icon-picture" @click="openFull('lineChart',options3,'小时客流汇总')"></i>
+              <i class="el-icon-picture" @click="openFull('lineChart',options3,'小时客流汇总')" />
             </div>
             <div style="width:100%;height:100%;">
-              <line-chart :data="options3" ref="lineChart"/>
+              <line-chart ref="lineChart" :data="options3" />
             </div>
           </div>
         </el-col>
@@ -122,12 +140,12 @@
           <div class="grid-content bg-purple report-line">
             <div class="report-gang">
               <span>区域小时客流汇总</span>
-              <i class="el-icon-picture" @click="openFull('lineTimeChart',options2,'小时客流')"></i>
+              <i class="el-icon-picture" @click="openFull('lineTimeChart',options2,'小时客流')" />
             </div>
             <div style="width:100%;height:100%;">
-<!--              <line-time-chart :data="options2" ref="lineTimeChart"/>-->
-							<!-- <line-chart :data="options2" ref="lineChart"/> -->
-              <line-time-chart :data="options2" ref="lineTimeChart"/>
+              <!--              <line-time-chart :data="options2" ref="lineTimeChart"/>-->
+              <!-- <line-chart :data="options2" ref="lineChart"/> -->
+              <line-time-chart ref="lineTimeChart" :data="options2" />
             </div>
           </div>
         </el-col>
@@ -138,10 +156,10 @@
           <div class="grid-content bg-purple report-line">
             <div class="report-gang">
               <span>到店频率</span>
-              <i class="el-icon-picture" @click="openFull('barChartAge',frequencyDatas,'到店频率')"></i>
+              <i class="el-icon-picture" @click="openFull('barChartAge',frequencyDatas,'到店频率')" />
             </div>
             <div style="width:100%;height:100%;">
-              <bar-chart-age :data="frequencyDatas" :height="chartHeight" ref="barChartAge"/>
+              <bar-chart-age ref="barChartAge" :data="frequencyDatas" :height="chartHeight" />
             </div>
           </div>
         </el-col>
@@ -149,10 +167,10 @@
           <div class="grid-content bg-purple report-line">
             <div class="report-gang">
               <span>区域客流Top10</span>
-              <i class="el-icon-picture" @click="openFull('barChartAge',areaTopData,'区域客流Top10')"></i>
+              <i class="el-icon-picture" @click="openFull('barChartAge',areaTopData,'区域客流Top10')" />
             </div>
             <div style="width:100%;height:100%;">
-              <bar-chart-age :data="areaTopData" :height="chartHeight" ref="barChartAge"/>
+              <bar-chart-age ref="barChartAge" :data="areaTopData" :height="chartHeight" />
             </div>
           </div>
         </el-col>
@@ -162,10 +180,10 @@
           <div class="grid-content bg-purple report-line">
             <div class="report-gang">
               <span>区域客流性别</span>
-              <i class="el-icon-picture" @click="openFull('pieChart',genderData,'区域客流性别')"></i>
+              <i class="el-icon-picture" @click="openFull('pieChart',genderData,'区域客流性别')" />
             </div>
             <div style="width:100%;height:100%;">
-              <pie-chart :data="genderData" :height="chartHeight" ref="pieChart"/>
+              <pie-chart ref="pieChart" :data="genderData" :height="chartHeight" />
             </div>
           </div>
         </el-col>
@@ -173,16 +191,16 @@
           <div class="grid-content bg-purple report-line">
             <div class="report-gang">
               <span>区域客流年龄</span>
-              <i class="el-icon-picture" @click="openFull('barChartAge',ageData,'区域客流年龄')"></i>
+              <i class="el-icon-picture" @click="openFull('barChartAge',ageData,'区域客流年龄')" />
             </div>
             <div style="width:100%;height:100%;">
-              <bar-chart-age :data="ageData" :height="chartHeight" ref="barChartAge"/>
+              <bar-chart-age ref="barChartAge" :data="ageData" :height="chartHeight" />
             </div>
           </div>
         </el-col>
       </el-row>
       <el-dialog :title="title" :visible.sync="fullVisible" fullscreen>
-        <component :is="componentName" :data="componentData" height="100%" v-if="fullVisible"></component>
+        <component :is="componentName" v-if="fullVisible" :data="componentData" height="100%" />
       </el-dialog>
     </div>
   </div>
@@ -197,7 +215,7 @@
   import {getStoreFlowData} from '@/api/report'
 
   export default {
-    name: 'storesFlow',
+    name: 'StoresFlow',
     components: {labelView, LineTimeChart, BarChartAge, PieChart, LineChart},
     data() {
       return {
@@ -311,7 +329,7 @@
 				frequencyDatas:{},
         areaTopData: {},
         ageData: {},
-        genderData: {},
+        genderData: {}
         // 测试数据
         //  nn :[{"areaName":"PAD区","hh":"8","customerNum":0},
         // {"areaName":"出口区","hh":"8","customerNum":8},
@@ -379,7 +397,6 @@
           })
         }
         this.loadData(_params)
-        
 			},
       loadData(params) {
         getStoreFlowData(params).then(res => {
@@ -458,12 +475,12 @@
 					xAxisData:[],
 					legendData:''
 				}
-        let obj = Object.assign({}, mockdata)
-        let xAxisData = new Set()
-        let legendData = new Set()
-        let mock = {}
+        const obj = Object.assign({}, mockdata)
+        const xAxisData = new Set()
+        const legendData = new Set()
+        const mock = {}
         data.forEach(element => {
-          let has = xAxisData.has(element.hh)
+          const has = xAxisData.has(element.hh)
           legendData.add(element.areaName)
           if (!has) {
             mock[element.hh] = {}
@@ -473,9 +490,9 @@
           mock[element.hh]
           xAxisData.add(element.hh)
         })
-        let seriesData = [];
+        const seriesData = [];
         [...legendData].forEach(it => {
-          let dataList = [];
+          const dataList = [];
           [...xAxisData].forEach(item => {
             if (mock[item].hasOwnProperty(it)) {
               dataList.push(mock[item][it])
@@ -496,7 +513,7 @@
       },
       // 到店频次
       laodFrequencyData(data) {
-				console.log("laodFrequencyData----",data)
+				console.log('laodFrequencyData----',data)
 				const frequencyData ={
 					data: [],
 					xAxisData:[],
@@ -509,7 +526,7 @@
 					obj.xAxisData.push(element.frequencyName)
 				})
 				this.frequencyDatas = obj
-				console.log("laodFrequencyData",this.frequencyDatas)
+				console.log('laodFrequencyData',this.frequencyDatas)
       },
       // 区域客流Top10
       laodAreaTopData(data) {
@@ -525,7 +542,7 @@
 					obj.xAxisData.push(element.areaName)
 				})
 				this.areaTopData = obj
-				console.log("laodAreaTopData",this.areaTopData)
+				console.log('laodAreaTopData',this.areaTopData)
       },
       // 区域客流年龄
       laodAreaAge(data) {
