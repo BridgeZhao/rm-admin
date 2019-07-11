@@ -36,21 +36,20 @@
       <el-table-column
         prop="storeName"
         label="门店名"
-        width="150"
       />
       <el-table-column
         prop="deviceName"
         label="注册设备"
-        width="150"
+        width="180"
       />
       <el-table-column
         prop="memberNo"
         label="会员卡号"
-        width="150"
+        width="120"
       />
       <el-table-column
         label="注册场景"
-        width="150"
+        width="120"
       >
         <template slot-scope="scope">
           <el-tag>
@@ -58,7 +57,10 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="电话">
+      <el-table-column
+				 label="电话"
+				 width="120"
+			>
         <template slot-scope="scope">
           {{ scope.row.phone }}
         </template>
