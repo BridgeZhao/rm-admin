@@ -11,7 +11,7 @@
         </el-radio-button>
       </el-radio-group>
     </div>
-    <dispose-nav v-show="gameTab === &quot;nav&quot;" />
+    <!-- <dispose-nav v-show="gameTab === &quot;nav&quot;" /> -->
     <dispose-game v-show="gameTab === &quot;navGame&quot;" :store-id="defaultStoreId" />
     <dispose-ad v-show="gameTab === &quot;navAd&quot;" :store-id="defaultStoreId" />
   </div>

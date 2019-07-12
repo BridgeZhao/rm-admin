@@ -79,12 +79,9 @@
   import { getDevices } from '@/api/device'
   export default {
     name: 'DisposeGame',
-    props:{
-      storeId: {
-        type: String,
-        default: ''
-      }
-    },
+    props:[
+      "StoreId"
+    ],
     data() {
       return {
         gameData: [],
@@ -137,6 +134,7 @@
     },
     watch:{
       StoreId : function(newVal,oldVal){
+        console.log('下拉响应',newVal)
         this.defaultStoreId = newVal
         this.channelGamePage()
         this.getDevices ()
