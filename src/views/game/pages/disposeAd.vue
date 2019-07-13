@@ -372,7 +372,6 @@
     },
     watch: {
       StoreId: function(newVal, oldVal) {
-        console.log('下拉响应',newVal)
         this.pagination.storeId = newVal
         this.pagination.page = 1
         this.adPage()

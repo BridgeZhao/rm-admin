@@ -134,7 +134,6 @@
     },
     watch:{
       StoreId : function(newVal,oldVal){
-        console.log('下拉响应',newVal)
         this.defaultStoreId = newVal
         this.channelGamePage()
         this.getDevices ()
